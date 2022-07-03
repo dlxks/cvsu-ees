@@ -477,6 +477,11 @@
 
     <template #content>
       <!-- Name -->
+       <div class="mb-4" v-if="editMode">
+        <jet-label for="controlnum" value="Control number" />
+        <b>{{ form.applicant_id }}</b>
+      </div>
+
       <div class="mb-4">
         <jet-label for="sched_name" value="Exam Name" />
         <jet-input
@@ -534,20 +539,6 @@
         </div>
       </div>
 
-      <div class="mb-4" v-if="editMode">
-        <jet-label for="range" value="Control Number" />
-        <div class="w-full inline-flex">
-          <Multiselect
-            v-model="form.applicant_id"
-            valueProp="id"
-            :searchable="true"
-            label="id"
-            :options="applicants"
-            :close-on-select="false"
-            id="range"
-          />
-        </div>
-      </div>
 
       <!-- Sched Date -->
       <div class="mb-4">

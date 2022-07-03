@@ -43,20 +43,17 @@
                                     : 'text-red-900'
                                 "
                               >
-                                {{ date }}
+                                {{ schedule.sched_code }}
                               </span>
                               <span class="font-semibold text-xl text-blue-900 block">
-                                {{ time }}
+                                {{ schedule.sched_name }}
+                              </span>
+                               <span class="font-semibold text-xl text-blue-900 block">
+                                {{ schedule.date }}
                               </span>
                               <span
                                 v-show="schedule.status == 'active'"
                                 class="font-semibold text-xl text-emerald-700 block uppercase"
-                              >
-                                {{ schedule.status }}
-                              </span>
-                              <span
-                                v-show="schedule.status == 'ended'"
-                                class="font-semibold text-xl text-red-900 block uppercase"
                               >
                                 {{ schedule.status }}
                               </span>

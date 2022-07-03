@@ -25,22 +25,23 @@ class ApplicantExamController extends Controller
      */
     public function index()
     {
-        $authApplicant = auth()->user()->id;
-        $applicant = Applicant::where('user_id', $authApplicant)->first();
+        // $authApplicant = auth()->user()->id;
+        // $applicant = Applicant::where('user_id', $authApplicant)->first();
 
-        $schedule = Schedule::where('applicant_id', $applicant->id)->first();
+        // $schedule = Schedule::where('applicant_id', $applicant->id)->first();
 
-        if ($schedule->status == 'active') {
-            $exams = Exam::where('status', 'active')->latest()->get();
-            $questions = Exam::with('questions')->get();
-        } else {
-            $exams = Exam::query();
-            $questions = null;
-        }
+        // if ($schedule->status == 'active') {
+        //     $exams = Exam::where('status', 'active')->latest()->get();
+        //     $questions = Exam::with('questions')->get();
+        // } else {
+        //     $exams = Exam::query();
+        //     $questions = null;
+        // }
+
+        $applicant_exams = auth()->user()->applicantAccount->schedule->exams;
 
         return Inertia::render('Applicant/Exam/Index', [
-            'exams' => $exams,
-            'schedule' => $schedule,
+            'exams' => $applicant_exams
         ]);
     }
 
@@ -108,7 +109,7 @@ class ApplicantExamController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * 
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

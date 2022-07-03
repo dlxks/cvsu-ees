@@ -22,18 +22,18 @@ class ApplicantDashboardController extends Controller
      */
     public function index()
     {
-        $authApplicant = auth()->user()->id;
-        $applicant = Applicant::where('user_id', $authApplicant)->first();
-        $schedule = Schedule::where('applicant_id', $applicant->id)->first();
+        // $authApplicant = auth()->user()->id;
+        // $applicant = Applicant::where('user_id', $authApplicant)->first();
+        // $schedule = Schedule::where('applicant_id', $applicant->id)->first();
 
-        $sched_date = date('F j, Y', strtotime($schedule->date));
-        $sched_time = date('h:i A', strtotime($schedule->date));
+        // $sched_date = date('F j, Y', strtotime($schedule->date));
+        // $sched_time = date('h:i A', strtotime($schedule->date));
 
+        $applicant_schedule = auth()->user()->applicantAccount->schedule;
 
         return Inertia::render('Applicant/Dashboard/Index', [
-            'schedule' => $schedule,
-            'date' => $sched_date,
-            'time' => $sched_time,
+            'schedule' => $applicant_schedule,
+
         ]);
     }
 

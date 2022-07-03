@@ -13,10 +13,10 @@ class CreateExamScheduleTable extends Migration
      */
     public function up()
     {
-        Schema::create('exam_schedule', function (Blueprint $table) {
+        Schema::create('exam_schedules', function (Blueprint $table) {
             $table->id();
+            $table->string('schedule_id');
             $table->bigInteger('exam_id');
-            $table->string('sched_code');
             $table->timestamps();
         });
     }

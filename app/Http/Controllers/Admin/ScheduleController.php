@@ -55,7 +55,7 @@ class ScheduleController extends Controller
             ->latest()
             ->get();
 
-            
+
         $exam_names = Exam::latest()->get();
 
         $perpage = $request->input('perpage') ?: 25;
@@ -101,8 +101,8 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        $date_now = Carbon::now('Asia/Hong_Kong')->format('Y-m-d');
-        $date = date('Y-m-d', strtotime($request['date']));
+        $date_now = Carbon::now('Asia/Singapore')->format('Y-m-d');
+        $date = date('Y-m-d h:i:s', strtotime($request['date']));
 
         $val = Validator::make($request->all(), [
             'exams' => ['required'],
@@ -119,29 +119,30 @@ class ScheduleController extends Controller
 
         $sched_code = IdGenerator::generate(['table' => 'schedules', 'field' => 'sched_code', 'length' => 8, 'prefix' => 'SCH-', 'reset_on_prefix_change' => true]);
 
+        $start = substr($request->start_ctrl_num, 4);
+        $end = substr($request->end_ctrl_num, 4);
         $arr = [];
-        for ($x = substr($request->start_ctrl_num, 4); $x <= substr($request->end_ctrl_num, 4); $x++) {
+        for ($x = $start; $x <= strval($end); $x++) {
 
-            if (!in_array($x, $arr)) {
-                array_push($arr, $x);
-            }
+            //    if (!in_array($x, $arr)) {
+            //         $n = str_pad($x, 6, "0", STR_PAD_LEFT);
+            //         array_push($arr, date('ym').$n);
+            //     }
 
+            $n = str_pad($x, 6, "0", STR_PAD_LEFT);
             $sched = Schedule::create([
                 'sched_code' => $sched_code,
                 'sched_name' => $request['sched_name'],
-                'applicant_id' => $x,
-                'status' => $date == $date_now ? 'active' : 'pending',
+                'applicant_id' => date('ym') . $n,
+                'status' => $date <= $date_now ? 'active' : 'pending',
                 'date' => date('Y-m-d', strtotime($request['date'])),
             ]);
+
+            foreach ($request['exams'] as $ex) {
+                $sched->exams()->attach($ex['id']);
+            }
         }
 
-        $exids = [];
-        foreach ($request['exams'] as $ex) {
-            array_push($exids, $ex['id']);
-        }
-
-        // dd($excodes);
-        $sched->exams()->sync($exids);
 
         // EMAIL
         // $data = [
@@ -194,7 +195,6 @@ class ScheduleController extends Controller
 
         $val = Validator::make($request->all(), [
             'sched_name' => ['required'],
-            'applicant_id' => ['required'],
             'date' => ['required', 'date'],
         ]);
 
@@ -205,24 +205,23 @@ class ScheduleController extends Controller
 
         $schedule->update([
             'sched_name' => $request->sched_name,
-            'applicant_id' => $request->applicant_id,
             'date' => $date,
         ]);
 
-       if($date == $date_now){
+        if ($date == $date_now) {
             $schedule->update(['status' => 'active']);
-       }else if($date > $date_now){
+        } else if ($date > $date_now) {
             $schedule->update(['status' => 'pending']);
-       }else if($date < $date_now){
+        } else if ($date < $date_now) {
             $schedule->update(['status' => 'ended']);
-       }
+        }
 
-       
-       $exids = [];
-       foreach ($request['exams'] as $ex) {
-           array_push($exids, $ex['id']);
-       }
-       $schedule->exams()->sync($exids);
+
+        $exids = [];
+        foreach ($request['exams'] as $ex) {
+            array_push($exids, $ex['id']);
+        }
+        $schedule->exams()->sync($exids);
 
         $this->flash('Schedule updated successfully.', 'success');
 

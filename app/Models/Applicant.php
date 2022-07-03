@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Schedule;
 
 class Applicant extends Model
 {
@@ -46,6 +47,11 @@ class Applicant extends Model
     public function result()
     {
         return $this->hasOne(Result::class);
+    }
+
+    public function schedule()
+    {
+        return $this->hasOne(Schedule::class);
     }
 
     public function getCreatedAtAttribute($value)

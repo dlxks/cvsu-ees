@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Applicant;
 
 class User extends Authenticatable
 {
@@ -63,7 +64,13 @@ class User extends Authenticatable
         'profile_photo_url',
         'can',
     ];
-    
+
+
+    public function applicantAccount()
+    {
+        return $this->hasOne(Applicant::class);
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return now()->parse($value)->timezone(config('app.timezone'))->format('d F Y, H:i:s');
