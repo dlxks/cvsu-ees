@@ -13,7 +13,8 @@
           <!-- Line buttons and show dropdown -->
           <div class="inline-flex" align="right">
             <div class="text-xl font-medium text-white leading-tight">
-              <!-- Time left: <span>{{ time }}</span> -->
+              <span class="text-sm">Time left:</span>
+              <span class="text-red-200">{{ time }}</span>
             </div>
           </div>
           <!-- Hide in line buttons and show dropdown -->
@@ -69,38 +70,31 @@
                           <p class="text-md mb-8 text--primary">
                             {{ id + 1 }}) {{ question.question }}
                           </p>
-                          <jet-input
-                            v-for="choice in question.choices"
-                            :key="choice"
-                            v-model="choice.option"
-                            label="Solo"
-                            height="50"
-                            solo
-                            readonly
-                            rounded
-                            class="w-full p-4 shadow overflow-hidden border-b border-gray-500 rounded-lg m-2 md:m-2 lg:m-4"
-                          >
-                            <template v-s lot:prepend-inner>
-                              <jet-input
-                                type=""
-                                v-model="applicantResponses[id]"
-                                class="w-full p-4 shadow overflow-hidden border-b border-gray-500 rounded-lg m-2 md:m-2 lg:m-4"
+                          <div class="justify-center">
+                            <div v-for="choice in question.choices" :key="choice">
+                              <div
+                                class="form-check w-full p-4 shadow overflow-hidden border-b border-gray-500 rounded-lg m-2 md:m-2 lg:m-4"
                               >
-                                <div class="text-lg">
-                                  <div class="px-4 py-4">
-                                    <jet-input
-                                      type="radio"
-                                      :value="
-                                        choice.is_correct == true ? true : choice.option
-                                      "
-                                      name="id"
-                                      @click="choices(question.id, choice.id)"
-                                    ></jet-input>
-                                  </div>
-                                </div>
-                              </jet-input>
-                            </template>
-                          </jet-input>
+                                <input
+                                  type="radio"
+                                  name="options"
+                                  :id="choice"
+                                  v-model="applicantResponses[id]"
+                                  :value="
+                                    choice.is_correct == true ? true : choice.option
+                                  "
+                                  @click="choices(question.id, choice.id)"
+                                  class="mr-3"
+                                />
+                                <label
+                                  class="form-check-label inline-block text-gray-800"
+                                  for="choice"
+                                >
+                                  <span>{{ choice.option }}</span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
                         </span>
                       </span>
                     </div>
@@ -153,7 +147,20 @@
               </button>
             </div>
             <!-- Table div -->
+
+            <!-- End score -->
+
+            <div class="text-center py-6" v-if="questionIndex == questions.length">
+              <span> You have successfully Completed this <strong>exam</strong></span>
+              <p>
+                Your Score is : <b>/{{ quizQuestions.length }}</b>
+              </p>
+              <!-- <inertia-link :href="route('home')">
+                <v-btn class="my-6" color="primary"> Go home </v-btn>
+              </inertia-link> -->
+            </div>
           </div>
+          <!-- End score -->
           <!-- Left side -->
 
           <!-- Right side -->
@@ -278,22 +285,22 @@ export default {
     };
   },
 
-  // mounted() {
-  //   setInterval(() => {
-  //     this.clock = moment(this.clock.subtract(1, "seconds"));
-  //   }, 1000);
-  // },
+  mounted() {
+    setInterval(() => {
+      this.clock = moment(this.clock.subtract(1, "seconds"));
+    }, 1000);
+  },
 
-  // computed: {
-  //   time: function () {
-  //     var time = this.clock.format("mm:ss");
+  computed: {
+    time: function () {
+      var time = this.clock.format("mm:ss");
 
-  //     if (time == "00:00") {
-  //       alert("test");
-  //     }
-  //     return time;
-  //   },
-  // },
+      if (time == "00:00") {
+        alert("test");
+      }
+      return time;
+    },
+  },
 
   methods: {
     prev() {

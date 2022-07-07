@@ -97,8 +97,8 @@
           <span class="text-lg capitalize">
             <img
               :src="questionform.img_path"
-              v-if="questionform.img_path"
-              class="object-contain h-80"
+              class="object-contain h-80 hidden"
+              :class="!qImg ? 'block' : 'hidden'"
             />
 
             <jet-input
@@ -151,8 +151,8 @@
                   <div class="object-center">
                     <img
                       :src="choice.img_path"
-                      v-if="choice.img_path"
-                      class="object-contain h-80"
+                      class="object-contain h-80 hidden"
+                      :class="choice.img_path ? 'block' : 'block'"
                     />
                   </div>
 
@@ -220,6 +220,9 @@ export default {
         img_path: this.question.img_path,
         choices: this.question.choices,
       }),
+
+      qImg: false,
+      // aImg: this.question.choices.img_path,
     };
   },
 

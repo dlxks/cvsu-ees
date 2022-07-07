@@ -189,9 +189,14 @@ class ApplicantController extends Controller
      */
     public function destroy($id)
     {
-        $d = Applicant::find($id);
+        $applicant = Applicant::find($id);
+
+        $userid = $applicant->user_id;
+        $user = User::where('id', $userid)->first();
+
         // $d->colleges()->detach();
-        $d->delete();
+        $user->delete();
+        $applicant->delete();
 
         $this->flash('Applicant removed.', 'success');
 

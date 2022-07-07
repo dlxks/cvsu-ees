@@ -25,5 +25,6 @@ if (mix.inProduction()) {
 }
 
 mix.browserSync({
-    proxy: 'http://localhost:8000'
+    proxy: "http://localhost:8000",
 });
+mix.disableSuccessNotifications();

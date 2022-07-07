@@ -13,7 +13,7 @@
       <!-- Header holder -->
 
       <!-- page content -->
-      <div class="">
+      <div class="pb-40">
         <div class="max-w-full mx-auto px-14 sm:px-4 lg:px-12">
           <jet-banner />
           <main>
