@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\ApplicantExport;
 use App\Exports\ApplicantsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Banner;
 use App\Models\Applicant;
-use App\Models\College;
 use App\Models\User;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use PDF;
 

@@ -95,12 +95,6 @@
         <div class="inline-flex">
           <span class="uppercase text-sm mr-2 text-gray-500"> Question: </span>
           <span class="text-lg capitalize">
-            <img
-              :src="questionform.img_path"
-              class="object-contain h-80 hidden"
-              :class="!qImg ? 'block' : 'hidden'"
-            />
-
             <jet-input
               id="question"
               type="text"
@@ -110,6 +104,13 @@
               required
             >
             </jet-input>
+            <div v-if="question.img_path">
+              <img
+                :src="question.img_url.img_url"
+                class="object-contain h-80"
+                alt="Image"
+              />
+            </div>
             <!-- <jet-input
               id="imgphoto"
               type="file"
@@ -134,7 +135,7 @@
             class="w-full md:w-6/12 lg:w-4/12"
           >
             <div
-              class="shadow overflow-hidden border-b border-gray-200 rounded-lg m-2 md:m-2 lg:m-4"
+              class="shadow overflow-hidden border-b bg-gray-100 border-gray-200 rounded-lg m-2 md:m-2 lg:m-4"
             >
               <div class="w-full py-2 px-4">
                 <span class="text-gray-500 float-right">
@@ -148,14 +149,6 @@
               </div>
               <div class="text-lg">
                 <div class="px-4 py-4">
-                  <div class="object-center">
-                    <img
-                      :src="choice.img_path"
-                      class="object-contain h-80 hidden"
-                      :class="choice.img_path ? 'block' : 'block'"
-                    />
-                  </div>
-
                   <jet-input
                     id="question"
                     type="text"
@@ -165,6 +158,12 @@
                     required
                   >
                   </jet-input>
+
+                  <div class="object-center">
+                    <div v-if="choice.img_path">
+                      <img :src="choice.img_url" class="object-contain h-80" />
+                    </div>
+                  </div>
                   <!-- <jet-input
                     id="imgphoto"
                     type="file"
@@ -220,9 +219,6 @@ export default {
         img_path: this.question.img_path,
         choices: this.question.choices,
       }),
-
-      qImg: false,
-      // aImg: this.question.choices.img_path,
     };
   },
 
@@ -244,16 +240,16 @@ export default {
     },
 
     // Preview image question
-    previewImage(e) {
-      const file = e.target.files[0];
-      this.questionform.img_path = URL.createObjectURL(file);
-    },
+    // previewImage(e) {
+    //   const file = e.target.files[0];
+    //   this.questionform.img_path = URL.createObjectURL(file);
+    // },
 
     // Preview image option
-    previewChoice(e) {
-      const file = e.target.files[0];
-      this.choice.img_path = URL.createObjectURL(file);
-    },
+    // previewChoice(e) {
+    //   const file = e.target.files[0];
+    //   this.choice.img_path = URL.createObjectURL(file);
+    // },
 
     // Toggle change
     toggleChange: function (id) {

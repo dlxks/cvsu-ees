@@ -20,7 +20,7 @@ class CreateQuestionsTable extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade');
             $table->string('question');
-            $table->string('img_path')->nullable();
+            $table->string('img_path', 2048)->nullable();
             $table->timestamps();
         });
     }

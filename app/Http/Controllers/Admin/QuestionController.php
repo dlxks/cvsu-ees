@@ -10,6 +10,8 @@ use App\Http\Traits\Banner;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\isEmpty;
+
 class QuestionController extends Controller
 {
     use Banner;
@@ -43,6 +45,10 @@ class QuestionController extends Controller
     {
         $data = $request->only('exam_id', 'question', 'img_path', 'choices');
 
+        // $request->validate([
+        //     'img_path' => 'required|mimes:jpg,jpeg,png|max:2048'
+        //  ]);
+         
         $path = null;
         if ($request->hasFile('img_path')) {
             $path = $request->file('img_path')->store('public/photos');
@@ -53,6 +59,7 @@ class QuestionController extends Controller
             'question' => $data['question'],
             'img_path' => $path,
         ]);
+
 
         foreach ($data['choices'] as $opt) {
             $path1 = null;
@@ -90,15 +97,15 @@ class QuestionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Question $question)
-
     {
         return Inertia::render('Admin/Question/Edit', [
             'question' => [
                 'exam_id' => $question->exam_id,
                 'id' => $question->id,
                 'question' => $question->question,
-                'img_path' => $question->img_path,
-                'choices' => $question->choices()->get()->map->only('id', 'option', 'img_path', 'is_correct'),
+                'img_path' => $question->append('img_url')->img_path,
+                'img_url' => $question->append('img_url'),
+                'choices' => $question->choices()->get()->append('img_url'),
             ],
         ]);
     }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Traits\HasCan;
+use App\Http\Traits\HasImgUrl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +12,7 @@ class Choice extends Model
 {
     use HasFactory;
     use HasCan;
+    use HasImgUrl;
 
     protected $fillable = [
         'question_id',
@@ -21,6 +23,7 @@ class Choice extends Model
 
     protected $appends = [
         'can',
+        'img_url'
     ];
 
     public function question()
@@ -28,10 +31,10 @@ class Choice extends Model
         return $this->belongsTo(Question::class);
     }
 
-    public function getImgPathAttribute($value)
-    {
-        return asset(Storage::url($value));
-    }
+    // public function getImgPathAttribute($value)
+    // {
+    //     return asset(Storage::url($value));
+    // }
 
     public function getCreatedAtAttribute($value)
     {

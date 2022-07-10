@@ -621,6 +621,7 @@
           class="mt-1 block w-full"
           autocomplete
           v-model="form.birthday"
+          @keyup.enter="save(form)"
         />
       </div>
     </template>

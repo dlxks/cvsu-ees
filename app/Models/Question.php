@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Traits\HasCan;
+use App\Http\Traits\HasImgUrl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +12,7 @@ class Question extends Model
 {
     use HasFactory;
     use HasCan;
+    use HasImgUrl;
 
     protected $fillable = [
         'exam_id',
@@ -20,6 +22,7 @@ class Question extends Model
 
     protected $appends = [
         'can',
+        'img_url',
     ];
 
     public function exam()
@@ -37,10 +40,14 @@ class Question extends Model
         return Question::orderBy('created_at', 'asc')->with('exam');
     }
 
-    public function getImgPathAttribute($value)
-    {
-        return asset(Storage::url($value));
-    }
+    // public function getImgPathAttribute($value)
+    // {
+    //     return Storage::url($value);
+
+    //     // return $this->img_path
+    //     //             ? Storage::disk($this->imageDisk())->url($this->img_path)
+    //     //             : $this->defaultProfilePhotoUrl();
+    // }    
 
     public function getCreatedAtAttribute($value)
     {
