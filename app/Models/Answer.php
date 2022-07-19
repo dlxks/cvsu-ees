@@ -12,7 +12,7 @@ class Answer extends Model
     use HasCan;
 
     protected $fillable = [
-        'appplicant_id',
+        'applicant_id',
         'exam_id',
         'question_id',
         'answer_id',

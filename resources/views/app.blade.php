@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="token" id="token" value="{{ csrf_token() }}">
-       
+
 
     <title inertia>{{ config('app.name', 'Cavite State University') }}</title>
 
@@ -14,6 +14,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <link rel="shortcut icon" href="#">
 
     <!-- Scripts -->
     @routes

@@ -18,7 +18,7 @@ class CreateAnswersTable extends Migration
             $table->bigInteger('applicant_id');
             $table->bigInteger('exam_id');
             $table->bigInteger('question_id');
-            $table->bigInteger('answer_id');
+            $table->bigInteger('answer_id')->nullable();
             $table->timestamps();
         });
     }

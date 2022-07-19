@@ -51,10 +51,6 @@
           <!-- Left side -->
           <div class="w-full lg:w-8/12">
             <!-- Table div -->
-            <div class="px-4 py-2 w-full bg-gray-700">
-              <span class="uppercase tracking-wider text-white">Question</span>
-            </div>
-
             <div class="relative md:pt-6 pb-6 pt-12">
               <div class="mx-auto w-full">
                 <div>
@@ -63,6 +59,7 @@
                     <div class="w-full px-8 bg-gray-50 rounded shadow-md">
                       <span
                         v-for="(question, id) in questions"
+                        v-if="questionIndex != questions.length"
                         :key="id"
                         class="w-full px-4"
                       >
@@ -70,27 +67,41 @@
                           <p class="text-md mb-8 text--primary">
                             {{ id + 1 }}) {{ question.question }}
                           </p>
+                          <div v-if="question.img_path">
+                            <img
+                              :src="question.img_url"
+                              class="object-contain h-80"
+                              alt="Image"
+                            />
+                          </div>
                           <div class="justify-center">
-                            <div v-for="choice in question.choices" :key="choice">
+                            <div v-for="choice in question.choices" :key="choice.id">
                               <div
                                 class="form-check w-full p-4 shadow overflow-hidden border-b border-gray-500 rounded-lg m-2 md:m-2 lg:m-4"
                               >
                                 <input
                                   type="radio"
                                   name="options"
-                                  :id="choice"
+                                  :id="choice.id"
                                   v-model="applicantResponses[id]"
                                   :value="
                                     choice.is_correct == true ? true : choice.option
                                   "
+                                  v-bind:value="choice"
                                   @click="choices(question.id, choice.id)"
                                   class="mr-3"
                                 />
                                 <label
                                   class="form-check-label inline-block text-gray-800"
-                                  for="choice"
+                                  :for="choice.id"
                                 >
                                   <span>{{ choice.option }}</span>
+                                  <div v-if="choice.img_path">
+                                    <img
+                                      :src="choice.img_url"
+                                      class="object-contain h-80"
+                                    />
+                                  </div>
                                 </label>
                               </div>
                             </div>
@@ -126,13 +137,38 @@
                 </svg>
                 Previous
               </button>
+              <!-- next button -->
               <button
                 text
                 color="primary"
                 class="ml-2 white--text float-right inline-flex px-4 py-2 bg-emerald-200 hover:bg-emerald-300 text-emerald-800 rounded-md"
-                @click="postApplicantAnswers"
+                @click="postApplicantAnswers('next')"
+                v-if="questionIndex < questions.length - 1"
               >
                 Next<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 ml-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+
+              <!-- submit button -->
+              <button
+                text
+                color="primary"
+                class="ml-2 white--text float-right inline-flex px-4 py-2 bg-emerald-200 hover:bg-emerald-300 text-emerald-800 rounded-md"
+                @click="openModal(true)"
+                v-if="questionIndex === questions.length - 1"
+              >
+                Submit
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-5 w-5 ml-2"
                   viewBox="0 0 20 20"
@@ -148,26 +184,14 @@
             </div>
             <!-- Table div -->
 
-            <!-- End score -->
-
-            <div class="text-center py-6" v-if="questionIndex == questions.length">
-              <span> You have successfully Completed this <strong>exam</strong></span>
-              <p>
-                Your Score is : <b>/{{ quizQuestions.length }}</b>
-              </p>
-              <!-- <inertia-link :href="route('home')">
-                <v-btn class="my-6" color="primary"> Go home </v-btn>
-              </inertia-link> -->
+            <div class="text-center py-6" v-if="questionIndex === questions.length">
+              te
             </div>
           </div>
-          <!-- End score -->
           <!-- Left side -->
 
           <!-- Right side -->
           <div class="w-full lg:w-4/12">
-            <div class="px-4 py-2 w-full bg-emerald-600">
-              <span class="uppercase tracking-wider text-white">Navigation</span>
-            </div>
             <div class="relative md:pt-6 pb-6 pt-12">
               <div class="mx-auto w-full">
                 <div class="px-8">
@@ -184,12 +208,13 @@
                     >
                       <button
                         @click="goto(id)"
-                        class="text-md mb-8 p-4 bg-gray-100 rounded shadow-sm"
+                        class="text-md mb-6 p-3 bg-gray-100 rounded shadow-sm"
                         :class="
                           id === questionIndex
                             ? 'text-white hover:text-gray-200 bg-gray-500 hover:bg-gray-400'
                             : 'text-gray-700 hover:text-gray-500'
                         "
+                        :disabled="disabled"
                       >
                         {{ id + 1 }}
                       </button>
@@ -248,6 +273,25 @@
       <!-- Full dashboard -->
     </div>
   </applicant-layout>
+
+  <dialog-modal :show="isOpen" @close="openModal(false)">
+    <template #title>
+      <span> Submit Exam </span>
+    </template>
+
+    <template #content>
+      <span
+        >Once you submit, you won't be able to return on your exam. Do you want to
+        continue?</span
+      >
+    </template>
+
+    <template #footer>
+      <jet-secondary-button @click="openModal(false)"> Cancel </jet-secondary-button>
+
+      <jet-button class="ml-2" @click="submitApplicantAnswers()"> Submit </jet-button>
+    </template>
+  </dialog-modal>
 </template>
 
 <script>
@@ -256,6 +300,9 @@ import moment from "moment";
 import { Link } from "@inertiajs/inertia-vue3";
 import JetPagination from "@/Components/Pagination";
 import JetInput from "@/Jetstream/Input";
+import DialogModal from "@/Jetstream/DialogModal";
+import JetButton from "@/Jetstream/Button";
+import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 import route from "../../../../../vendor/tightenco/ziggy/src/js";
 
 export default {
@@ -265,6 +312,9 @@ export default {
     Link,
     JetPagination,
     JetInput,
+    DialogModal,
+    JetButton,
+    JetSecondaryButton,
   },
 
   props: {
@@ -282,6 +332,10 @@ export default {
       currentQuestion: 0,
       currentAnswer: 0,
       clock: moment(this.duration * 60 * 1000),
+
+      isOpen: false,
+      isSubmitted: false,
+      disabled: null,
     };
   },
 
@@ -296,7 +350,8 @@ export default {
       var time = this.clock.format("mm:ss");
 
       if (time == "00:00") {
-        alert("test");
+        // alert("test");
+        return submitApplicantAnswers();
       }
       return time;
     },
@@ -320,13 +375,45 @@ export default {
       });
     },
 
-    postApplicantAnswers() {
+    postApplicantAnswers(status) {
       this.questionIndex++;
+      if (status == "next") {
+        axios.post("/applicant/test", {
+          answerId: this.currentAnswer,
+          questionId: this.currentQuestion,
+          examId: this.exam.id,
+        });
+      } else if (status == "submit") {
+        this.isOpen = true;
+      }
+    },
+
+    // submit button function
+    submitApplicantAnswers() {
       axios.post("/applicant/test", {
         answerId: this.currentAnswer,
         questionId: this.currentQuestion,
         examId: this.exam.id,
       });
+      this.questionIndex++;
+      this.isSubmitted = true;
+      this.disabledClick(true);
+      this.isOpen = false;
+    },
+
+    // Disable function
+    disabledClick: function (s) {
+      this.disabled = s;
+    },
+
+    // Modal function
+    openModal: function (status) {
+      if (status == true) {
+        this.isOpen = true;
+      } else if (status == false) {
+        this.isOpen = false;
+      }
+      return this.isOpen;
     },
   },
 };

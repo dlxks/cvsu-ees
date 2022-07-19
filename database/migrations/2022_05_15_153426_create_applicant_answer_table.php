@@ -15,7 +15,7 @@ class CreateApplicantAnswerTable extends Migration
     {
         Schema::create('applicant_answer', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('appplicant_id');
+            $table->bigInteger('applicant_id');
             $table->bigInteger('exam_id');
             $table->bigInteger('question_id');
             $table->bigInteger('answer_id');

@@ -41,7 +41,7 @@ class ApplicantExamController extends Controller
         $applicant_exams = auth()->user()->applicantAccount->schedule->exams;
 
         return Inertia::render('Applicant/Exam/Index', [
-            'exams' => $applicant_exams
+            'exams' => $applicant_exams,
         ]);
     }
 
@@ -94,7 +94,7 @@ class ApplicantExamController extends Controller
         $examHasTaken = Answer::where(['applicant_id' => $applicant_id, 'exam_id' => $exam_id])->get();
         $wasCompleted = Answer::where('applicant_id', $applicant_id)->whereIn('exam_id', (new Exam)->hasExamAttempted())->pluck('exam_id')->toArray();
 
-        if(in_array($exam_id, $wasCompleted)){
+        if (in_array($exam_id, $wasCompleted)) {
             $this->flash("You already taken this exam.", 'danger');
             return back();
         }
@@ -149,13 +149,17 @@ class ApplicantExamController extends Controller
 
         $authApplicant = auth()->user()->id;
         $applicant = Applicant::where('user_id', $authApplicant)->first();
-        return $applicantAQ = Answer::updateOrCreate(
+
+        // dd($applicant->id);
+        return Answer::updateOrCreate(
             [
                 'applicant_id' => $applicant->id,
                 'exam_id' => $examId,
-                'question_id' => $questionId
+                'question_id' => $questionId,
             ],
-            ['answer_id' => $answerId]
+            [
+                'answer_id' => $answerId
+            ],
         );
     }
 }
