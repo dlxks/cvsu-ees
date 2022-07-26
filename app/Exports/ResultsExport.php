@@ -8,13 +8,12 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ResultsExport implements FromCollection, WithEvents, WithHeadings, ShouldAutoSize, WithStyles
+class ResultsExport implements FromCollection, WithEvents, WithHeadings, ShouldAutoSize, WithStyles, WithColumnFormatting
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -23,23 +22,27 @@ class ResultsExport implements FromCollection, WithEvents, WithHeadings, ShouldA
     {
         // return User::all();
 
-        $data = Result::select(\DB::raw('results.applicant_id as Control_Number, 
-                                            results.name as Name, 
-                                            results.course as Course, 
-                                            results.status as Status '))
-            ->orderBy('applicants.id')
+        $data = \DB::table('results')
+            ->join('applicants', 'applicants.id', '=', 'results.applicant_id')
+            ->select(\DB::raw('results.applicant_id as Control_Number, 
+                                        results.name as name, 
+                                        results.course as course, 
+                                        results.status as status,
+                                        applicants.email as email,
+                                        applicants.phone_number as phone_number'))
+            ->orderBy('applicants.id', 'asc')
             ->get();
 
-        $data = $data->each(function ($d) {
-            $d->setAppends([]);
-        });
+        // $data = $data->each(function ($d) {
+        //     $d->setAppends([]);
+        // });
 
         return $data;
     }
 
     public function headings(): array
     {
-        return ['Control Number', 'Name', 'Course', 'Status'];
+        return ['Control Number', 'Name', 'Course', 'Status', 'Email', 'Contact Number'];
     }
 
     public function styles(Worksheet $sheet)
@@ -56,11 +59,18 @@ class ResultsExport implements FromCollection, WithEvents, WithHeadings, ShouldA
         ];
     }
 
+    public function columnFormats(): array
+    {
+        return [
+            'F' => NumberFormat::FORMAT_NUMBER,
+        ];
+    }
+
     public function registerEvents(): array
     {
         return [
             AfterSheet::class =>  function (AfterSheet $event) {
-                $cellRange = 'A1:D1';
+                $cellRange = 'A1:F1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->getSize(10);
             },
         ];

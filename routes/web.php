@@ -80,6 +80,8 @@ Route::prefix('admin')
 
         // Results routes
         Route::resource('results', ResultController::class);
+        Route::get('/export/results', [ResultController::class, 'export'])->name('results.export'); //Export data
+        Route::get('/pdf/results', [ResultController::class, 'generate_pdf'])->name('results.pdf'); //Export pdf
         Route::get('send-notification', [ResultController::class, 'sendNotification'])->name('send.notif');
 
         // Chatbot routes

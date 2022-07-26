@@ -35,6 +35,10 @@ class Course extends Model
         return $this->belongsTo(College::class);
     }
 
+    // public function results(){
+    //     return $this->belongsToMany(Result::class);
+    // }
+
     public function getCreatedAtAttribute($value)
     {
         return now()->parse($value)->timezone(config('app.timezone'))->format('d F Y, H:i:s');

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chatbot;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
@@ -16,7 +19,33 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Index');
+        $noOfExams = DB::table('exams')->count();
+        $noOfApplicants = DB::table('applicants')->count();
+        $noOfSched = DB::table('schedules')
+            ->where('status', 'pending')
+            ->orWhere('status', 'active')
+            ->count();
+
+        $data = Schedule::where('status', 'pending')
+            ->orWhere('status', 'active')
+            ->orderBy('date', 'desc');
+        // ->latest()
+        // ->get();
+
+        $contacts = Chatbot::where('category', 'Contact Information')
+            ->orderBy('question', 'asc')
+            ->get();
+
+            // dd($contacts);
+
+        return Inertia::render('Index', [
+            'noOfExams' => $noOfExams,
+            'noOfApplicants' => $noOfApplicants,
+            'noOfSched' => $noOfSched,
+            'schedules' => $data->paginate(30)->withQueryString(),
+            'contacts' => $contacts,
+        ]);
+        // return Inertia::render('Index');
         // return view('Index');
     }
 

@@ -18,7 +18,7 @@ class CreateExamsTable extends Migration
             $table->string('subject');
             $table->string('exam_code')->unique();
             $table->string('description')->nullable();
-            $table->integer('duration')->nullable();
+            $table->bigInteger('duration')->nullable();
             $table->string('status')->default('inactive');
             $table->timestamps();
         });

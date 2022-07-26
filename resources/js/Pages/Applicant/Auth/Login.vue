@@ -7,6 +7,7 @@
     </template>
 
     <JetValidationErrors class="mb-4" />
+    <jet-banner class="mb-4" />
     <form @submit.prevent="submit">
       <!-- Control Number -->
       <div class="mt-4">
@@ -79,6 +80,7 @@ import JetLabel from "@/Jetstream/Label.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import JetFormSection from "@/Jetstream/FormSection";
 import JetActionMessage from "@/Jetstream/ActionMessage";
+import JetBanner from "@/Jetstream/Banner.vue";
 
 const form = useForm({
   control_number: "",

@@ -45,7 +45,7 @@
               class="text-sm border-transparent rounded-full focus:outline-none focus:border-gray-300 transition"
             >
               <img
-                class="h-10 w-10 rounded-full"
+                class="h-10 w-10 rounded-full object-cover"
                 :src="$page.props.user.profile_photo_url"
                 :alt="$page.props.user.name"
               />
@@ -154,7 +154,7 @@
                     <div class="flex" align="left">
                       <div class="flex-shrink-0 h-10 w-10">
                         <img
-                          class="h-10 w-10 rounded-full"
+                          class="h-10 w-10 rounded-full object-cover"
                           :src="$page.props.user.profile_photo_url"
                           :alt="$page.props.user.name"
                         />

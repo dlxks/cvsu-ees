@@ -39,10 +39,12 @@ class ScheduleEnded extends Command
      */
     public function handle()
     {
+        \Log::info("Checking schedules..");
+
         $date_now = Carbon::today()->format('Y-m-d');
 
         Schedule::where('date', '<', $date_now)
-                ->update(['status' => 'ended']);
+            ->update(['status' => 'ended']);
 
         // $schedule = Schedule::where('date', $date_now)->get();
 

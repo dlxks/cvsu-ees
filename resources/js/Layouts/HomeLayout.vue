@@ -14,7 +14,7 @@
                     <div class="flex items-center">
                       <div class="flex-shrink-0 h-10 w-10">
                         <img
-                          src="https://en.wikipedia.org/wiki/Cavite_State_University#/media/File:Cavite_State_University_(CvSU).png"
+                          src="https://drive.google.com/uc?id=1NQL8McpMmgaK0WgqpihPWsUzArvFHzRo"
                           class="w-10"
                           alt="CvSU Logo"
                           title="CvSU"

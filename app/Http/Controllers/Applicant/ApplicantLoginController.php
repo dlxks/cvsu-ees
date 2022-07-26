@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\Banner;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,8 @@ use Inertia\Inertia;
 
 class ApplicantLoginController extends Controller
 {
+    use Banner;
+
     public function showLoginForm()
     {
         if (!auth()->check())
@@ -30,9 +33,13 @@ class ApplicantLoginController extends Controller
             ->where('id', $request->control_number)
             ->where('birthday', $request->birthday)->first();
 
-        Auth::login($applicant->userAccount);
-
-        return redirect()->route('applicant.dashboard.index');
+        if (!$applicant) {
+            $this->flash('Invalid Control Number, Email or Birthday', 'danger');
+            return redirect()->back();
+        } else {
+            Auth::login($applicant->userAccount);
+            return redirect()->route('applicant.dashboard.index');
+        }
     }
 
     public function logout()

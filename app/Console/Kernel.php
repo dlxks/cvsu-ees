@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
             ->everyTenMinutes();
 
         $schedule->command('schedule:ended')
-            ->everyMinute();
+            ->everyTenMinutes();
     }
 
     /**

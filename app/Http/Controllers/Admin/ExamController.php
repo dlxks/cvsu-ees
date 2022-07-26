@@ -82,12 +82,13 @@ class ExamController extends Controller
         }
 
         $exam_code = IdGenerator::generate(['table' => 'exams', 'field' => 'exam_code', 'length' => 8, 'prefix' => 'EXM-']);
+        $duration = $request['duration'];
 
         Exam::create([
             'exam_code' => $exam_code,
             'subject' => Str::of($request['subject'])->upper(),
             'description' => Str::of($request['description'])->ucfirst(),
-            'duration' => $request['duration'],
+            'duration' => $duration,
         ]);
 
         $this->flash('Exam created!', 'success');

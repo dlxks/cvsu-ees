@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\Banner;
 use App\Models\Answer;
 use App\Models\Applicant;
+use App\Models\Attempt;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Schedule;
@@ -25,24 +26,29 @@ class ApplicantExamController extends Controller
      */
     public function index()
     {
-        // $authApplicant = auth()->user()->id;
-        // $applicant = Applicant::where('user_id', $authApplicant)->first();
+        $authApplicant = auth()->user()->id;
+        $applicant = Applicant::where('user_id', $authApplicant)->first();
 
-        // $schedule = Schedule::where('applicant_id', $applicant->id)->first();
+        $schedule = Schedule::where('applicant_id', $applicant->id)->first();
 
-        // if ($schedule->status == 'active') {
-        //     $exams = Exam::where('status', 'active')->latest()->get();
-        //     $questions = Exam::with('questions')->get();
-        // } else {
-        //     $exams = Exam::query();
-        //     $questions = null;
-        // }
-
-        $applicant_exams = auth()->user()->applicantAccount->schedule->exams;
+        if ($schedule->status == 'active') {
+            $exams = Exam::where('status', 'active')->latest()->get();
+            $questions = Exam::with('questions')->get();
+        } else {
+            $exams = Exam::where('status', 'active')->latest()->get();
+            $questions = null;
+        }
 
         return Inertia::render('Applicant/Exam/Index', [
-            'exams' => $applicant_exams,
+            'exams' => $exams,
+            'questions' => $questions
         ]);
+
+        // $applicant_exams = auth()->user()->applicantAccount->schedule->exams;
+
+        // return Inertia::render('Applicant/Exam/Index', [
+        //     'exams' => $applicant_exams,
+        // ]);
     }
 
     /**
@@ -78,33 +84,70 @@ class ApplicantExamController extends Controller
         $applicant = Applicant::where('user_id', $authApplicant)->first();
 
         $schedule = Schedule::where('applicant_id', $applicant->id)->first();
-
-        if ($schedule->status == 'inactive') {
-            $this->flash("You are not allowed to take this exam or you're not scheduled for today.", 'danger');
-            return back();
-        }
+        $attempt = Attempt::where('applicant_id', $applicant->id)->first();
 
         $applicant_id = $applicant->id;
         $exam_id = $exam->id;
 
         $exam = Exam::find($exam_id);
         $questions = Question::with('choices')->where('exam_id', $exam_id)->inRandomOrder()->get();
+        $answers = Answer::where(['applicant_id' => $applicant_id, 'exam_id' => $exam_id])->get();
         $duration = Exam::where('id', $exam_id)->value('duration');
 
-        $examHasTaken = Answer::where(['applicant_id' => $applicant_id, 'exam_id' => $exam_id])->get();
-        $wasCompleted = Answer::where('applicant_id', $applicant_id)->whereIn('exam_id', (new Exam)->hasExamAttempted())->pluck('exam_id')->toArray();
-
-        if (in_array($exam_id, $wasCompleted)) {
-            $this->flash("You already taken this exam.", 'danger');
+        if ($schedule->status == 'ended') {
+            $this->flash("The exam has ended. You are not allowed to take it again.", 'danger');
             return back();
         }
 
-        return Inertia::render('Applicant/Exam/Show', [
-            'exam' => $exam,
-            'duration' => $duration,
-            'questions' => $questions,
-            'examHasTaken' => $examHasTaken,
-        ]);
+        if ($schedule->status == 'pending') {
+            $this->flash("You are not scheduled to take the exam today.", 'danger');
+            return back();
+        }
+
+        $start_time = Carbon::now();
+        $end_time = $start_time->addMinutes($duration)->format('Y-m-d H:i');
+        $curr_time = Carbon::now()->format('Y-m-d H:i');
+
+        if ($schedule->status == 'active') {
+
+            // create attempt
+            if (!$attempt) {
+                Attempt::create(
+                    [
+                        'applicant_id' => $applicant->id,
+                        'exam_id' => $exam_id,
+                        'start_time' => $curr_time,
+                        'end_time' => $end_time,
+                    ],
+                );
+
+                return Inertia::render('Applicant/Exam/Show', [
+                    'exam' => $exam,
+                    'questions' => $questions,
+                    'answers' => $answers,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                ]);
+            }
+            // attempt ended
+            if ($attempt->applicant_id == $applicant_id && $attempt->exam_id == $exam_id && $attempt->end_time < $curr_time) {
+                $this->flash("Your attempt for this exam was finished.", 'danger');
+                return back();
+            }
+            // continue attempt
+            if ($attempt->applicant_id == $applicant_id && $attempt->exam_id == $exam_id && $curr_time < $attempt->end_time) {
+                $start  = Carbon::parse($attempt->start_time);
+                $end  = Carbon::parse($attempt->end_time);
+
+                return Inertia::render('Applicant/Exam/Show', [
+                    'exam' => $exam,
+                    'questions' => $questions,
+                    'answers' => $answers,
+                    'start_time' => $attempt->start_time,
+                    'end_time' => $attempt->end_time,
+                ]);
+            }
+        }
     }
 
     /**

@@ -1,8 +1,10 @@
 <template>
-  <applicant-layout title="Applicant">
+  <exam-layout title="Applicant">
     <template #header>
       <!-- Header -->
-      <div class="grid grid-cols-2 px-5 py-3 shadow-lg rounded-md bg-emerald-600">
+      <div
+        class="container mx-auto grid grid-cols-2 px-5 py-3 shadow-lg rounded-md bg-emerald-600"
+      >
         <div>
           <h2 class="font-semibold text-xl text-white leading-tight">
             <span>{{ exam.exam_code }}</span>
@@ -13,8 +15,11 @@
           <!-- Line buttons and show dropdown -->
           <div class="inline-flex" align="right">
             <div class="text-xl font-medium text-white leading-tight">
-              <span class="text-sm">Time left:</span>
-              <span class="text-red-200">{{ time }}</span>
+              <span class="text-sm">Time left: </span>
+              <span class="text-red-200">{{ days }}</span>
+              <span class="text-red-200">{{ hours }}</span>
+              <span class="text-red-200">{{ minutes }}</span>
+              <span class="text-red-200">{{ seconds }}</span>
             </div>
           </div>
           <!-- Hide in line buttons and show dropdown -->
@@ -23,7 +28,7 @@
       </div>
     </template>
 
-    <div class="flex flex-col">
+    <div class="flex flex-col container mx-auto">
       <!-- Card -->
       <div class="w-full px-4">
         <div
@@ -87,7 +92,6 @@
                                   :value="
                                     choice.is_correct == true ? true : choice.option
                                   "
-                                  v-bind:value="choice"
                                   @click="choices(question.id, choice.id)"
                                   class="mr-3"
                                 />
@@ -243,13 +247,39 @@
                       </svg>
                       Previous
                     </button>
+
+                    <!-- nexy button -->
                     <button
                       text
                       color="primary"
                       class="white--text float-right inline-flex"
-                      @click="postApplicantAnswers"
+                      @click="postApplicantAnswers('next')"
+                      v-if="questionIndex < questions.length - 1"
                     >
                       Next<svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 ml-2"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+
+                    <!-- submit button -->
+                    <button
+                      text
+                      color="primary"
+                      class="white--text float-right inline-flex"
+                      @click="openModal(true)"
+                      v-if="questionIndex === questions.length - 1"
+                    >
+                      Submit
+                      <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="h-5 w-5 ml-2"
                         viewBox="0 0 20 20"
@@ -272,7 +302,7 @@
       </div>
       <!-- Full dashboard -->
     </div>
-  </applicant-layout>
+  </exam-layout>
 
   <dialog-modal :show="isOpen" @close="openModal(false)">
     <template #title>
@@ -295,7 +325,7 @@
 </template>
 
 <script>
-import ApplicantLayout from "@/Layouts/ApplicantLayout";
+import ExamLayout from "@/Layouts/ExamLayout";
 import moment from "moment";
 import { Link } from "@inertiajs/inertia-vue3";
 import JetPagination from "@/Components/Pagination";
@@ -304,10 +334,12 @@ import DialogModal from "@/Jetstream/DialogModal";
 import JetButton from "@/Jetstream/Button";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 import route from "../../../../../vendor/tightenco/ziggy/src/js";
+import { floor } from "lodash";
+import M from "minimatch";
 
 export default {
   components: {
-    ApplicantLayout,
+    ExamLayout,
     moment,
     Link,
     JetPagination,
@@ -320,44 +352,70 @@ export default {
   props: {
     exam: Object,
     questions: Object,
-    examHasTaken: Object,
-    duration: Number,
+    answers: Object,
+    start_time: String,
+    end_time: String,
   },
 
   data() {
     return {
       radioGroup: 0,
       questionIndex: 0,
-      applicantResponses: Array(this.questions.length).fill(false),
+      applicantResponses: Array(this.questions.length).fill(this.answers.answer_id),
       currentQuestion: 0,
       currentAnswer: 0,
-      clock: moment(this.duration * 60 * 1000),
 
       isOpen: false,
       isSubmitted: false,
       disabled: null,
+
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
     };
   },
 
-  mounted() {
-    setInterval(() => {
-      this.clock = moment(this.clock.subtract(1, "seconds"));
-    }, 1000);
-  },
+  mounted() {},
 
   computed: {
-    time: function () {
-      var time = this.clock.format("mm:ss");
-
-      if (time == "00:00") {
-        // alert("test");
-        return submitApplicantAnswers();
-      }
-      return time;
+    _seconds: () => 1000,
+    _minutes() {
+      return this._seconds * 60;
+    },
+    _hours() {
+      return this._seconds * 60;
+    },
+    _days() {
+      return this._seconds * 24;
     },
   },
 
   methods: {
+    // timer
+    showRemaining() {
+      const timer = setInterval(() => {
+        const start = new Date(this.start_time);
+        const end = new Date(this.end_time);
+        const distance = end.getTime() - start.getTime();
+
+        if (distance < 0) {
+          clearInterval(timer);
+          return;
+        }
+
+        const ddays = Math.floor(distance / this._days);
+        const dhours = Math.floor((distance % this._days) / this._hours);
+        const dminutes = Math.floor((distance % this._hours) / this._minutes);
+        const dseconds = Math.floor((distance % this._minutes) / this._seconds);
+
+        this.days = ddays < 10 ? "0" + ddays : ddays;
+        this.hours = dhours < 10 ? "0" + dhours : dhours;
+        this.minutes = dminutes < 10 ? "0" + dminutes : dminutes;
+        this.seconds = dseconds < 10 ? "0" + dseconds : dseconds;
+      });
+    },
+
     prev() {
       this.questionIndex--;
     },
@@ -400,6 +458,22 @@ export default {
       this.disabledClick(true);
       this.isOpen = false;
     },
+
+    // submit button function
+    submitOnTimerEnd() {
+      axios.post("/applicant/test", {
+        answerId: this.currentAnswer,
+        questionId: this.currentQuestion,
+        examId: this.exam.id,
+      });
+      this.questionIndex++;
+      this.isSubmitted = true;
+      this.disabledClick(true);
+
+      this.$inertia.visit(route("applicant.exams.index"));
+    },
+
+    // update time left
 
     // Disable function
     disabledClick: function (s) {

@@ -43,10 +43,10 @@
           <template #trigger>
             <button
               v-if="$page.props.jetstream.managesProfilePhotos"
-              class="text-sm border-transparent rounded-full focus:outline-none focus:border-gray-300 transition"
+              class="text-sm border-transparent focus:outline-none focus:border-gray-300 transition"
             >
               <img
-                class="h-10 w-10 rounded-full"
+                class="rounded-full h-10 w-10 object-cover"
                 :src="$page.props.user.profile_photo_url"
                 :alt="$page.props.user.name"
               />
@@ -153,7 +153,7 @@
                     <div class="flex" align="left">
                       <div class="flex-shrink-0 h-10 w-10">
                         <img
-                          class="h-10 w-10 rounded-full"
+                          class="rounded-full h-10 w-10 object-cover"
                           :src="$page.props.user.profile_photo_url"
                           :alt="$page.props.user.name"
                         />

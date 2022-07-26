@@ -188,7 +188,6 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-
         $date_now = Carbon::now('Asia/Hong_Kong')->format('Y-m-d');
 
         $date = date('Y-m-d H:i:s', strtotime($request->date));

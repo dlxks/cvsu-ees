@@ -40,15 +40,6 @@ class Question extends Model
         return Question::orderBy('created_at', 'asc')->with('exam');
     }
 
-    // public function getImgPathAttribute($value)
-    // {
-    //     return Storage::url($value);
-
-    //     // return $this->img_path
-    //     //             ? Storage::disk($this->imageDisk())->url($this->img_path)
-    //     //             : $this->defaultProfilePhotoUrl();
-    // }    
-
     public function getCreatedAtAttribute($value)
     {
         return now()->parse($value)->timezone(config('app.timezone'))->format('d F Y, H:i:s');

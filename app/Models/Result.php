@@ -29,6 +29,11 @@ class Result extends Model
         return $this->belongsTo(Applicant::class);
     }
 
+    // public function courses()
+    // {
+    //     return $this->hasMany(Course::class);
+    // }
+
     public function getCreatedAtAttribute($value)
     {
         return now()->parse($value)->timezone(config('app.timezone'))->format('d F Y, H:i:s');

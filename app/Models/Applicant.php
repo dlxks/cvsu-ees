@@ -46,12 +46,16 @@ class Applicant extends Model
 
     public function result()
     {
-        return $this->hasOne(Result::class);
+        return $this->hasMany(Result::class);
     }
 
     public function schedule()
     {
         return $this->hasOne(Schedule::class);
+    }
+
+    public function attempt(){
+        return $this->hasOne(Attempt::class);
     }
 
     public function getCreatedAtAttribute($value)

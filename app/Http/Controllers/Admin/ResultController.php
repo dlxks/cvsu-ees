@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ResultsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Banner;
 use App\Mail\ResultMail;
 use App\Models\Applicant;
 use App\Models\Course;
 use App\Models\Result;
-use App\Models\User;
-use App\Notifications\ResultNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Vonage\Client;
 use Vonage\Client\Credentials\Basic;
 use Vonage\SMS\Message\SMS;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class ResultController extends Controller
 {
@@ -170,6 +171,46 @@ class ResultController extends Controller
         //
     }
 
+
+    // Export function
+    public function export()
+    {
+        $date = Carbon::now()->format('d-m-Y');
+
+        if (request()->has('type')) {
+            if (request()->get('type') == 'xlsx') {
+                return Excel::download(new ResultsExport, $date . '-results.xlsx');
+            } elseif (request()->get('type') == 'csv') {
+                return Excel::download(new ResultsExport, $date . '-results.csv');
+            }
+        }
+        return back();
+    }
+
+    public function generate_pdf()
+    {
+        $date = Carbon::now()->format('d-m-Y');
+        // $data = Result::orderBy('applicant_id', 'asc')->get();
+        $data = \DB::table('results')
+            ->join('applicants', 'applicants.id', '=', 'results.applicant_id')
+            ->select(\DB::raw('results.applicant_id as applicant_id, 
+                                            results.name as name, 
+                                            results.course as course, 
+                                            results.status as status,
+                                            applicants.email as email,
+                                            applicants.phone_number as phone_number'))
+            ->orderBy('applicants.id', 'asc')
+            ->get();
+        $ddate = Carbon::now()->format('d/m/Y');
+
+        $pdf = PDF::loadView('pdf.results', [
+            'data' => $data,
+            'ddate' => $ddate,
+        ]);
+
+        return $pdf->stream($date . '-results.pdf');
+    }
+
     public function sendNotification(Request $request)
     {
         $data = [
@@ -198,10 +239,10 @@ class ResultController extends Controller
             $message = $response->current();
 
             if ($message->getStatus() == 0) {
-                $this->flash('Result was sent!', 'success');
+                $this->flash('Results was sent!', 'success');
             } else {
 
-                $this->flash('Result was not sent!', 'danger');
+                $this->flash('Results was not sent!', 'danger');
             }
 
             // EMAIL

@@ -46,10 +46,32 @@
               </div>
             </div>
             <div class="float-right my-2">
-              <jet-button @click="take(exam)">Take Exam</jet-button>
+              <jet-button @click="openModal(true)">Take Exam</jet-button>
             </div>
-          </div>
 
+            <!-- Notice modal -->
+            <dialog-modal :show="isOpen" @close="openModal(false)">
+              <template #title>
+                <span> Take Exam </span>
+              </template>
+
+              <template #content>
+                <span
+                  >Once you start the examination, you will not be able to return. Once
+                  the timer ends, the exam will be automatically submitted.</span
+                >
+              </template>
+
+              <template #footer>
+                <jet-secondary-button @click="openModal(false)">
+                  Cancel
+                </jet-secondary-button>
+
+                <jet-button class="ml-2" @click="openExam(exam)"> Take </jet-button>
+              </template>
+            </dialog-modal>
+            <!-- Notice modal -->
+          </div>
         </div>
       </div>
       <!-- Header card -->
@@ -62,6 +84,8 @@ import ApplicantLayout from "@/Layouts/ApplicantLayout";
 import { Link } from "@inertiajs/inertia-vue3";
 import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import JetButton from "@/Jetstream/Button.vue";
+import JetSecondaryButton from "@/Jetstream/SecondaryButton";
+import DialogModal from "@/Jetstream/DialogModal";
 import NoData from "@/Components/Fillers/NoData.vue";
 
 export default {
@@ -70,6 +94,8 @@ export default {
     Link,
     JetSectionBorder,
     JetButton,
+    JetSecondaryButton,
+    DialogModal,
     NoData,
   },
 
@@ -79,11 +105,31 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      isOpen: false,
+      isSubmitted: false,
+      disabled: null,
+    };
   },
 
   methods: {
-    take: function (exam) {
+    // Disable function
+    disabledClick: function (s) {
+      this.disabled = s;
+    },
+
+    // Modal function
+    openModal: function (status) {
+      if (status == true) {
+        this.isOpen = true;
+      } else if (status == false) {
+        this.isOpen = false;
+      }
+      return this.isOpen;
+    },
+
+    // Take exam
+    openExam: function (exam) {
       this.$inertia.visit(route("applicant.exams.show", exam));
     },
   },
