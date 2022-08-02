@@ -17,7 +17,6 @@ class CreateResultsTable extends Migration
             $table->id();
             $table->bigInteger('applicant_id');
             $table->string('name');
-            $table->string('course')->nullable();
             $table->string('exam');
             $table->integer('score')->nullable();
             $table->string('status')->default('pending');

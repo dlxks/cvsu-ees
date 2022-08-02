@@ -101,12 +101,14 @@
                 <td class="text-right text-gray-500 px-2">Course:</td>
                 <td class="px-4 py-2">
                   <Multiselect
-                    v-model="form.course"
-                    placeholder="Select course"
-                    valueProp="course_name"
+                    v-model="form.courses"
+                    mode="tags"
+                    placeholder="Select courses"
+                    object="true"
+                    valueProp="id"
                     :searchable="true"
                     label="course_name"
-                    :options="courses"
+                    :options="course_names"
                   />
                 </td>
               </tr>
@@ -140,10 +142,30 @@
                       Back to Results
                     </jet-secondary-button>
                     <jet-button
+                      @click="verify(form)"
+                      class="inline-flex items-center mx-2 bg-emerald-200 hover:bg-emerald-300 text-emerald-800 font-medium rounded-md"
+                    >
+                      Verify
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 ml-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                        />
+                      </svg>
+                    </jet-button>
+                    <jet-button
                       @click="send(form)"
                       class="inline-flex items-center mx-2 bg-blue-200 hover:bg-blue-300 text-blue-800 font-medium rounded-md"
                     >
-                      Verify and Send
+                      Send
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="h-5 w-5 ml-2 rotate-90"
@@ -205,7 +227,7 @@ export default {
   props: {
     result: Object,
     applicant: Object,
-    courses: Object,
+    course_names: Object,
   },
 
   data() {
@@ -214,16 +236,16 @@ export default {
       disabled: null,
       editMode: false,
 
-      form: {
+      form: this.$inertia.form({
         name: this.result.name,
         applicant_id: this.result.applicant_id,
-        course: this.result.course,
+        courses: [],
         exam: this.result.exam,
         score: this.result.score,
         status: this.result.status,
         phone_number: this.applicant.phone_number,
         email: this.applicant.email,
-      },
+      }),
     };
   },
 
@@ -246,14 +268,17 @@ export default {
       return this.isOpen;
     },
 
-    // Send
-    send: function (result) {
+    // Update
+    verify: function (result) {
       this.$inertia.put(
         this.route("admin.results.update", this.result.id),
         this.form,
         {}
       );
+    },
 
+    // Send notif
+    send: function (result) {
       this.$inertia.visit(route("admin.send.notif"), {
         method: "get",
         data: result,

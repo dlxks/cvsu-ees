@@ -21,7 +21,17 @@ class Answer extends Model
     protected $appends = [
         'can',
     ];
-    
+
+    public function question()
+    {
+        return $this->belongsTo(Question::class);
+    }
+
+    public function choice()
+    {
+        return $this->belongsTo(Choice::class);
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return now()->parse($value)->timezone(config('app.timezone'))->format('d F Y, H:i:s');

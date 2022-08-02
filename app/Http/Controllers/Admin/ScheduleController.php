@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Vonage\Client\Credentials\Basic;
+use Vonage\Client;
+use Vonage\SMS\Message\SMS;
 
 class ScheduleController extends Controller
 {
@@ -124,11 +127,6 @@ class ScheduleController extends Controller
         $arr = [];
         for ($x = $start; $x <= strval($end); $x++) {
 
-            //    if (!in_array($x, $arr)) {
-            //         $n = str_pad($x, 6, "0", STR_PAD_LEFT);
-            //         array_push($arr, date('ym').$n);
-            //     }
-
             $n = str_pad($x, 6, "0", STR_PAD_LEFT);
             $sched = Schedule::create([
                 'sched_code' => $sched_code,
@@ -139,18 +137,9 @@ class ScheduleController extends Controller
             ]);
 
             foreach ($request['exams'] as $ex) {
-                $sched->exams()->attach($ex['id']);
+                $sched->exams()->sync($ex['id']);
             }
         }
-
-
-        // EMAIL
-        // $data = [
-        //     'name' => $request['name'],
-        //     'status' => $request['status'],
-        //     'course' => $request['course'],
-        //     'regards' => 'Cavite State University-Main Campus',
-        // ];
 
         $this->flash('Schedule created!', 'success');
 
@@ -215,7 +204,6 @@ class ScheduleController extends Controller
             $schedule->update(['status' => 'ended']);
         }
 
-
         $exids = [];
         foreach ($request['exams'] as $ex) {
             array_push($exids, $ex['id']);
@@ -263,12 +251,30 @@ class ScheduleController extends Controller
             ->where('schedules.status', '=', 'pending')
             ->get();
 
-
         if (count($applicants) < 1) {
             $this->flash('No pending schdules.', 'danger');
             return redirect()->back();
         } elseif (count($applicants) > 0) {
             foreach ($applicants as $applicant) {
+
+                $sms_message = 'This is Cavite State University-Main Campus. You were scheduled to take the entrance examination on ' . $applicant->date . '.';
+                // SMS
+                $basic  = new Basic("68ad8f1a", "4PMcuDQ5mVe0STkl");
+                $client = new Client($basic);
+
+                $response = $client->sms()->send(
+                    new SMS($applicant->phone_number, 'Cavite State University-Main Campus', $sms_message)
+                );
+
+                $message = $response->current();
+
+                if ($message->getStatus() == 0) {
+                    $this->flash('Schedule was sent!', 'success');
+                } else {
+
+                    $this->flash('Schedule was not sent!', 'danger');
+                }
+
                 $data = [
                     'ctrl_num' => $applicant->id,
                     'name' => $applicant->lname . ', ' . $applicant->fname . ' ' . $applicant->mname,

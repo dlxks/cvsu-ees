@@ -3,10 +3,10 @@
     <template #header>
       <!-- Header -->
       <div
-        class="container mx-auto grid grid-cols-2 px-5 py-3 shadow-lg rounded-md bg-emerald-600"
+        class="container mx-auto grid grid-cols-2 px-5 py-3 shadow-lg rounded-md bg-emerald-500"
       >
         <div>
-          <h2 class="font-semibold text-xl text-white leading-tight">
+          <h2 class="font-semibold text-xl leading-tight text-white">
             <span>{{ exam.exam_code }}</span>
           </h2>
         </div>
@@ -14,12 +14,46 @@
         <div align="right">
           <!-- Line buttons and show dropdown -->
           <div class="inline-flex" align="right">
-            <div class="text-xl font-medium text-white leading-tight">
-              <span class="text-sm">Time left: </span>
-              <span class="text-red-200">{{ days }}</span>
-              <span class="text-red-200">{{ hours }}</span>
-              <span class="text-red-200">{{ minutes }}</span>
-              <span class="text-red-200">{{ seconds }}</span>
+            <div class="text-lg font-medium leading-tight">
+              <span class="text-xs text-white">Remaining Time : </span>
+              <span
+                class="inline-block text-center"
+                :class="
+                  this.seconds < 60 && this.minutes == 0 ? 'text-red-500' : 'text-white'
+                "
+                v-if="this.days != 0"
+              >
+                {{ days }}:
+                <!-- <span class="block text-xs">Days</span> -->
+              </span>
+              <span
+                class="inline-block text-center"
+                :class="
+                  this.seconds < 60 && this.minutes == 0 ? 'text-red-500' : 'text-white'
+                "
+                v-if="this.hours != 0"
+              >
+                {{ hours }}:
+                <!-- <span class="block text-xs">Hours</span> -->
+              </span>
+              <span
+                class="inline-block text-center"
+                :class="
+                  this.seconds < 60 && this.minutes == 0 ? 'text-red-500' : 'text-white'
+                "
+              >
+                {{ minutes }}:
+                <!-- <span class="block text-xs">Minutes</span> -->
+              </span>
+              <span
+                class="inline-block text-center"
+                :class="
+                  this.seconds < 60 && this.minutes == 0 ? 'text-red-500' : 'text-white'
+                "
+              >
+                {{ seconds }}
+                <!-- <span class="block text-xs">Seconds</span> -->
+              </span>
             </div>
           </div>
           <!-- Hide in line buttons and show dropdown -->
@@ -44,6 +78,13 @@
                   {{ exam.description }}
                 </span>
               </div>
+            </div>
+            <div class="mt-5">
+              <span class="text-red-700 text-md"
+                >*Note: If you close or refresh the page, all your selected answer will be
+                cleared. It will be saved but the selection will be cleared. If you choose
+                new answer, it will just update your current answer.</span
+              >
             </div>
           </div>
         </div>
@@ -92,6 +133,7 @@
                                   :value="
                                     choice.is_correct == true ? true : choice.option
                                   "
+                                  :selected="this.answers.answer_id == choice.id"
                                   @click="choices(question.id, choice.id)"
                                   class="mr-3"
                                 />
@@ -189,7 +231,8 @@
             <!-- Table div -->
 
             <div class="text-center py-6" v-if="questionIndex === questions.length">
-              te
+              <span>You have finished the exam.</span>
+              <jet-button @click="gotoResults()">See Results</jet-button>
             </div>
           </div>
           <!-- Left side -->
@@ -355,13 +398,13 @@ export default {
     answers: Object,
     start_time: String,
     end_time: String,
+    result: Object,
   },
 
   data() {
     return {
-      radioGroup: 0,
       questionIndex: 0,
-      applicantResponses: Array(this.questions.length).fill(this.answers.answer_id),
+      applicantResponses: Array(this.questions.length).fill(false),
       currentQuestion: 0,
       currentAnswer: 0,
 
@@ -376,7 +419,9 @@ export default {
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.showRemaining();
+  },
 
   computed: {
     _seconds: () => 1000,
@@ -384,10 +429,10 @@ export default {
       return this._seconds * 60;
     },
     _hours() {
-      return this._seconds * 60;
+      return this._minutes * 60;
     },
     _days() {
-      return this._seconds * 24;
+      return this._hours * 24;
     },
   },
 
@@ -395,13 +440,17 @@ export default {
     // timer
     showRemaining() {
       const timer = setInterval(() => {
-        const start = new Date(this.start_time);
+        const start = new Date();
         const end = new Date(this.end_time);
         const distance = end.getTime() - start.getTime();
 
         if (distance < 0) {
           clearInterval(timer);
-          return;
+          return this.submitOnTimerEnd();
+        }
+
+        if (this.result != null) {
+          clearInterval(timer);
         }
 
         const ddays = Math.floor(distance / this._days);
@@ -413,7 +462,7 @@ export default {
         this.hours = dhours < 10 ? "0" + dhours : dhours;
         this.minutes = dminutes < 10 ? "0" + dminutes : dminutes;
         this.seconds = dseconds < 10 ? "0" + dseconds : dseconds;
-      });
+      }, 1000);
     },
 
     prev() {
@@ -457,6 +506,12 @@ export default {
       this.isSubmitted = true;
       this.disabledClick(true);
       this.isOpen = false;
+
+      this.$inertia.post("/applicant/results", {
+        answerId: this.currentAnswer,
+        questionId: this.currentQuestion,
+        examId: this.exam.id,
+      });
     },
 
     // submit button function
@@ -470,7 +525,12 @@ export default {
       this.isSubmitted = true;
       this.disabledClick(true);
 
-      this.$inertia.visit(route("applicant.exams.index"));
+      this.$inertia.post("/applicant/results", {
+        answerId: this.currentAnswer,
+        questionId: this.currentQuestion,
+        examId: this.exam.id,
+      });
+      // this.$inertia.visit(route("applicant.results.index"));
     },
 
     // update time left
@@ -488,6 +548,11 @@ export default {
         this.isOpen = false;
       }
       return this.isOpen;
+    },
+
+    // Go to results
+    gotoResults() {
+      this.$inertia.visit(route("applicant.results.index"));
     },
   },
 };

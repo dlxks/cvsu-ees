@@ -477,7 +477,7 @@
 
     <template #content>
       <!-- Name -->
-       <div class="mb-4" v-if="editMode">
+      <div class="mb-4" v-if="editMode">
         <jet-label for="controlnum" value="Control number" />
         <b>{{ form.applicant_id }}</b>
       </div>
@@ -508,7 +508,6 @@
             label="subject"
             :options="exam_names"
             @keyup.enter="save(form)"
-            :close-on-select="false"
           />
         </div>
       </div>
@@ -538,7 +537,6 @@
           />
         </div>
       </div>
-
 
       <!-- Sched Date -->
       <div class="mb-4">

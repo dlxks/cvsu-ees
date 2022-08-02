@@ -31,13 +31,15 @@ class Course extends Model
         'can',
     ];
 
-    public function college(){
+    public function college()
+    {
         return $this->belongsTo(College::class);
     }
 
-    // public function results(){
-    //     return $this->belongsToMany(Result::class);
-    // }
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
 
     public function getCreatedAtAttribute($value)
     {

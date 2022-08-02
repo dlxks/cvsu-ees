@@ -44,18 +44,16 @@ class ResultController extends Controller
         ]);
 
         $course_names = Course::latest()->get();
-        $applicant = DB::table('results')
-            ->join('applicants', 'results.applicant_id', '=', 'applicants.id')
+        $applicant = Result::with('courses', 'applicant')
             ->where('results.applicant_id', '=', 'applicants.id');
 
-        $data = Result::query();
+        $data = Result::with('courses');
         $perpage = $request->input('perpage') ?: 25;
 
         if (request('search')) {
             $data
                 ->orwhere('results.applicant_id', 'like', '%' . request('search') . '%')
                 ->orWhere('results.name', 'like', '%' . request('search') . '%')
-                ->orWhere('results.course', 'like', '%' . request('search') . '%')
                 ->orWhere('results.status', 'like', '%' . request('search') . '%');
         }
 
@@ -103,20 +101,13 @@ class ResultController extends Controller
         $applicant = Applicant::where('applicants.id', '=', $result->applicant_id)
             ->first();
 
-        $courses = Course::latest()->get();
+        $course_names = Course::latest()->get();
+        $result->with('courses', 'applicant');
 
         return Inertia::render('Admin/Result/Show', [
-            'result' => [
-                'id' => $result->id,
-                'applicant_id' => $result->applicant_id,
-                'name' => $result->name,
-                'course' => $result->course,
-                'exam' => $result->exam,
-                'score' => $result->score,
-                'status' => $result->status,
-            ],
+            'result' => $result,
             'applicant' => $applicant,
-            'courses' => $courses,
+            'course_names' => $course_names,
         ]);
     }
 
@@ -142,22 +133,44 @@ class ResultController extends Controller
     {
         $val = Validator::make($request->all(), [
             'name' => ['required'],
-            'applicant_id' =>  ['required'],
+            'applicant_id' => ['required'],
             'exam' => ['required'],
             'score' => ['required'],
-            'course' => ['required'],
             'status' => ['required'],
         ]);
+
+        if ($request['status'] == 'qualified') {
+            $val = Validator::make($request->all(), [
+                'courses' => ['required'],
+            ]);
+        }
 
         if ($val->fails()) {
             $this->flash($val->errors()->first(), 'danger');
             return back();
         }
 
-        $result->update([
-            'course' => $request['course'],
-            'status' => $request['status'],
-        ]);
+        $result->updateOrCreate(
+            [
+                'applicant_id' => $request['applicant_id'],
+            ],
+            [
+                'status' => $request['status'],
+            ]
+        );
+
+        $courseids = [];
+        if (!$request['courses']) {
+            $result->courses()->sync($courseids);
+        } else {
+            foreach ($request['courses'] as $crs) {
+                array_push($courseids, $crs['id']);
+            }
+            $result->courses()->sync($courseids);
+        }
+
+        $this->flash('Result verified!', 'success');
+        return redirect()->back();
     }
 
     /**
@@ -189,39 +202,26 @@ class ResultController extends Controller
 
     public function generate_pdf()
     {
-        $date = Carbon::now()->format('d-m-Y');
-        // $data = Result::orderBy('applicant_id', 'asc')->get();
-        $data = \DB::table('results')
-            ->join('applicants', 'applicants.id', '=', 'results.applicant_id')
-            ->select(\DB::raw('results.applicant_id as applicant_id, 
-                                            results.name as name, 
-                                            results.course as course, 
-                                            results.status as status,
-                                            applicants.email as email,
-                                            applicants.phone_number as phone_number'))
-            ->orderBy('applicants.id', 'asc')
+        $results = Result::with('courses', 'applicant')
+            ->orderBy('results.applicant_id', 'asc')
             ->get();
-        $ddate = Carbon::now()->format('d/m/Y');
+
+        $date = Carbon::now()->format('d/m/Y');
 
         $pdf = PDF::loadView('pdf.results', [
-            'data' => $data,
-            'ddate' => $ddate,
+            'results' => $results,
+            'date' => $date,
         ]);
 
-        return $pdf->stream($date . '-results.pdf');
+        return $pdf->stream($date . '*results.pdf');
     }
 
     public function sendNotification(Request $request)
     {
-        $data = [
-            'name' => $request['name'],
-            'status' => $request['status'],
-            'course' => $request['course'],
-            'regards' => 'Cavite State University-Main Campus',
-        ];
+        $app_id = $request['applicant_id'];
 
-
-        $sms_message = 'This is Cavite State University. You are ' . $request['status'] . ' to enroll to ' . $request['course'] . ' program in Cavite State University-Main Campus.';
+        $result = Result::with('courses')->where('applicant_id', $app_id)->first();
+        $sms_message = 'This is Cavite State University-Main Campus. We would like to inform you that the results of your application is already out. Please check you email or the examination site to see the results. Thank you!';
 
         $phone = $request['phone_number'];
         $email = $request['email'];
@@ -233,7 +233,7 @@ class ResultController extends Controller
             $client = new Client($basic);
 
             $response = $client->sms()->send(
-                new SMS($phone, 'Cavite State University', $sms_message)
+                new SMS($phone, 'Cavite State University-Main Campus', $sms_message)
             );
 
             $message = $response->current();
@@ -246,7 +246,7 @@ class ResultController extends Controller
             }
 
             // EMAIL
-            Mail::to($email)->send(new ResultMail($data));
+            Mail::to($email)->send(new ResultMail($result));
 
             $this->flash('Result was sent!', 'success');
 

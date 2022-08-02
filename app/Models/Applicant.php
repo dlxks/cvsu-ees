@@ -46,7 +46,7 @@ class Applicant extends Model
 
     public function result()
     {
-        return $this->hasMany(Result::class);
+        return $this->hasOne(Result::class);
     }
 
     public function schedule()

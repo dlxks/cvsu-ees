@@ -45,8 +45,6 @@ class HomeController extends Controller
             'schedules' => $data->paginate(30)->withQueryString(),
             'contacts' => $contacts,
         ]);
-        // return Inertia::render('Index');
-        // return view('Index');
     }
 
     /**

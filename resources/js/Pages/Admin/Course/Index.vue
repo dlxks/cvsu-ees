@@ -305,8 +305,17 @@
           id="course_desc"
           type="text"
           class="mt-1 block w-full"
+          v-show="!editMode"
           v-model="form.course_desc"
           @keyup.enter="save(form)"
+        />
+        <jet-input
+          id="course_desc"
+          type="text"
+          class="mt-1 block w-full"
+          v-show="editMode"
+          v-model="form.course_desc"
+          @keyup.enter="update(form)"
         />
       </div>
     </template>

@@ -35,46 +35,76 @@
                               Exam Schedule
                             </h5>
                             <div class="py-2">
-                              <span
-                                class="font-semibold text-xl text-blue-900 block"
-                                :class="
-                                  schedule.status === 'ended'
-                                    ? 'text-blue-900'
-                                    : 'text-red-900'
-                                "
-                              >
-                                {{ schedule.sched_code }}
-                              </span>
-                              <span class="font-semibold text-xl text-blue-900 block">
-                                {{ schedule.sched_name }}
-                              </span>
-                               <span class="font-semibold text-xl text-blue-900 block">
-                                {{ schedule.date }}
-                              </span>
-                              <span
-                                v-show="schedule.status == 'active'"
-                                class="font-semibold text-xl text-emerald-700 block uppercase"
-                              >
-                                {{ schedule.status }}
-                              </span>
+                              <div class="py-4">
+                                <span
+                                  class="font-semibold text-xl block"
+                                  :class="
+                                    schedule.status === 'ended'
+                                      ? 'text-red-900'
+                                      : 'text-blue-900'
+                                  "
+                                >
+                                  <span class="text-sm text-gray-500">Code:</span>
+                                  {{ schedule.sched_code }}
+                                </span>
+                                <span
+                                  class="font-semibold text-xl block"
+                                  :class="
+                                    schedule.status === 'ended'
+                                      ? 'text-red-900'
+                                      : 'text-blue-900'
+                                  "
+                                >
+                                  <span class="text-sm text-gray-500">Batch:</span>
+                                  {{ schedule.sched_name }}
+                                </span>
+                                <span
+                                  class="font-semibold text-xl block"
+                                  :class="
+                                    schedule.status === 'ended'
+                                      ? 'text-red-900'
+                                      : 'text-blue-900'
+                                  "
+                                >
+                                  <span class="text-sm text-gray-500">Date:</span>
+                                  {{ date }}
+                                </span>
+                              </div>
+                              <div class="py-4">
+                                <span class="text-gray-500">Status: </span>
+                                <span
+                                  v-show="schedule.status == 'active'"
+                                  class="font-semibold text-xl text-emerald-700 block uppercase"
+                                >
+                                  {{ schedule.status }}
+                                </span>
+                                <span
+                                  v-show="schedule.status == 'ended'"
+                                  class="font-semibold text-xl text-red-700 block uppercase"
+                                >
+                                  {{ schedule.status }}
+                                </span>
+                              </div>
                             </div>
                           </div>
                           <div class="relative w-auto pl-4 flex-initial">
                             <div
                               class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-blue-500"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
+                              <Link :href="route('applicant.exams.index')">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="h-5 w-5"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                    clip-rule="evenodd"
+                                  />
+                                </svg>
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -117,16 +147,23 @@
                             <h5 class="text-gray-400 uppercase font-bold text-md">
                               Results
                             </h5>
-                            <div class="py-2">
-                              <span class="font-semibold text-xl text-gray-700">
-                                85/100
+                            <div
+                              class="py-2 uppercase font-semibold text-xl text-gray-700"
+                            >
+                              <span class="block">
+                                <span class="text-gray-500 text-sm">Score: </span
+                                >{{ result.score }}
+                              </span>
+                              <span class="block">
+                                <span class="text-gray-500 text-sm">Score: </span
+                                >{{ result.status }}
                               </span>
                             </div>
                           </div>
                           <div class="relative w-auto pl-4 flex-initial">
                             <Link
                               class="cursor-pointer"
-                              :href="route('applicant.exams.index')"
+                              :href="route('applicant.results.index')"
                             >
                               <div
                                 class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-emerald-500"
@@ -150,7 +187,7 @@
                         <p class="text-sm text-gray-400 mt-4">
                           <Link
                             class="cursor-pointer mr-2 text-emerald-500 hover:text-emerald-700 hover:animate-pulse"
-                            :href="route('applicant.exams.index')"
+                            :href="route('applicant.results.index')"
                           >
                             <span class="inline-flex">
                               See results
@@ -224,7 +261,7 @@ export default {
   props: {
     schedule: Object,
     date: Object,
-    time: Object,
+    result: Object,
   },
 
   data() {

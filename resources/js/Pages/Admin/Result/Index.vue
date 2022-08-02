@@ -243,7 +243,7 @@
                               d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
                             />
                           </svg>
-                          Course
+                          Courses
                         </span>
                       </th>
                       <th
@@ -384,7 +384,13 @@
                         {{ result.name }}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        {{ result.course }}
+                        <span v-for="course in result.courses" v-bind:key="course.id">
+                          {{
+                            result.courses.length >= 2
+                              ? course.course_name + ", "
+                              : course.course_name
+                          }}
+                        </span>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
                         {{ result.exam }}

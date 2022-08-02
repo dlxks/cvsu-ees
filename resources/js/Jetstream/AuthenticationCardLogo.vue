@@ -5,7 +5,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 <template>
   <Link :href="'/'">
     <img
-      src="https://drive.google.com/uc?id=1NQL8McpMmgaK0WgqpihPWsUzArvFHzRo"
+      src="https://drive.google.com/uc?id=1eXYuH_JePPGJCUg5XLNTuU0DeNoy5QKS"
       class="w-40"
       alt="CvSU Logo"
       title="CvSU"

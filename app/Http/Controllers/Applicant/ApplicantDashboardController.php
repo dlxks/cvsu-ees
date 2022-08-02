@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Applicant;
+use App\Models\Result;
 use App\Models\Schedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,19 +23,28 @@ class ApplicantDashboardController extends Controller
      */
     public function index()
     {
-        // $authApplicant = auth()->user()->id;
-        // $applicant = Applicant::where('user_id', $authApplicant)->first();
+        $authApplicant = auth()->user()->id;
+        $applicant = Applicant::where('user_id', $authApplicant)->first();
         // $schedule = Schedule::where('applicant_id', $applicant->id)->first();
 
-        // $sched_date = date('F j, Y', strtotime($schedule->date));
-        // $sched_time = date('h:i A', strtotime($schedule->date));
+        $schedule = auth()->user()->applicantAccount->schedule;
+        $sched_date = date('F j, Y', strtotime($schedule->date));
 
-        $applicant_schedule = auth()->user()->applicantAccount->schedule;
+        $result = Result::with('courses', 'applicant')->where('applicant_id', $applicant->id)->first();
 
         return Inertia::render('Applicant/Dashboard/Index', [
-            'schedule' => $applicant_schedule,
+            'schedule' => $schedule,
+            'date' => $sched_date,
+            'result' => $result,
 
         ]);
+
+        // $applicant_schedule = auth()->user()->applicantAccount->schedule;
+
+        // return Inertia::render('Applicant/Dashboard/Index', [
+        //     'schedule' => $applicant_schedule,
+
+        // ]);
     }
 
     /**

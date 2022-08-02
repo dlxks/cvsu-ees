@@ -50,18 +50,24 @@
 
         }
 
+        .date {
+            float: right;
+            right: 0;
+            color: red;
+        }
     </style>
 </head>
 
 <body>
-    <span class="date">{{ $ddate }}</span>
+    <span class="date">{{ $date }} - </span>
+    <span class="name"> Cavite State University-Main Campus</span>
 
     <table>
         <thead>
             <tr>
                 <th>Control Number</th>
                 <th>Name</th>
-                <th>Course</th>
+                <th>Courses</th>
                 <th>Status</th>
                 <th>Email</th>
                 <th>Phone Number</th>
@@ -69,14 +75,18 @@
         </thead>
         <tbody>
 
-            @foreach ($data as $result)
+            @foreach ($results as $result)
                 <tr>
                     <td>{{ $result->applicant_id }}</td>
                     <td>{{ $result->name }}</td>
-                    <td>{{ $result->course }}</td>
+                    <td>
+                        @foreach ($result->courses as $course)
+                            {{ $course->course_name . ', ' }}
+                        @endforeach
+                    </td>
                     <td>{{ $result->status }}</td>
-                    <td>{{ $result->email }}</td>
-                    <td>{{ $result->phone_number }}</td>
+                    <td>{{ $result->applicant->email }}</td>
+                    <td>{{ $result->applicant->phone_number }}</td>
                 </tr>
             @endforeach
         </tbody>

@@ -111,6 +111,7 @@ Route::prefix('applicant')
 
             // Result
             Route::resource('results', ApplicantResultController::class);
+            Route::get('/pdf/result', [ApplicantResultController::class, 'export_pdf'])->name('result.pdf'); //Export pdf
             
         });
     });

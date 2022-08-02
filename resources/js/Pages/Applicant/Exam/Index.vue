@@ -45,20 +45,31 @@
                 <span class="text-gray-700 text-md font-medium">{{ exam.duration }}</span>
               </div>
             </div>
+            <!-- v-if="this.attempt.end_time < this.dateNow" -->
             <div class="float-right my-2">
-              <jet-button @click="openModal(true)">Take Exam</jet-button>
+              <jet-button @click="openModal(true)" v-if="this.attempt == null"
+                >Take Exam</jet-button
+              >
+              <jet-button @click="openModal(true)" v-if="this.attempt != null"
+                >Continue Exam</jet-button
+              >
             </div>
 
             <!-- Notice modal -->
             <dialog-modal :show="isOpen" @close="openModal(false)">
               <template #title>
-                <span> Take Exam </span>
+                <span v-if="this.attempt == null"> Take Exam </span>
+                <span v-if="this.attempt != null"> Take Exam </span>
               </template>
 
               <template #content>
-                <span
-                  >Once you start the examination, you will not be able to return. Once
-                  the timer ends, the exam will be automatically submitted.</span
+                <span v-if="this.attempt == null"
+                  >Once you start the examination, you will not be able to return. Timer
+                  will continue even if you close the page. When the timer expires, the
+                  exam will be automatically submitted.
+                </span>
+                <span v-if="this.attempt != null"
+                  >You are currently taking the exam, do you wish to continue?</span
                 >
               </template>
 
@@ -67,7 +78,20 @@
                   Cancel
                 </jet-secondary-button>
 
-                <jet-button class="ml-2" @click="openExam(exam)"> Take </jet-button>
+                <jet-button
+                  class="ml-2"
+                  @click="openExam(exam)"
+                  v-if="this.attempt == null"
+                >
+                  Take
+                </jet-button>
+                <jet-button
+                  class="ml-2"
+                  @click="openExam(exam)"
+                  v-if="this.attempt != null"
+                >
+                  Continue
+                </jet-button>
               </template>
             </dialog-modal>
             <!-- Notice modal -->
@@ -102,6 +126,7 @@ export default {
   props: {
     exams: Object,
     schedule: Object,
+    attempt: Object,
   },
 
   data() {
@@ -109,6 +134,7 @@ export default {
       isOpen: false,
       isSubmitted: false,
       disabled: null,
+      dateNow: new Date(),
     };
   },
 

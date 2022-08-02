@@ -35,6 +35,11 @@ class Question extends Model
         return $this->hasMany(Choice::class);
     }
 
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
     public function getQuestions()
     {
         return Question::orderBy('created_at', 'asc')->with('exam');

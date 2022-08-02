@@ -17,7 +17,6 @@ class CreateAttemptsTable extends Migration
             $table->id();
             $table->bigInteger('applicant_id');
             $table->bigInteger('exam_id');
-            $table->bigInteger('time_left')->nullable();
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
             $table->timestamps();

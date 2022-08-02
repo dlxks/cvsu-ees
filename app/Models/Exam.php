@@ -30,7 +30,6 @@ class Exam extends Model
 
     public function schedules()
     {
-        // return $this->belongsToMany(Schedule::class, 'exam_schedule', 'exam_id', 'sched_code');
         return $this->hasMany(Schedule::class, 'exam_id', 'id');
     }
 

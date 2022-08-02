@@ -458,7 +458,10 @@
                   <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-if="!applicants.data.length">
                       <td class="p-4 text-center text-xs text-gray-800" colspan="9">
-                        No data
+                        <span class="text-red-500 uppercase text-xl"
+                          >No data found!</span
+                        >
+                        <NoData />
                       </td>
                     </tr>
                     <tr v-for="applicant in applicants.data" :key="applicant.id">
@@ -670,6 +673,7 @@ import JetPagination from "@/Components/Pagination";
 import { Link } from "@inertiajs/inertia-vue3";
 import shared from "@/Scripts/shared";
 import Multiselect from "@vueform/multiselect";
+import NoData from "@/Components/Fillers/NoData.vue";
 
 export default {
   components: {
@@ -686,6 +690,7 @@ export default {
     DialogModal,
     Link,
     Multiselect,
+    NoData,
   },
 
   props: {
