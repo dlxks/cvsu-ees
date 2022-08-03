@@ -30,11 +30,13 @@ class ApplicantExamController extends Controller
         $authApplicant = auth()->user()->id;
         $applicant = Applicant::where('user_id', $authApplicant)->first();
 
-        $schedule = Schedule::where('applicant_id', $applicant->id)->first();
+        $schedule = Schedule::with('exams')->where('applicant_id', $applicant->id)->first();
         $attempt = Attempt::where('applicant_id', $applicant->id)->first();
         
-        $exams = null;
-        $questions = null;
+        // $exams = null;
+        // $questions = null;
+        $applicant_exams = auth()->user()->applicantAccount->schedule->exams;
+
 
         if ($schedule) {
             if ($schedule->status == 'active') {
@@ -47,7 +49,7 @@ class ApplicantExamController extends Controller
         }
 
         return Inertia::render('Applicant/Exam/Index', [
-            'exams' => $exams,
+            'exams' => $applicant_exams,
             'questions' => $questions,
             'attempt' => $attempt
         ]);
