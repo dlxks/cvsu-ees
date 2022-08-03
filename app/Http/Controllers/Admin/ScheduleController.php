@@ -140,9 +140,11 @@ class ScheduleController extends Controller
             ]);
             $app_id++;
 
+            $exids = [];
             foreach ($request['exams'] as $ex) {
-                $sched->exams()->sync($ex['id']);
+                array_push($exids, $ex['id']);
             }
+            $sched->exams()->sync($exids);
         }
 
         $this->flash('Schedule created!', 'success');
