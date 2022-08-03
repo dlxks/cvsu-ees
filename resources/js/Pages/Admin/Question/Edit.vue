@@ -111,16 +111,6 @@
                 alt="Image"
               />
             </div>
-            <!-- <jet-input
-              id="imgphoto"
-              type="file"
-              placeholder=""
-              class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 my-2"
-              @input="questionform.img_path = $event.target.files[0]"
-              accept="image/png, image/jpeg"
-              @change="previewImage"
-            >
-            </jet-input> -->
           </span>
         </div>
       </div>
@@ -164,14 +154,6 @@
                       <img :src="choice.img_url" class="object-contain h-80" />
                     </div>
                   </div>
-                  <!-- <jet-input
-                    id="imgphoto"
-                    type="file"
-                    class="inline-block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 my-2"
-                    @change="previewChoice"
-                    accept="image/png, image/jpeg"
-                  >
-                  </jet-input> -->
                 </div>
               </div>
             </div>
@@ -238,18 +220,6 @@ export default {
         {}
       );
     },
-
-    // Preview image question
-    // previewImage(e) {
-    //   const file = e.target.files[0];
-    //   this.questionform.img_path = URL.createObjectURL(file);
-    // },
-
-    // Preview image option
-    // previewChoice(e) {
-    //   const file = e.target.files[0];
-    //   this.choice.img_path = URL.createObjectURL(file);
-    // },
 
     // Toggle change
     toggleChange: function (id) {

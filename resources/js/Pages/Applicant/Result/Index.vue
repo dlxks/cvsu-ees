@@ -119,12 +119,13 @@
                 </div>
               </div>
               <div class="relative w-auto pl-4 flex-initial">
-                <jet-input
+                <!-- <jet-input
                   v-model="form.applicant_id"
+                  v-if="applicant_id"
                   disabled
                   readonly
                   hidden
-                ></jet-input>
+                ></jet-input> -->
                 <jet-button
                   class="text-white p-3 text-center text-md inline-flex items-center justify-center w-auto h-15 shadow-lg rounded-full bg-emerald-500"
                   @click="exportPDF(form)"
@@ -179,12 +180,13 @@ export default {
   props: {
     result: Object,
     totalQuestions: Number,
+    app_id: Number,
   },
 
   data() {
     return {
       form: this.$inertia.form({
-        applicant_id: this.result.applicant_id,
+        applicant_id: this.app_id,
       }),
     };
   },
@@ -194,13 +196,6 @@ export default {
     exportPDF: function (applicant) {
       const url = "/applicant/pdf/result";
       window.location.href = url + "?applicant_id=" + this.form.applicant_id;
-
-      // this.$inertia.visit(route("applicant.result.pdf"), {
-      //   method: "get",
-      //   data: applicant,
-      // });
-
-      // this.$inertia.visit(route("applicant.result.pdf", applicant));
     },
   },
 };

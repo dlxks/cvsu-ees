@@ -15,10 +15,5 @@ trait HasImgUrl
     {
 
         return Storage::url($this->img_path);
-        // return $this->img_path ? Storage::url($this->img_path) : $this->img_path;
-
-        // return $this->img_path
-        //     ? Storage::disk($this->profilePhotoDisk())->url($this->img_path)
-        //     : $this->defaultProfilePhotoUrl();
     }
 }

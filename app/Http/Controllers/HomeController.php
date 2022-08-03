@@ -29,8 +29,6 @@ class HomeController extends Controller
         $data = Schedule::where('status', 'pending')
             ->orWhere('status', 'active')
             ->orderBy('date', 'desc');
-        // ->latest()
-        // ->get();
 
         $contacts = Chatbot::where('category', 'Contact Information')
             ->orderBy('question', 'asc')

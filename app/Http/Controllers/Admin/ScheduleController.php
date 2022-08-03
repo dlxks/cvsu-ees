@@ -125,16 +125,20 @@ class ScheduleController extends Controller
         $start = substr($request->start_ctrl_num, 4);
         $end = substr($request->end_ctrl_num, 4);
         $arr = [];
+
+        $app_id = $request->start_ctrl_num;
+
         for ($x = $start; $x <= strval($end); $x++) {
 
             $n = str_pad($x, 6, "0", STR_PAD_LEFT);
             $sched = Schedule::create([
                 'sched_code' => $sched_code,
                 'sched_name' => $request['sched_name'],
-                'applicant_id' => date('ym') . $n,
+                'applicant_id' => $app_id,
                 'status' => $date <= $date_now ? 'active' : 'pending',
                 'date' => date('Y-m-d', strtotime($request['date'])),
             ]);
+            $app_id++;
 
             foreach ($request['exams'] as $ex) {
                 $sched->exams()->sync($ex['id']);

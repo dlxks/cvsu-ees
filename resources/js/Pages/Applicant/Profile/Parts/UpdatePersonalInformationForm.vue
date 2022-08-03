@@ -67,31 +67,5 @@ export default {
     JetLabel,
     JetSecondaryButton,
   },
-
-  // props: {
-  //   applicant: Object,
-  // },
-
-  //   data() {
-  //     return {
-  //       form: this.$inertia.form({
-  //         _method: "PUT",
-  //         fname: this.user.fname,
-  //         mname: this.user.mname,
-  //         lname: this.user.lname,
-  //       }),
-
-  //       photoPreview: null,
-  //     };
-  //   },
-
-  //   methods: {
-  //     updatePersonalInformation() {
-  //       this.form.post(route("user-profile-information.update"), {
-  //         errorBag: "updatePersonalInformation",
-  //         preserveScroll: true,
-  //       });
-  //     },
-  //   },
 };
 </script>

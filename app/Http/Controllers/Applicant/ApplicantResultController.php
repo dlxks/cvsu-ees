@@ -29,6 +29,14 @@ class ApplicantResultController extends Controller
 
         $result = Result::with('courses', 'applicant')->where('applicant_id', $applicant->id)->first();
 
+        $app_id = null;
+        if ($result) {
+            $app_id = $result->applicant_id;
+        } else {
+            $app_id = null;
+        }
+
+
         $exam = Exam::query();
         $totalQuestions = Question::query();
 
@@ -43,6 +51,7 @@ class ApplicantResultController extends Controller
         return Inertia::render('Applicant/Result/Index', [
             'result' => $result,
             'totalQuestions' => $totalQuestions,
+            'app_id' => $app_id,
         ]);
     }
 
@@ -82,7 +91,8 @@ class ApplicantResultController extends Controller
         }
         $totalQuestions = Question::where('exam_id', $examId)->count();
         $correctAnswer = Choice::whereIn('id', $ans)->where('is_correct', 1)->count();
-        // dd($totalQuestions);
+
+        $rated = ($correctAnswer / $totalQuestions) * 100;
 
         Result::updateOrCreate(
             [
@@ -91,7 +101,7 @@ class ApplicantResultController extends Controller
             [
                 'name' => Str::of($applicant->lname)->ucfirst() . ', ' . Str::of($applicant->fname)->ucfirst() . ' ' . Str::of($applicant->mname)->ucfirst(),
                 'exam' => $exam->subject,
-                'score' => $correctAnswer,
+                'score' => $rated,
             ]
         );
 

@@ -210,41 +210,7 @@
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer flex" @click="sort('course')">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            v-if="params.field === 'course' && params.direction === 'asc'"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-                            />
-                          </svg>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            v-if="
-                              params.field === 'course' && params.direction === 'desc'
-                            "
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
-                            />
-                          </svg>
-                          Courses
-                        </span>
+                        <span class="cursor-pointer flex"> Courses </span>
                       </th>
                       <th
                         scope="col"
@@ -443,7 +409,9 @@
                           </svg>
                         </button>
                         <button
-                          class="inline-flex items-center px-4 py-2 bg-emerald-200 hover:bg-emerald-300 text-emerald-800 text-sm font-medium rounded-md"
+                          class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md"
+                          :class="result.status == 'qualified'
+                          ? 'bg-emerald-200 hover:bg-emerald-300 text-emerald-800' : 'bg-red-200 hover:bg-red-300 text-red-800'"
                           v-if="
                             result.status == 'qualified' ||
                             result.status == 'not qualified'

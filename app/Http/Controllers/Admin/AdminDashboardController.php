@@ -23,8 +23,6 @@ class AdminDashboardController extends Controller
         $data = Schedule::where('status', 'pending')
             ->orWhere('status', 'active')
             ->orderBy('date', 'desc');
-            // ->latest()
-            // ->get();
 
         return Inertia::render('Admin/Dashboard/Index', [
             'noOfExams' => $noOfExams,

@@ -34,7 +34,7 @@
                             <h5 class="text-gray-400 uppercase font-bold text-md">
                               Exam Schedule
                             </h5>
-                            <div class="py-2">
+                            <div class="py-2" v-if="schedule">
                               <div class="py-4">
                                 <span
                                   class="font-semibold text-xl block"
@@ -67,11 +67,17 @@
                                   "
                                 >
                                   <span class="text-sm text-gray-500">Date:</span>
-                                  {{ date }}
+                                  {{ schedule.date }}
                                 </span>
                               </div>
                               <div class="py-4">
                                 <span class="text-gray-500">Status: </span>
+                                <span
+                                  v-show="schedule.status == 'pending'"
+                                  class="font-semibold text-xl text-yellow-700 block uppercase"
+                                >
+                                  {{ schedule.status }}
+                                </span>
                                 <span
                                   v-show="schedule.status == 'active'"
                                   class="font-semibold text-xl text-emerald-700 block uppercase"
@@ -86,6 +92,14 @@
                                 </span>
                               </div>
                             </div>
+
+                            <!-- no sched -->
+                            <div class="py-2" v-if="!schedule">
+                              <span class="font-semibold text-md block text-gray-500">
+                                You have no current schedule of exam.
+                              </span>
+                            </div>
+                            <!-- no sched -->
                           </div>
                           <div class="relative w-auto pl-4 flex-initial">
                             <div
@@ -149,14 +163,15 @@
                             </h5>
                             <div
                               class="py-2 uppercase font-semibold text-xl text-gray-700"
+                              v-if="result"
                             >
                               <span class="block">
-                                <span class="text-gray-500 text-sm">Score: </span
-                                >{{ result.score }}
+                                <span class="text-gray-500 text-sm">Score: </span>
+                                {{ result.score }}
                               </span>
                               <span class="block">
-                                <span class="text-gray-500 text-sm">Score: </span
-                                >{{ result.status }}
+                                <span class="text-gray-500 text-sm">Status: </span>
+                                {{ result.status }}
                               </span>
                             </div>
                           </div>
@@ -184,6 +199,14 @@
                             </Link>
                           </div>
                         </div>
+
+                        <!-- no results -->
+                        <div class="py-2" v-if="!result">
+                          <span class="font-semibold text-md block text-gray-500">
+                            No results found.
+                          </span>
+                        </div>
+                        <!-- no results -->
                         <p class="text-sm text-gray-400 mt-4">
                           <Link
                             class="cursor-pointer mr-2 text-emerald-500 hover:text-emerald-700 hover:animate-pulse"
@@ -260,7 +283,6 @@ export default {
 
   props: {
     schedule: Object,
-    date: Object,
     result: Object,
   },
 

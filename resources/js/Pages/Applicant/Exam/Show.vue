@@ -530,7 +530,6 @@ export default {
         questionId: this.currentQuestion,
         examId: this.exam.id,
       });
-      // this.$inertia.visit(route("applicant.results.index"));
     },
 
     // update time left

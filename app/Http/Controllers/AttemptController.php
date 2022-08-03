@@ -72,25 +72,6 @@ class AttemptController extends Controller
      */
     public function update(Request $request, Attempt $attempt)
     {
-        // $authApplicant = auth()->user()->id;
-        // $applicant = Applicant::where('user_id', $authApplicant)->first();
-        // $attempt = Attempt::where('applicant_id', $applicant->id)->first();
-
-        // $applicant_id = $applicant->id;
-        // $exam_id = $attempt->exam_id;
-
-        // $exam = Exam::find($exam_id);
-        // $duration = Exam::where('id', $exam_id)->value('duration');
-
-        // Attempt::updateOrCreate(
-        //     [
-        //         'applicant_id' => $applicant_id,
-        //         'exam_id' => $exam_id,
-        //     ],
-        //     [
-        //         'time_left' => $duration,
-        //     ],
-        // );
     }
 
     /**

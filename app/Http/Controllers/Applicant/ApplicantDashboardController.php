@@ -23,27 +23,36 @@ class ApplicantDashboardController extends Controller
      */
     public function index()
     {
+
         $authApplicant = auth()->user()->id;
         $applicant = Applicant::where('user_id', $authApplicant)->first();
-        // $schedule = Schedule::where('applicant_id', $applicant->id)->first();
+        $schedule = Schedule::where('applicant_id', $applicant->id)->first();
 
-        $schedule = auth()->user()->applicantAccount->schedule;
-        $sched_date = date('F j, Y', strtotime($schedule->date));
+        // $schedule = auth()->user()->applicantAccount->schedule;
+        // $sched_date = date('F j, Y', strtotime($schedule->date));
 
         $result = Result::with('courses', 'applicant')->where('applicant_id', $applicant->id)->first();
+        // dd($applicant->id);
 
         return Inertia::render('Applicant/Dashboard/Index', [
             'schedule' => $schedule,
-            'date' => $sched_date,
+            // 'date' => $sched_date,
             'result' => $result,
 
         ]);
+        // $authApplicant = auth()->user()->id;
+        // $applicant = Applicant::where('user_id', $authApplicant)->first();
+
+        // $schedule = Schedule::where('applicant_id', $applicant->id)->first();
 
         // $applicant_schedule = auth()->user()->applicantAccount->schedule;
+        // $result = Result::with('courses', 'applicant')->where('applicant_id', $applicant->id)->first();
+
+        // dd($schedule);
 
         // return Inertia::render('Applicant/Dashboard/Index', [
-        //     'schedule' => $applicant_schedule,
-
+        //     'schedule' => $schedule,
+        //     'result' => $result,
         // ]);
     }
 

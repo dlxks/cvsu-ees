@@ -17,7 +17,7 @@
           class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
         >
           <!-- No data -->
-          <div v-if="!exams.length">
+          <div v-if="!exams">
             <div class="w-full py-8">
               <div class="p-4 text-center text-sm text-gray-800">
                 <span class="text-red-500 uppercase text-xl">No exam found!</span>

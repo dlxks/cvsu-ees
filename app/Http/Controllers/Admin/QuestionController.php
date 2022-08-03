@@ -44,10 +44,6 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $data = $request->only('exam_id', 'question', 'img_path', 'choices');
-
-        // $request->validate([
-        //     'img_path' => 'required|mimes:jpg,jpeg,png|max:2048'
-        //  ]);
          
         $path = null;
         if ($request->hasFile('img_path')) {
@@ -138,37 +134,6 @@ class QuestionController extends Controller
 
             return redirect()->back();
         }
-
-        // $data = $request->only('exam_id', 'question', 'img_path', 'choices');
-
-        // $path = null;
-        // if ($request->hasFile('img_path')) {
-        //     $path = $request->file('img_path')->store('public/photos');
-        // }
-
-        // $question->update([
-        //     'exam_id' => $data['exam_id'],
-        //     'question' => $data['question'],
-        //     'img_path' => $path,
-        // ]);
-
-        // $choice = Choice::query();
-        // foreach ($data['choices'] as $opt) {
-        //     $path1 = null;
-        //     // if ($opt['img_path']) {
-        //     //     $path1 = $opt['img_path']->store('public/photos');
-        //     // }
-        //     $choice->update([
-        //         'question_id' => $question->id,
-        //         'option' => $opt['option'],
-        //         'is_correct' => $opt['is_correct'],
-        //         'img_path' => $path1
-        //     ]);
-        // }
-
-        // $this->flash('Question updated', 'success');
-
-        // return redirect()->back();
     }
 
     /**

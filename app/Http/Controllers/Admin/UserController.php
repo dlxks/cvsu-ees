@@ -90,7 +90,6 @@ class UserController extends Controller
         $this->flash('User added', 'success');
 
         return redirect()->back();
-        // return redirect()->route('admin.users.index')->with('success', 'User added!');
     }
 
     /**
@@ -129,7 +128,6 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'phone' => ['required', 'integer', 'regex:/^(63)[0-9]{10}$/'],
-            // 'password' => $this->passwordRules(),000
         ]);
 
         if ($val->fails()) {
