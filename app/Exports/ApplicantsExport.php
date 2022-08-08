@@ -27,6 +27,7 @@ class ApplicantsExport implements FromCollection, WithEvents, WithHeadings, Shou
                                             applicants.fname as First_Name, 
                                             applicants.mname as Middle_Name, 
                                             applicants.lname as Last_Name, 
+                                            applicants.course_applied as Course_Applied, 
                                             applicants.email as Email, 
                                             applicants.phone_number as Phone_Number'))
             ->orderBy('applicants.id')
@@ -41,13 +42,13 @@ class ApplicantsExport implements FromCollection, WithEvents, WithHeadings, Shou
 
     public function headings(): array
     {
-        return ['Control Number', 'First Name', 'Middle Name', 'Last Name', 'Email', 'Phone Number'];
+        return ['Control Number', 'First Name', 'Middle Name', 'Last Name', 'Course Applied', 'Email', 'Phone Number'];
     }
 
     public function columnFormats(): array
     {
         return [
-            'F' => NumberFormat::FORMAT_NUMBER,
+            'G' => NumberFormat::FORMAT_NUMBER,
         ];
     }
 

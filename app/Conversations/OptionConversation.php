@@ -45,8 +45,7 @@ class OptionConversation extends Conversation
                         $this->bot->startConversation(new ContactConversation());
                         break;
                     case 'other':
-                        $this->say("Please contact admission@cvsu.edu.ph");
-                        $this->say("Thank you. Type 'Hi' to start new conversation.");
+                        $this->bot->startConversation(new OtherConversation());
                         break;
                 }
             }

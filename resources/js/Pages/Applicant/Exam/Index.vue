@@ -17,7 +17,7 @@
           class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
         >
           <!-- No data -->
-          <div v-if="!exams">
+          <div v-if="exams.length < 1 || schedule.status === 'ended'">
             <div class="w-full py-8">
               <div class="p-4 text-center text-sm text-gray-800">
                 <span class="text-red-500 uppercase text-xl">No exam found!</span>
@@ -28,7 +28,12 @@
           <!-- No data -->
 
           <!-- Header card -->
-          <div class="flex-auto p-8" v-for="exam in exams" :key="exam.id">
+          <div
+            class="flex-auto p-8"
+            v-for="exam in exams"
+            :key="exam.id"
+            v-if="schedule.status !== 'ended'"
+          >
             <div class="w-full">
               <div class="my-2">
                 <span class="text-gray-500 mr-2">Subject:</span>
@@ -45,21 +50,29 @@
                 <span class="text-gray-700 text-md font-medium">{{ exam.duration }}</span>
               </div>
             </div>
-            <!-- v-if="this.attempt.end_time < this.dateNow" -->
             <div class="float-right my-2">
-              <jet-button @click="openModal(true)" v-if="this.attempt == null"
+              <!-- Take exam -->
+              <jet-button @click="openExam(exam)" v-if="this.attempts.length <= 0"
                 >Take Exam</jet-button
               >
-              <jet-button @click="openModal(true)" v-if="this.attempt != null"
-                >Continue Exam</jet-button
-              >
+              <!-- Check if continue, take or ended -->
+              <div v-for="attempt in attempts" :key="attempt.id">
+                <span v-for="result in results" :key="result.id">
+                  <jet-button
+                    @click="openExam(exam)"
+                    v-if="exam.id != attempt.exam_id && exam.exam_code != result.exam"
+                  >
+                    Take Exam
+                  </jet-button>
+                </span>
+              </div>
             </div>
 
             <!-- Notice modal -->
             <dialog-modal :show="isOpen" @close="openModal(false)">
               <template #title>
                 <span v-if="this.attempt == null"> Take Exam </span>
-                <span v-if="this.attempt != null"> Take Exam </span>
+                <span v-if="this.attempt != null"> Continue Exam </span>
               </template>
 
               <template #content>
@@ -126,7 +139,8 @@ export default {
   props: {
     exams: Object,
     schedule: Object,
-    attempt: Object,
+    attempts: Object,
+    results: Object,
   },
 
   data() {

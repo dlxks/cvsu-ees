@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Applicants</title>
+    <title>Exam Results</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -67,8 +67,8 @@
             <tr>
                 <th>Control Number</th>
                 <th>Name</th>
-                <th>Courses</th>
-                <th>Status</th>
+                <th>Exam</th>
+                <th>Score</th>
                 <th>Email</th>
                 <th>Phone Number</th>
             </tr>
@@ -79,12 +79,8 @@
                 <tr>
                     <td>{{ $result->applicant_id }}</td>
                     <td>{{ $result->name }}</td>
-                    <td>
-                        @foreach ($result->courses as $course)
-                            {{ $course->course_name . ', ' }}
-                        @endforeach
-                    </td>
-                    <td>{{ $result->status }}</td>
+                    <td>{{ $result->exam }}</td>
+                    <td>{{ $result->score }}</td>
                     <td>{{ $result->applicant->email }}</td>
                     <td>{{ $result->applicant->phone_number }}</td>
                 </tr>

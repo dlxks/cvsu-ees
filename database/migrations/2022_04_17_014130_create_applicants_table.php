@@ -16,12 +16,13 @@ class CreateApplicantsTable extends Migration
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
-            ->constrained('users')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('fname');
             $table->string('mname')->nullable();
             $table->string('lname');
+            $table->string('course_applied');
             $table->date('birthday');
             $table->string('email')->unique();
             $table->bigInteger('phone_number')->unique();

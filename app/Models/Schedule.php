@@ -25,7 +25,12 @@ class Schedule extends Model
 
     public function exams()
     {
-        return $this->belongsToMany(Exam::class,'exam_schedules');
+        return $this->belongsToMany(Exam::class, 'exam_schedules');
+    }
+
+    public function applicants()
+    {
+        return $this->hasOne(Applicant::class, 'id', 'applicant_id');
     }
 
     public function getCreatedAtAttribute($value)

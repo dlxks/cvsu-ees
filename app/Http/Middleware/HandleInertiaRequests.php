@@ -9,6 +9,7 @@ use App\Models\Exam;
 use App\Models\Result;
 use App\Models\Schedule;
 use App\Models\User;
+use App\Models\Verified;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -113,6 +114,14 @@ class HandleInertiaRequests extends Middleware
                             'create' => $authUser->can('create', User::class),
                             'update' => $authUser->can('update', User::class),
                             'delete' => $authUser->can('delete', User::class),
+                        ],
+
+                        'verifieds' => [
+                            'viewAny' => $authUser->can('viewAny', Verified::class),
+                            'view' => $authUser->can('view', Verified::class),
+                            'create' => $authUser->can('create', Verified::class),
+                            'update' => $authUser->can('update', Verified::class),
+                            'delete' => $authUser->can('delete', Verified::class),
                         ],
                     ];
                 },

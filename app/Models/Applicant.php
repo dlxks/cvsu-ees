@@ -30,6 +30,7 @@ class Applicant extends Model
         'fname',
         'mname',
         'lname',
+        'course_applied',
         'birthday',
         'email',
         'phone_number',
@@ -44,17 +45,28 @@ class Applicant extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function result()
+    public function results()
     {
-        return $this->hasOne(Result::class);
+        return $this->hasMany(Result::class);
+    }
+
+    public function verified()
+    {
+        return $this->hasOne(Verified::class);
+    }
+
+    public function course()
+    {
+        return $this->hasOne(Course::class, 'course_name', 'course_applied');
     }
 
     public function schedule()
     {
-        return $this->hasOne(Schedule::class);
+        return $this->belongsTo(Schedule::class);
     }
 
-    public function attempt(){
+    public function attempt()
+    {
         return $this->hasOne(Attempt::class);
     }
 

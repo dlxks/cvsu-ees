@@ -18,8 +18,7 @@ class CreateResultsTable extends Migration
             $table->bigInteger('applicant_id');
             $table->string('name');
             $table->string('exam');
-            $table->double('score', 8, 2)->nullable();
-            $table->string('status')->default('pending');
+            $table->decimal('score', 8, 2)->nullable();
             $table->timestamps();
         });
     }

@@ -61,6 +61,7 @@
             <tr>
                 <th>Control Number</th>
                 <th>Name</th>
+                <th>Course Applied</th>
                 <th>Email</th>
                 <th>Phone Number</th>
             </tr>
@@ -71,6 +72,7 @@
                 <tr>
                     <td>{{ $applicant->id }}</td>
                     <td>{{ $applicant->lname }}, {{ $applicant->fname }} {{ $applicant->mname }}</td>
+                    <td>{{ $applicant->course_applied }}</td>
                     <td>{{ $applicant->email }}</td>
                     <td>{{ $applicant->phone_number }}</td>
                 </tr>

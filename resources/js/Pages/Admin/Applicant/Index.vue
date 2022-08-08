@@ -315,7 +315,50 @@
                           <div class="inline-block">Last Name</div></span
                         >
                       </th>
-
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        <span class="cursor-pointer" @click="sort('course_applied')">
+                          <div class="inline-block">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              v-if="
+                                params.field === 'course_applied' && params.direction === 'asc'
+                              "
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+                              />
+                            </svg>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              v-if="
+                                params.field === 'course_applied' && params.direction === 'desc'
+                              "
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                              />
+                            </svg>
+                          </div>
+                          <div class="inline-block">Course Applied</div></span
+                        >
+                      </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -458,9 +501,7 @@
                   <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-if="!applicants.data.length">
                       <td class="p-4 text-center text-xs text-gray-800" colspan="9">
-                        <span class="text-red-500 uppercase text-xl"
-                          >No data found!</span
-                        >
+                        <span class="text-red-500 uppercase text-xl">No data found!</span>
                         <NoData />
                       </td>
                     </tr>
@@ -476,6 +517,9 @@
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
                         {{ applicant.lname }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        {{ applicant.course_applied }}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
                         {{ applicant.birthday }}
@@ -589,6 +633,22 @@
         />
       </div>
 
+      <!-- Course -->
+      <div class="mb-4">
+        <jet-label for="course" value="Course" />
+
+        <Multiselect
+          v-model="form.course_applied"
+          placeholder="Select course"
+          valueProp="course_name"
+          :searchable="true"
+          label="course_name"
+          id="course"
+          :options="courses"
+          class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+        />
+      </div>
+
       <!-- Email -->
       <div class="mb-4">
         <jet-label for="email" value="Email" />
@@ -615,7 +675,7 @@
         />
       </div>
 
-      <!-- Biryhday -->
+      <!-- Birthday -->
       <div class="mb-4">
         <jet-label for="birthday" value="Birthday" />
         <jet-input
@@ -696,6 +756,7 @@ export default {
   props: {
     applicants: Object,
     filters: Object,
+    courses: Object,
   },
 
   extends: shared,
@@ -716,6 +777,7 @@ export default {
         email: "",
         phone_number: "",
         birthday: "",
+        course_applied: "",
       }),
       isOpen: false,
       disabled: null,

@@ -34,7 +34,7 @@
                             <h5 class="text-gray-400 uppercase font-bold text-md">
                               Exam Schedule
                             </h5>
-                            <div class="py-2" v-if="schedule">
+                            <div class="py-2" v-if="schedule && schedule.status !== 'ended'">
                               <div class="py-4">
                                 <span
                                   class="font-semibold text-xl block"
@@ -94,7 +94,7 @@
                             </div>
 
                             <!-- no sched -->
-                            <div class="py-2" v-if="!schedule">
+                            <div class="py-2" v-if="!schedule || schedule.status === 'ended'">
                               <span class="font-semibold text-md block text-gray-500">
                                 You have no current schedule of exam.
                               </span>
@@ -167,7 +167,7 @@
                             >
                               <span class="block">
                                 <span class="text-gray-500 text-sm">Score: </span>
-                                {{ result.score }}
+                                {{ result.rating }}
                               </span>
                               <span class="block">
                                 <span class="text-gray-500 text-sm">Status: </span>

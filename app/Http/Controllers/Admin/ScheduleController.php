@@ -11,7 +11,6 @@ use App\Models\Exam;
 use App\Models\Schedule;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -19,6 +18,7 @@ use Carbon\Carbon;
 use Vonage\Client\Credentials\Basic;
 use Vonage\Client;
 use Vonage\SMS\Message\SMS;
+use Illuminate\Support\Str;
 
 class ScheduleController extends Controller
 {
@@ -133,7 +133,7 @@ class ScheduleController extends Controller
             $n = str_pad($x, 6, "0", STR_PAD_LEFT);
             $sched = Schedule::create([
                 'sched_code' => $sched_code,
-                'sched_name' => $request['sched_name'],
+                'sched_name' => Str::of($request['sched_name'])->upper(),
                 'applicant_id' => $app_id,
                 'status' => $date <= $date_now ? 'active' : 'pending',
                 'date' => date('Y-m-d', strtotime($request['date'])),
@@ -242,34 +242,21 @@ class ScheduleController extends Controller
 
     public function sendNotification(Request $request)
     {
-        $applicants = \DB::table('schedules')
-            ->join('applicants', 'schedules.applicant_id', '=', 'applicants.id')
-            ->select(
-                'applicants.id',
-                'applicants.fname',
-                'applicants.mname',
-                'applicants.lname',
-                'applicants.email',
-                'applicants.phone_number',
-                'schedules.sched_name',
-                'schedules.date'
-            )
-            ->where('schedules.status', '=', 'pending')
-            ->get();
+        $schedules =  Schedule::with('applicants')->where('status', 'pending')->get();
 
-        if (count($applicants) < 1) {
+        if (count($schedules) < 1) {
             $this->flash('No pending schdules.', 'danger');
             return redirect()->back();
-        } elseif (count($applicants) > 0) {
-            foreach ($applicants as $applicant) {
+        } elseif (count($schedules) > 0) {
+            foreach ($schedules as $schedule) {
 
-                $sms_message = 'This is Cavite State University-Main Campus. You were scheduled to take the entrance examination on ' . $applicant->date . '.';
-                // SMS
+                $sms_message = 'This is Cavite State University-Main Campus. You were scheduled to take the entrance examination on ' . $schedule->date . '.';
+                // // SMS
                 $basic  = new Basic("68ad8f1a", "4PMcuDQ5mVe0STkl");
                 $client = new Client($basic);
 
                 $response = $client->sms()->send(
-                    new SMS($applicant->phone_number, 'Cavite State University-Main Campus', $sms_message)
+                    new SMS($schedule->applicants->phone_number, 'Cavite State University-Main Campus', $sms_message)
                 );
 
                 $message = $response->current();
@@ -280,18 +267,18 @@ class ScheduleController extends Controller
 
                     $this->flash('Schedule was not sent!', 'danger');
                 }
-
+                // Email
                 $data = [
-                    'ctrl_num' => $applicant->id,
-                    'name' => $applicant->lname . ', ' . $applicant->fname . ' ' . $applicant->mname,
-                    'email' => $applicant->email,
-                    'phone_number' => $applicant->phone_number,
-                    'sched_name' => $applicant->sched_name,
-                    'date' => $applicant->date,
+                    'ctrl_num' => $schedule->applicants->id,
+                    'name' => $schedule->applicants->lname . ', ' . $schedule->applicants->fname . ' ' . $schedule->applicants->mname,
+                    'email' => $schedule->applicants->email,
+                    'phone_number' => $schedule->applicants->phone_number,
+                    'sched_name' => $schedule->sched_name,
+                    'date' => $schedule->date,
                     'regards' => 'Cavite State University-Main Campus',
                 ];
 
-                Mail::to($applicant->email)->send(new ScheduleMail($data));
+                Mail::to($schedule->applicants->email)->send(new ScheduleMail($data));
             }
 
             $this->flash('Schedule sent!', 'success');

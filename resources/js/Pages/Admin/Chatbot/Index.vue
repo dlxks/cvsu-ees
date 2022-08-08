@@ -1,5 +1,5 @@
 <template>
-  <admin-layout title="Courses">
+  <admin-layout title="Chatbot">
     <template #header>
       <!-- Header -->
       <div class="grid grid-cols-2 px-5 py-3 shadow-md rounded-md">
@@ -8,54 +8,6 @@
             <span>Chatbot Questions</span>
           </h2>
         </div>
-
-        <!-- Page Buttons -->
-        <div align="right">
-          <!-- Line buttons and show dropdown -->
-          <div class="block" align="right">
-            <jet-dropdown>
-              <template #trigger>
-                <span class="inline-flex rounded-md">
-                  <button
-                    type="button"
-                    class="inline-flex items-center px-4 py-2 mr-2 bg-gray-800 hover:bg-gray-600 text-gray-100 text-sm font-medium rounded-md"
-                  >
-                    <span>Data Management</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="ml-2 -mr-0.5 h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-                      />
-                    </svg>
-                  </button>
-                </span>
-              </template>
-              <template #content>
-                <!-- Data management buttons -->
-                <div class="px-2 py-2">
-                  <div class="py-1">
-                    <jet-button
-                      @click="importModal(true)"
-                      class="inline-flex items-center px-4 py-2 mr-2 bg-blue-200 hover:bg-blue-300 text-blue-800 text-sm font-medium rounded-md"
-                    >
-                      Import from file
-                    </jet-button>
-                  </div>
-                </div>
-              </template>
-            </jet-dropdown>
-          </div>
-          <!-- Hide in line buttons and show dropdown -->
-        </div>
-        <!-- End Page Buttons -->
         <!-- Header -->
       </div>
     </template>
@@ -150,7 +102,6 @@
                     class="shadow overflow-hidden border-b border-gray-200 rounded-lg m-2 md:m-2 lg:m-4"
                   >
                     <div class="w-full bg-emerald-500 py-2 px-4 inline-flex">
-                      <!-- <span class="mr-2 text-xl text-white"> {{ exam.exam_code }}</span> -->
                       <div align="right">{{ concern.category }}</div>
                     </div>
                     <div class="text-md">

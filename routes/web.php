@@ -6,10 +6,12 @@ use App\Http\Controllers\Admin\ChoiceController;
 use App\Http\Controllers\Admin\CollegeController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\ExamController;
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VerifiedController;
 use App\Http\Controllers\Applicant\ApplicantDashboardController;
 use App\Http\Controllers\Applicant\ApplicantExamController;
 use App\Http\Controllers\Applicant\ApplicantLoginController;
@@ -82,11 +84,20 @@ Route::prefix('admin')
         Route::resource('results', ResultController::class);
         Route::get('/export/results', [ResultController::class, 'export'])->name('results.export'); //Export data
         Route::get('/pdf/results', [ResultController::class, 'generate_pdf'])->name('results.pdf'); //Export pdf
-        Route::get('send-notification', [ResultController::class, 'sendNotification'])->name('send.notif');
+
+        // Verified Results
+        Route::resource('verified', VerifiedController::class);
+        Route::get('/export/verified', [VerifiedController::class, 'export'])->name('verified.export'); //Export data
+        Route::get('/pdf/verified', [VerifiedController::class, 'generate_pdf'])->name('verified.pdf'); //Export pdf
+        Route::get('send-verified', [VerifiedController::class, 'sendNotification'])->name('send.verified');
 
         // Chatbot routes
         Route::resource('chatbot', ChatbotController::class);
-        Route::post('chatbot-import', [ChatbotController::class, 'import'])->name('chatbot.import');
+        // Route::post('chatbot-import', [ChatbotController::class, 'import'])->name('chatbot.import');
+
+        // Messages routes
+        Route::resource('messages', MessageController::class);
+        Route::get('/export/messages', [MessageController::class, 'export'])->name('messages.export'); //Export data
     });
 
 Route::prefix('applicant')
@@ -107,12 +118,12 @@ Route::prefix('applicant')
 
             // Exam
             Route::resource('exams', ApplicantExamController::class);
-            Route::post('test',[ApplicantExamController::class, 'postExam'])->name('post.test');
+            Route::post('test', [ApplicantExamController::class, 'postExam'])->name('post.test');
 
             // Result
             Route::resource('results', ApplicantResultController::class);
             Route::get('/pdf/result', [ApplicantResultController::class, 'export_pdf'])->name('result.pdf'); //Export pdf
-            
+
         });
     });
 

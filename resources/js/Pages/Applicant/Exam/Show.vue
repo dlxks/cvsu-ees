@@ -83,7 +83,9 @@
               <span class="text-red-700 text-md"
                 >*Note: If you close or refresh the page, all your selected answer will be
                 cleared. It will be saved but the selection will be cleared. If you choose
-                new answer, it will just update your current answer.</span
+                new answer, it will just update your current answer. You also need to
+                submit the exam before the timer ends or the exam will end and the results
+                will not be recorded.</span
               >
             </div>
           </div>
@@ -531,8 +533,6 @@ export default {
         examId: this.exam.id,
       });
     },
-
-    // update time left
 
     // Disable function
     disabledClick: function (s) {

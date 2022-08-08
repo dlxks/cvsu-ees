@@ -435,7 +435,38 @@
                   d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
                 />
               </svg>
-              <span>Results</span>
+              <span>Exam Results</span>
+            </jet-nav-link>
+          </li>
+          <!-- Link End -->
+          <!-- Link Start-->
+          <li class="items-center">
+            <jet-nav-link
+              v-if="$page.props.permission.verifieds.viewAny"
+              :href="route('admin.verified.index')"
+              class="text-xs uppercase py-2 font-bold block"
+              :class="
+                route().current('admin.verified.index') ||
+                route().current('admin.verified.show')
+                  ? 'text-emerald-500 hover:text-emerald-600'
+                  : 'text-gray-700 hover:text-gray-500'
+              "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                />
+              </svg>
+              <span>Results Verification</span>
             </jet-nav-link>
           </li>
           <!-- Link End -->
@@ -480,6 +511,35 @@
                 />
               </svg>
               <span>Chatbot Questions</span>
+            </jet-nav-link>
+          </li>
+          <!-- Link End -->
+          <!-- Link Start-->
+          <li class="items-center">
+            <jet-nav-link
+              :href="route('admin.messages.index')"
+              class="text-xs uppercase py-2 font-bold block"
+              :class="
+                route().current('admin.messages.index')
+                  ? 'text-emerald-500 hover:text-emerald-600'
+                  : 'text-gray-700 hover:text-gray-500'
+              "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+                />
+              </svg>
+              <span>Applicant Messages</span>
             </jet-nav-link>
           </li>
           <!-- Link End -->

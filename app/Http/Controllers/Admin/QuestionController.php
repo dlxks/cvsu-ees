@@ -127,7 +127,7 @@ class QuestionController extends Controller
                 $answer = Choice::find($option['id']);
                 $answer->option = $option['option'];
                 $answer->is_correct = $option['is_correct'];
-                $answer->save();
+                $answer->update();
             };
 
             $this->flash('Question updated', 'success');

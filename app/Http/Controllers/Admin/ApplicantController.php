@@ -6,6 +6,7 @@ use App\Exports\ApplicantsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Banner;
 use App\Models\Applicant;
+use App\Models\Course;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class ApplicantController extends Controller
 
         $data = Applicant::query();
         $perpage = $request->input('perpage') ?: 25;
+        $courses = Course::latest()->get();
 
         if (request('search')) {
             $data
@@ -42,6 +44,7 @@ class ApplicantController extends Controller
                 ->orwhere('applicants.fname', 'like', '%' . request('search') . '%')
                 ->orWhere('applicants.mname', 'like', '%' . request('search') . '%')
                 ->orWhere('applicants.lname', 'like', '%' . request('search') . '%')
+                ->orWhere('applicants.course_applied', 'like', '%' . request('search') . '%')
                 ->orWhere('applicants.email', 'like', '%' . request('search') . '%')
                 ->orWhere('applicants.phone_number', 'like', '%' . request('search') . '%');
         }
@@ -53,6 +56,7 @@ class ApplicantController extends Controller
         return Inertia::render('Admin/Applicant/Index', [
             'applicants' => $data->paginate($perpage)->withQueryString(),
             'filters' => request()->all(['search', 'field', 'direction', 'perpage']),
+            'courses' => $courses,
         ]);
     }
 
@@ -79,6 +83,7 @@ class ApplicantController extends Controller
             'fname' => ['required', 'string', 'max:255'],
             'lname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:applicants'],
+            'course_applied' => ['required'],
             'phone_number' => ['required', 'integer', 'unique:applicants', 'regex:/^(63)[0-9]{10}$/'],
             'birthday' => ['required', 'date'],
         ]);
@@ -100,6 +105,7 @@ class ApplicantController extends Controller
             'fname' => Str::of($request['fname'])->ucfirst(),
             'mname' => Str::of($request['mname'])->ucfirst(),
             'lname' => Str::of($request['lname'])->ucfirst(),
+            'course_applied' => Str::of($request['course_applied'])->upper(),
             'email' => $request['email'],
             'phone_number' => $request['phone_number'],
             'birthday' => $request['birthday'],
@@ -144,6 +150,7 @@ class ApplicantController extends Controller
         $val = Validator::make($request->all(), [
             'fname' => ['required', 'string', 'max:255'],
             'lname' => ['required', 'string', 'max:255'],
+            'course_applied' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'phone_number' => ['required', 'integer', 'regex:/^(63)[0-9]{10}$/'],
             'birthday' => ['required', 'date'],
@@ -167,6 +174,7 @@ class ApplicantController extends Controller
             'fname' => Str::of($request['fname'])->ucfirst(),
             'mname' => Str::of($request['mname'])->ucfirst(),
             'lname' => Str::of($request['lname'])->ucfirst(),
+            'course_applied' => Str::of($request['course_applied'])->upper(),
             'email' => $request['email'],
             'phone_number' => $request['phone_number'],
             'birthday' => $request['birthday'],

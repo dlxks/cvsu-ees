@@ -33,16 +33,9 @@ class Exam extends Model
         return $this->hasMany(Schedule::class, 'exam_id', 'id');
     }
 
-    public function hasExamAttempted()
+    public function results()
     {
-        $attemptedExam = [];
-        $authApplicant = auth()->user()->id;
-        $applicant = Answer::where('applicant_id', $authApplicant)->get();
-        foreach($applicant as $appl){
-            array_push($attemptedExam, $appl->exam_id);
-        }
-
-        return $attemptedExam;
+        return $this->belongsToMany(Result::class);
     }
 
     public function getCreatedAtAttribute($value)

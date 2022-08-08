@@ -25,7 +25,7 @@ class ExampleConversation extends Conversation
 
         return $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
-                if ($answer->getValue() === 'requirements') {
+                if ($answer->getValue() === 'joke') {
                     $joke = json_decode(file_get_contents('http://api.icndb.com/jokes/random'));
                     $this->say($joke->value->joke);
                 } else {

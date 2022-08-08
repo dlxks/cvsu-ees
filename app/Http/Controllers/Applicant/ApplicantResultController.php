@@ -9,6 +9,7 @@ use App\Models\Choice;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Result;
+use App\Models\Verified;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
@@ -25,33 +26,18 @@ class ApplicantResultController extends Controller
     public function index()
     {
         $authApplicant = auth()->user()->id;
-        $applicant = Applicant::where('user_id', $authApplicant)->first();
+        $applicant = Applicant::with('course')->where('user_id', $authApplicant)->first();
 
-        $result = Result::with('courses', 'applicant')->where('applicant_id', $applicant->id)->first();
+        $verified = Verified::with('course', 'applicant')
+            ->where('applicant_id', $applicant->id)->first();
+        $results = Result::with('applicant', 'exam')->where('applicant_id', $applicant->id)->get();
 
-        $app_id = null;
-        if ($result) {
-            $app_id = $result->applicant_id;
-        } else {
-            $app_id = null;
-        }
-
-
-        $exam = Exam::query();
-        $totalQuestions = Question::query();
-
-        if ($result) {
-            $exam = Exam::where('subject', $result->exam)->first();
-            $totalQuestions = Question::where('exam_id', $exam->id)->count();
-        } else {
-            $exam = null;
-            $totalQuestions = null;
-        }
+        // dd($verified);
 
         return Inertia::render('Applicant/Result/Index', [
-            'result' => $result,
-            'totalQuestions' => $totalQuestions,
-            'app_id' => $app_id,
+            'applicant' => $applicant,
+            'verified' => $verified,
+            'results' => $results,
         ]);
     }
 
@@ -74,21 +60,23 @@ class ApplicantResultController extends Controller
     public function store(Request $request)
     {
         $examId = $request['examId'];
-        $questionId = $request['questionId'];
-        $answerId = $request['answerId'];
 
         $authApplicant = auth()->user()->id;
         $applicant = Applicant::where('user_id', $authApplicant)->first();
 
         $exam = Exam::where('id', $examId)->first();
 
-        $answers = Answer::where('applicant_id', $applicant->id)->where('exam_id', $examId)->where('question_id', '!=', 0)->with('question')->with('choice')->get();
-        $choice = Choice::query()->get();
+        $answers = Answer::where([
+            ['applicant_id', $applicant->id],
+            ['exam_id', $examId],
+            ['question_id', '!=', 0],
+        ])->with('question')->with('choice')->get();
 
         $ans = [];
         foreach ($answers as $answer) {
             array_push($ans, $answer->answer_id);
         }
+
         $totalQuestions = Question::where('exam_id', $examId)->count();
         $correctAnswer = Choice::whereIn('id', $ans)->where('is_correct', 1)->count();
 
@@ -97,15 +85,34 @@ class ApplicantResultController extends Controller
         Result::updateOrCreate(
             [
                 'applicant_id' => $applicant->id,
+                'exam' => $exam->exam_code,
             ],
             [
                 'name' => Str::of($applicant->lname)->ucfirst() . ', ' . Str::of($applicant->fname)->ucfirst() . ' ' . Str::of($applicant->mname)->ucfirst(),
-                'exam' => $exam->subject,
                 'score' => $rated,
             ]
         );
 
-        return redirect(route('applicant.results.index'));
+        // Insert into verified table
+        $all_res = Result::where('applicant_id', $applicant->id)->get();
+        $exm_cnt = Result::where('applicant_id', $applicant->id)->count();
+        $rtd_score = 0;
+        foreach ($all_res as $res) {
+            $rtd_score += $res->score;
+        }
+        $total_rating = $rtd_score / $exm_cnt;
+        Verified::updateOrCreate(
+            [
+                'applicant_id' => $applicant->id,
+            ],
+            [
+                'name' => Str::of($applicant->lname)->ucfirst() . ', ' . Str::of($applicant->fname)->ucfirst() . ' ' . Str::of($applicant->mname)->ucfirst(),
+                'rating' => $total_rating,
+                'course_applied' => $applicant->course_applied,
+            ]
+        );
+
+        return redirect(route('applicant.exams.index'));
     }
 
     /**

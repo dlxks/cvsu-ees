@@ -22,7 +22,7 @@ class ChatbotController extends Controller
             'field' => ['in:category,question,answer'],
         ]);
 
-        $data = Chatbot::query();
+        $data = Chatbot::orderBy('created_at', 'desc');
 
         $perpage = $request->input('perpage') ?: 25;
 

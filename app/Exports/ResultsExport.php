@@ -23,40 +23,20 @@ class ResultsExport implements ShouldAutoSize, WithMapping, WithHeadings, WithEv
 {
     use Exportable;
 
-    // private $courses[];
-    // private $course_string;
-
     public function query()
     {
         return Result::query()
-            ->with('courses', 'applicant')
+            ->with('applicant')
             ->orderBy('results.applicant_id', 'asc');
     }
 
     public function map($result): array
     {
-        // Get courses array
-        foreach ($result->courses as $course) {
-            $courses[] = array(
-                $course->course_name,
-            );
-        }
-        // Convert courses array to string
-        $courses_string = '';
-        foreach ($courses as $course) {
-            foreach ($course as $name => $course_name) {
-                $courses_string .= $course_name . ', ';
-            }
-        }
-
-        $clean_courses = substr($courses_string, 0, -2);
-
         return [
             $result->applicant_id,
             $result->name,
+            $result->exam,
             $result->score,
-            $result->status,
-            $clean_courses,
             $result->applicant->email,
             $result->applicant->phone_number,
         ];
@@ -67,9 +47,8 @@ class ResultsExport implements ShouldAutoSize, WithMapping, WithHeadings, WithEv
         return [
             'Control Number',
             'Name',
+            'Exam',
             'Score',
-            'Status',
-            'Courses',
             'Email',
             'Phone Number',
         ];
@@ -79,7 +58,7 @@ class ResultsExport implements ShouldAutoSize, WithMapping, WithHeadings, WithEv
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:G1')->applyFromArray([
+                $event->sheet->getStyle('A1:F1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]
@@ -91,7 +70,7 @@ class ResultsExport implements ShouldAutoSize, WithMapping, WithHeadings, WithEv
     public function columnFormats(): array
     {
         return [
-            'G' => NumberFormat::FORMAT_NUMBER,
+            'F' => NumberFormat::FORMAT_NUMBER,
         ];
     }
 

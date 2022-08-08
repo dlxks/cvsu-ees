@@ -44,17 +44,16 @@ class ResultController extends Controller
         ]);
 
         $course_names = Course::latest()->get();
-        $applicant = Result::with('courses', 'applicant')
+        $applicant = Result::with('applicant')
             ->where('results.applicant_id', '=', 'applicants.id');
 
-        $data = Result::with('courses');
+        $data = Result::orderBy('score', 'desc');
         $perpage = $request->input('perpage') ?: 25;
 
         if (request('search')) {
             $data
                 ->orwhere('results.applicant_id', 'like', '%' . request('search') . '%')
-                ->orWhere('results.name', 'like', '%' . request('search') . '%')
-                ->orWhere('results.status', 'like', '%' . request('search') . '%');
+                ->orWhere('results.name', 'like', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
@@ -98,17 +97,6 @@ class ResultController extends Controller
      */
     public function show(Result $result)
     {
-        $applicant = Applicant::where('applicants.id', '=', $result->applicant_id)
-            ->first();
-
-        $course_names = Course::latest()->get();
-        $result->with('courses', 'applicant');
-
-        return Inertia::render('Admin/Result/Show', [
-            'result' => $result,
-            'applicant' => $applicant,
-            'course_names' => $course_names,
-        ]);
     }
 
     /**
@@ -131,46 +119,7 @@ class ResultController extends Controller
      */
     public function update(Request $request, Result $result)
     {
-        $val = Validator::make($request->all(), [
-            'name' => ['required'],
-            'applicant_id' => ['required'],
-            'exam' => ['required'],
-            'score' => ['required'],
-            'status' => ['required'],
-        ]);
-
-        if ($request['status'] == 'qualified') {
-            $val = Validator::make($request->all(), [
-                'courses' => ['required'],
-            ]);
-        }
-
-        if ($val->fails()) {
-            $this->flash($val->errors()->first(), 'danger');
-            return back();
-        }
-
-        $result->updateOrCreate(
-            [
-                'applicant_id' => $request['applicant_id'],
-            ],
-            [
-                'status' => $request['status'],
-            ]
-        );
-
-        $courseids = [];
-        if (!$request['courses']) {
-            $result->courses()->sync($courseids);
-        } else {
-            foreach ($request['courses'] as $crs) {
-                array_push($courseids, $crs['id']);
-            }
-            $result->courses()->sync($courseids);
-        }
-
-        $this->flash('Result verified!', 'success');
-        return redirect()->back();
+        // 
     }
 
     /**
@@ -183,7 +132,6 @@ class ResultController extends Controller
     {
         //
     }
-
 
     // Export function
     public function export()
@@ -202,7 +150,7 @@ class ResultController extends Controller
 
     public function generate_pdf()
     {
-        $results = Result::with('courses', 'applicant')
+        $results = Result::with('applicant')
             ->orderBy('results.applicant_id', 'asc')
             ->get();
 
@@ -214,45 +162,5 @@ class ResultController extends Controller
         ]);
 
         return $pdf->stream($date . '*results.pdf');
-    }
-
-    public function sendNotification(Request $request)
-    {
-        $app_id = $request['applicant_id'];
-
-        $result = Result::with('courses')->where('applicant_id', $app_id)->first();
-        $sms_message = 'This is Cavite State University-Main Campus. We would like to inform you that the results of your application is already out. Please check you email or the examination site to see the results. Thank you!';
-
-        $phone = $request['phone_number'];
-        $email = $request['email'];
-
-        if ($request['status'] == 'qualified') {
-
-            // SMS
-            $basic  = new Basic("68ad8f1a", "4PMcuDQ5mVe0STkl");
-            $client = new Client($basic);
-
-            $response = $client->sms()->send(
-                new SMS($phone, 'Cavite State University-Main Campus', $sms_message)
-            );
-
-            $message = $response->current();
-
-            if ($message->getStatus() == 0) {
-                $this->flash('Results was sent!', 'success');
-            } else {
-
-                $this->flash('Results was not sent!', 'danger');
-            }
-
-            // EMAIL
-            Mail::to($email)->send(new ResultMail($result));
-
-            $this->flash('Result was sent!', 'success');
-
-            return redirect()->back();
-        } else {
-            return redirect(route('admin.results.index'));
-        }
     }
 }

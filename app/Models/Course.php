@@ -36,9 +36,13 @@ class Course extends Model
         return $this->belongsTo(College::class);
     }
 
-    public function results()
+    public function verifieds()
     {
-        return $this->hasMany(Result::class);
+        return $this->belongsToMany(Verified::class);
+    }
+
+    public function applicants(){
+        return $this->belongsToMany(Applicant::class);
     }
 
     public function getCreatedAtAttribute($value)

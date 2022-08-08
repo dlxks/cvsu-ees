@@ -11,14 +11,11 @@ class Result extends Model
 {
     use HasFactory, HasCan, Notifiable;
 
-
     protected $fillable = [
         'applicant_id',
         'name',
-        'course',
         'exam',
         'score',
-        'status',
     ];
 
     protected $appends = [
@@ -30,9 +27,14 @@ class Result extends Model
         return $this->belongsTo(Applicant::class);
     }
 
-    public function courses()
+    public function verified()
     {
-        return $this->belongsToMany(Course::class, 'course_result');
+        return $this->belongsTo(Result::class);
+    }
+
+    public function exam()
+    {
+        return $this->hasOne(Exam::class, 'exam_code', 'exam');
     }
 
     public function getCreatedAtAttribute($value)

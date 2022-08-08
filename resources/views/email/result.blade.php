@@ -34,12 +34,7 @@
 
     <h3 class="greetings">Greetings Mr/Ms. {{ $results->name }}</h3>
     <p>This is <span class="name">{{ config('app.name', 'Cavite State University') }}.</span></p>
-    <p>We would like top inform you that you were {{ $results->status }} to enroll in following programs:</p>
-    <ul class="course-list">
-        @foreach ($results->courses as $course)
-            <li class="course">{{ $course->course_name }} - {{ $course->course_desc }}</li>
-        @endforeach
-    </ul>
+    <p>We would like top inform you that you were {{ $results->status }} to enroll in {{ $results->course->course_name }} - {{ $results->course->course_desc }} program.</p>
     <p>Please proceed on completing the requirements for enrollment. If you have any concern regarding the enrollment. Please contact the university registrar.</p>
 
     <h4 class="thanks">Thank you!</h4>
