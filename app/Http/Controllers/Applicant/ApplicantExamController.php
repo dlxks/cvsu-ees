@@ -145,6 +145,7 @@ class ApplicantExamController extends Controller
                         'answers' => $answers,
                         'start_time' => $start_time,
                         'end_time' => $end_time,
+                        'applicant' => $applicant,
                     ]);
                 }
                 // attempt ended
@@ -161,6 +162,7 @@ class ApplicantExamController extends Controller
                         'answers' => $answers,
                         'start_time' => $attempt->start_time,
                         'end_time' => $attempt->end_time,
+                        'applicant' => $applicant,
                     ]);
                 }
             }
@@ -193,6 +195,7 @@ class ApplicantExamController extends Controller
                             'start_time' => $start_time,
                             'end_time' => $end_time,
                             'result' => $res_check,
+                            'applicant' => $applicant,
                         ]);
                     }
                     // attempt ended
@@ -208,6 +211,7 @@ class ApplicantExamController extends Controller
                             'answers' => $answers,
                             'start_time' => $attempt->start_time,
                             'end_time' => $attempt->end_time,
+                            'applicant' => $applicant,
                         ]);
                     }
                 } elseif ($res_check->applicant_id && $res_check->exam != $exam->exam_code) {
@@ -229,6 +233,7 @@ class ApplicantExamController extends Controller
                             'start_time' => $start_time,
                             'end_time' => $end_time,
                             'result' => $res_check,
+                            'applicant' => $applicant,
                         ]);
                     }
                     // attempt ended
@@ -245,6 +250,7 @@ class ApplicantExamController extends Controller
                             'answers' => $answers,
                             'start_time' => $attempt->start_time,
                             'end_time' => $attempt->end_time,
+                            'applicant' => $applicant,
                         ]);
                     }
                 } else {

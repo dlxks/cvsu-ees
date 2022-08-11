@@ -24,7 +24,6 @@
                 v-if="this.days != 0"
               >
                 {{ days }}:
-                <!-- <span class="block text-xs">Days</span> -->
               </span>
               <span
                 class="inline-block text-center"
@@ -34,7 +33,6 @@
                 v-if="this.hours != 0"
               >
                 {{ hours }}:
-                <!-- <span class="block text-xs">Hours</span> -->
               </span>
               <span
                 class="inline-block text-center"
@@ -43,7 +41,6 @@
                 "
               >
                 {{ minutes }}:
-                <!-- <span class="block text-xs">Minutes</span> -->
               </span>
               <span
                 class="inline-block text-center"
@@ -52,7 +49,6 @@
                 "
               >
                 {{ seconds }}
-                <!-- <span class="block text-xs">Seconds</span> -->
               </span>
             </div>
           </div>
@@ -127,6 +123,12 @@
                               <div
                                 class="form-check w-full p-4 shadow overflow-hidden border-b border-gray-500 rounded-lg m-2 md:m-2 lg:m-4"
                               >
+                              <!-- :selected="
+                                    answers.applicant_id === applicant.id &&
+                                    answers.exam_id === exam.id &&
+                                    answers.question_id === questions.id &&
+                                    answers.answer_id === choice.id 
+                                  " -->
                                 <input
                                   type="radio"
                                   name="options"
@@ -135,7 +137,7 @@
                                   :value="
                                     choice.is_correct == true ? true : choice.option
                                   "
-                                  :selected="this.answers.answer_id == choice.id"
+                                  
                                   @click="choices(question.id, choice.id)"
                                   class="mr-3"
                                 />
@@ -401,6 +403,7 @@ export default {
     start_time: String,
     end_time: String,
     result: Object,
+    applicant: Object,
   },
 
   data() {

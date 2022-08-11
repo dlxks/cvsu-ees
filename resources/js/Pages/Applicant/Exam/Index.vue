@@ -52,20 +52,9 @@
             </div>
             <div class="float-right my-2">
               <!-- Take exam -->
-              <jet-button @click="openExam(exam)" v-if="this.attempts.length <= 0"
+              <jet-button @click="openExam(exam)"
                 >Take Exam</jet-button
               >
-              <!-- Check if continue, take or ended -->
-              <div v-for="attempt in attempts" :key="attempt.id">
-                <span v-for="result in results" :key="result.id">
-                  <jet-button
-                    @click="openExam(exam)"
-                    v-if="exam.id != attempt.exam_id && exam.exam_code != result.exam"
-                  >
-                    Take Exam
-                  </jet-button>
-                </span>
-              </div>
             </div>
 
             <!-- Notice modal -->
@@ -148,7 +137,7 @@ export default {
       isOpen: false,
       isSubmitted: false,
       disabled: null,
-      dateNow: new Date(),
+      dateNow: new Date('m-d-Y h:m:s'),
     };
   },
 

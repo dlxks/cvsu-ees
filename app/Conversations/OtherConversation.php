@@ -42,7 +42,7 @@ class OtherConversation extends Conversation
 
     public function askContact($name)
     {
-        return $this->ask('Your concern/inquiry was saved! Please leave also your contact information(email or contact number).', function (Answer $answer) {
+        return $this->ask('Please leave also your contact information(email or contact number) so we can reach you once we had an answer.', function (Answer $answer) {
             $this->contact = $answer->getText();
 
             Message::create([

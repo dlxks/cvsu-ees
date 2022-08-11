@@ -31,6 +31,11 @@ class Choice extends Model
         return $this->belongsTo(Question::class);
     }
 
+    public function answer()
+    {
+        return $this->belongsTo(Answer::class);
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return now()->parse($value)->timezone(config('app.timezone'))->format('d F Y, H:i:s');
