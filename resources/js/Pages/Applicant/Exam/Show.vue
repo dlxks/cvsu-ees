@@ -123,21 +123,23 @@
                               <div
                                 class="form-check w-full p-4 shadow overflow-hidden border-b border-gray-500 rounded-lg m-2 md:m-2 lg:m-4"
                               >
-                              <!-- :selected="
+                              
+                                  <!-- :selected="
                                     answers.applicant_id === applicant.id &&
                                     answers.exam_id === exam.id &&
                                     answers.question_id === questions.id &&
-                                    answers.answer_id === choice.id 
+                                    answers.answer_id === choice.id
                                   " -->
+                                  <!-- v-model="applicantResponses[id]" -->
                                 <input
                                   type="radio"
                                   name="options"
                                   :id="choice.id"
-                                  v-model="applicantResponses[id]"
+                                  selected
+                                  v-model="answer_id[id]"
                                   :value="
-                                    choice.is_correct == true ? true : choice.option
+                                    choice.option
                                   "
-                                  
                                   @click="choices(question.id, choice.id)"
                                   class="mr-3"
                                 />
@@ -409,7 +411,8 @@ export default {
   data() {
     return {
       questionIndex: 0,
-      applicantResponses: Array(this.questions.length).fill(false),
+      // applicantResponses: Array(this.questions.length).fill(false),
+      answer_id: Array(this.questions.length).fill(false),
       currentQuestion: 0,
       currentAnswer: 0,
 
