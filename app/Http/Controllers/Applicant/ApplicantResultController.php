@@ -70,7 +70,7 @@ class ApplicantResultController extends Controller
             ['applicant_id', $applicant->id],
             ['exam_id', $examId],
             ['question_id', '!=', 0],
-        ])->with('question')->with('choice')->get();
+        ])->with('question', 'choice')->get();
 
         $ans = [];
         foreach ($answers as $answer) {

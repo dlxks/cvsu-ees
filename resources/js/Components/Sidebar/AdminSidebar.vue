@@ -409,7 +409,7 @@
         <!-- Navigation Start -->
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
           <!-- Link Start-->
-          <li class="items-center">
+          <!-- <li class="items-center">
             <jet-nav-link
               v-if="$page.props.permission.results.viewAny"
               :href="route('admin.results.index')"
@@ -437,7 +437,7 @@
               </svg>
               <span>Exam Results</span>
             </jet-nav-link>
-          </li>
+          </li> -->
           <!-- Link End -->
           <!-- Link Start-->
           <li class="items-center">

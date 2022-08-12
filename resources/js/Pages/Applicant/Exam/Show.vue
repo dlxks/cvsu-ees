@@ -125,10 +125,9 @@
                               >
                               
                                   <!-- :selected="
-                                    answers.applicant_id === applicant.id &&
                                     answers.exam_id === exam.id &&
                                     answers.question_id === questions.id &&
-                                    answers.answer_id === choice.id
+                                    answers.answers === choice.id
                                   " -->
                                   <!-- v-model="applicantResponses[id]" -->
                                 <input
@@ -136,7 +135,7 @@
                                   name="options"
                                   :id="choice.id"
                                   selected
-                                  v-model="answer_id[id]"
+                                  v-model="answers[id]"
                                   :value="
                                     choice.option
                                   "
@@ -412,9 +411,9 @@ export default {
     return {
       questionIndex: 0,
       // applicantResponses: Array(this.questions.length).fill(false),
-      answer_id: Array(this.questions.length).fill(false),
-      currentQuestion: 0,
-      currentAnswer: 0,
+      answers: Array(this.questions.length).fill(false),
+      question_id: this.answers.question_id,
+      answer_id:  this.answers.answer_id,
 
       isOpen: false,
       isSubmitted: false,
@@ -475,17 +474,22 @@ export default {
 
     prev() {
       this.questionIndex--;
+        axios.post("/applicant/test", {
+          answerId: this.answer_id,
+          questionId: this.question_id,
+          examId: this.exam.id,
+        });
     },
 
     choices(question, answer) {
-      (this.currentAnswer = answer), (this.currentQuestion = question);
+      (this.answer_id = answer), (this.question_id = question);
     },
 
     goto(question) {
       this.questionIndex = question;
       axios.post("/applicant/test", {
-        answerId: this.currentAnswer,
-        questionId: this.currentQuestion,
+        answerId: this.answer_id,
+        questionId: this.question_id,
         examId: this.exam.id,
       });
     },
@@ -494,8 +498,8 @@ export default {
       this.questionIndex++;
       if (status == "next") {
         axios.post("/applicant/test", {
-          answerId: this.currentAnswer,
-          questionId: this.currentQuestion,
+          answerId: this.answer_id,
+          questionId: this.question_id,
           examId: this.exam.id,
         });
       } else if (status == "submit") {
@@ -506,8 +510,8 @@ export default {
     // submit button function
     submitApplicantAnswers() {
       axios.post("/applicant/test", {
-        answerId: this.currentAnswer,
-        questionId: this.currentQuestion,
+        answerId: this.answer_id,
+        questionId: this.question_id,
         examId: this.exam.id,
       });
       this.questionIndex++;
@@ -516,8 +520,8 @@ export default {
       this.isOpen = false;
 
       this.$inertia.post("/applicant/results", {
-        answerId: this.currentAnswer,
-        questionId: this.currentQuestion,
+        answerId: this.answer_id,
+        questionId: this.question_id,
         examId: this.exam.id,
       });
     },
@@ -525,8 +529,8 @@ export default {
     // submit button function
     submitOnTimerEnd() {
       axios.post("/applicant/test", {
-        answerId: this.currentAnswer,
-        questionId: this.currentQuestion,
+        answerId: this.answer_id,
+        questionId: this.question_id,
         examId: this.exam.id,
       });
       this.questionIndex++;
@@ -534,8 +538,8 @@ export default {
       this.disabledClick(true);
 
       this.$inertia.post("/applicant/results", {
-        answerId: this.currentAnswer,
-        questionId: this.currentQuestion,
+        answerId: this.answer_id,
+        questionId: this.question_id,
         examId: this.exam.id,
       });
     },
