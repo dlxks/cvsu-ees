@@ -80,21 +80,25 @@
       <div class="mx-auto sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 px-5 py-3">
           <div>
-            <div class="inline-block">
+            <!-- Search -->
+            <div class="block">
+              <span class="text-sm text-gray-500">Search: </span>
               <jet-input
                 type="text"
-                class="block ml-2 mb-4 w-60"
                 placeholder="Search..."
                 v-model="params.search"
+                class="px-2 py-1 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
               />
             </div>
+            <!-- Search -->
+
             <!-- View filter -->
-            <div class="inline-block">
-              <span class="px-1 text-gray-500">Show</span>
+            <div class="block">
+              <span class="text-sm text-gray-500">No. per page: </span>
               <select
                 ref="perpage"
                 id="perpage"
-                class="mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                class="px-2 py-1 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
                 v-model="params.perpage"
               >
                 <option
@@ -106,7 +110,6 @@
                   <span>{{ perpage }}</span>
                 </option>
               </select>
-              <span class="px-1 text-gray-500">per page</span>
             </div>
             <!-- View filter -->
           </div>
@@ -319,45 +322,7 @@
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('course_applied')">
-                          <div class="inline-block">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              v-if="
-                                params.field === 'course_applied' && params.direction === 'asc'
-                              "
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-                              />
-                            </svg>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              v-if="
-                                params.field === 'course_applied' && params.direction === 'desc'
-                              "
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
-                              />
-                            </svg>
-                          </div>
-                          <div class="inline-block">Course Applied</div></span
-                        >
+                        <span><div class="inline-block">Course Applied</div></span>
                       </th>
                       <th
                         scope="col"
@@ -505,33 +470,37 @@
                         <NoData />
                       </td>
                     </tr>
-                    <tr v-for="applicant in applicants.data" :key="applicant.id">
-                      <td class="px-6 py-4 whitespace-nowrap">
+                    <tr
+                      v-for="applicant in applicants.data"
+                      :key="applicant.id"
+                      class="text-sm"
+                    >
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ applicant.id }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ applicant.fname }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ applicant.mname }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ applicant.lname }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ applicant.course_applied }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ applicant.birthday }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ applicant.email }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ applicant.phone_number }}
                       </td>
                       <td
-                        class="px-6 py-4 space-x-1 whitespace-nowrap text-right text-sm font-medium"
+                        class="px-6 py-1 space-x-1 whitespace-nowrap text-right text-sm font-medium"
                       >
                         <button
                           @click="edit(applicant, true)"
@@ -642,10 +611,10 @@
           placeholder="Select course"
           valueProp="course_name"
           :searchable="true"
-          label="course_name"
+          label="course_desc"
           id="course"
           :options="courses"
-          class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+          class="mt-1 block text-sm w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
         />
       </div>
 

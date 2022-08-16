@@ -24,24 +24,42 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         request()->validate([
             'direction' => ['in:asc,desc'],
             'field' => ['in:course_name,course_desc'],
         ]);
 
-        $colleges = College::latest()->get();
+        $colleges = College::latest()->orderBy('college_name', 'asc')->get();
+        $perpage = $request->input('perpage') ?: 25;
+        $data = Course::with('college')->orderBy('course_name', 'asc');
 
-        $data = Course::with('college')
-            ->select(\DB::raw('*'));
+        $search_keyword = request('search');
 
+        // Search data
         if (request('search')) {
-            $data
-                ->join('colleges', 'courses.college_id', '=', 'colleges.id')
-                ->where('courses.course_name', 'like', '%' . request('search') . '%')
-                ->orWhere('courses.course_desc', 'like', '%' . request('search') . '%')
-                ->orWhere('colleges.college_name', 'like', '%' . request('search') . '%');
+            $data->where(function ($data) use ($search_keyword) {
+                $data
+                    ->where('courses.course_name', 'like', '%' . request('search') . '%')
+                    ->orWhere('courses.course_desc', 'like', '%' . request('search') . '%')
+                    ->orwhereHas('college', function ($subq) use ($search_keyword) {
+                        $subq->where(function ($subq2) use ($search_keyword) {
+                            $subq2->orWhere('college_name', 'like', '%' . request('search') . '%');
+                        });
+                    });
+            });
+        }
+
+        if (request()->has(['college'])) {
+            $data->where(function ($data) use ($search_keyword) {
+                $data
+                    ->whereHas('college', function ($subq) use ($search_keyword) {
+                        $subq->where(function ($subq2) use ($search_keyword) {
+                            $subq2->orWhere('college_name', 'like', '%' . request('college') . '%');
+                        });
+                    });
+            });
         }
 
         if (request()->has(['field', 'direction'])) {
@@ -49,8 +67,8 @@ class CourseController extends Controller
         }
 
         return Inertia::render('Admin/Course/Index', [
-            'courses' => $data->paginate(25)->withQueryString(),
-            'filters' => request()->all(['search', 'field', 'direction']),
+            'courses' => $data->paginate($perpage)->withQueryString(),
+            'filters' => request()->all(['search', 'field', 'direction', 'perpage', 'college']),
             'colleges' => $colleges,
         ]);
     }
@@ -126,7 +144,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-       
+
         $val = Validator::make($request->all(), [
             'college' => ['required'],
             'course_name' => ['required', 'string', 'max:255'],

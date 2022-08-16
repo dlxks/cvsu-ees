@@ -81,22 +81,25 @@
       <div class="mx-auto sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 px-5 py-3">
           <div>
-            <div class="inline-block">
+            <!-- Search -->
+            <div class="block">
+              <span class="text-sm text-gray-500">Search: </span>
               <jet-input
                 type="text"
-                class="block ml-2 mb-4 w-60"
                 placeholder="Search..."
                 v-model="params.search"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
               />
             </div>
+            <!-- Search -->
 
             <!-- View filter -->
-            <div class="inline-block">
-              <span class="px-1 text-gray-500">Show</span>
+            <div class="block">
+              <span class="text-sm text-gray-500">No. per page: </span>
               <select
                 ref="perpage"
                 id="perpage"
-                class="mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
                 v-model="params.perpage"
               >
                 <option
@@ -108,7 +111,6 @@
                   <span>{{ perpage }}</span>
                 </option>
               </select>
-              <span class="px-1 text-gray-500">per page</span>
             </div>
             <!-- View filter -->
           </div>
@@ -344,20 +346,24 @@
                         <NoData />
                       </td>
                     </tr>
-                    <tr v-for="verified in verifieds.data" :key="verified.id">
-                      <td class="px-6 py-4 whitespace-nowrap">
+                    <tr
+                      v-for="verified in verifieds.data"
+                      :key="verified.id"
+                      class="text-sm"
+                    >
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ verified.applicant_id }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ verified.name }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ verified.rating }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ verified.course_applied }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         <span
                           v-if="verified.status == 'pending'"
                           class="inline-flex items-center text-orange-800 bg-orange-200 px-2 text-sm font-medium rounded-md"
@@ -378,7 +384,7 @@
                         </span>
                       </td>
                       <td
-                        class="px-6 py-4 space-x-1 whitespace-nowrap text-right text-sm font-medium"
+                        class="px-6 py-1 space-x-1 whitespace-nowrap text-right text-sm font-medium"
                       >
                         <button
                           class="inline-flex items-center px-4 py-2 bg-blue-200 hover:bg-blue-300 text-blue-800 text-sm font-medium rounded-md"

@@ -91,19 +91,18 @@
         </div>
       </div>
       <!-- Question -->
-      <div class="px-5 py-3">
-        <div class="inline-flex">
+      <div class="p-4 align-middle sm:px-8 lg:px-10">
+        <div class="flex flex-wrap">
           <span class="uppercase text-sm mr-2 text-gray-500"> Question: </span>
-          <span class="text-lg capitalize">
-            <jet-input
+          <div class="text-lg capitalize w-full">
+            <textarea
               id="question"
               type="text"
               v-model="questionform.question"
               placeholder="Enter Question"
-              class="inline-block w-full my-2"
               required
-            >
-            </jet-input>
+              class="px-2 py-1 relative bg-white rounded mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow-sm block w-full"
+            />
             <div v-if="question.img_path">
               <img
                 :src="question.img_url.img_url"
@@ -111,7 +110,7 @@
                 alt="Image"
               />
             </div>
-          </span>
+          </div>
         </div>
       </div>
 

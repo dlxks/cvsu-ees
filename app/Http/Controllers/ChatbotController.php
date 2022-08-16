@@ -24,13 +24,19 @@ class ChatbotController extends Controller
 
         $data = Chatbot::orderBy('created_at', 'desc');
 
-        $perpage = $request->input('perpage') ?: 25;
+        $perpage = $request->input('perpage') ?: 5;
+        $search_keyword = request('search');
 
         if (request('search')) {
             $data
-                ->where('chatbots.category', 'like', '%' . request('search') . '%')
-                ->orwhere('chatbots.question', 'like', '%' . request('search') . '%')
-                ->orWhere('chatbots.answer', 'like', '%' . request('search') . '%');
+                ->where('category', 'like', '%' . request('search') . '%')
+                ->orwhere('question', 'like', '%' . request('search') . '%')
+                ->orWhere('answer', 'like', '%' . request('search') . '%');
+        }
+
+
+        if (request()->has(['category'])) {
+            $data->where('category', 'like', '%' . request('category') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
@@ -39,7 +45,7 @@ class ChatbotController extends Controller
 
         return Inertia::render('Admin/Chatbot/Index', [
             'concerns' => $data->paginate($perpage)->withQueryString(),
-            'filters' => request()->all(['search', 'field', 'direction', 'perpage']),
+            'filters' => request()->all(['search', 'field', 'direction', 'perpage', 'category']),
         ]);
     }
 
@@ -114,10 +120,10 @@ class ChatbotController extends Controller
         return redirect()->route('admin.chatbot.index');
     }
 
-    public function import() 
+    public function import()
     {
-        Excel::import(new ChatbotsImport,request()->file('file'));
-             
+        Excel::import(new ChatbotsImport, request()->file('file'));
+
         return back();
     }
 }

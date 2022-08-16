@@ -111,6 +111,7 @@ class ExamController extends Controller
                 'exam_code' => $exam->exam_code,
                 'description' => $exam->description,
                 'duration' => $exam->duration,
+                'status' => $exam->status,
                 'questions' => $exam->questions()->get()->map->only('exam_id', 'id', 'question'),
             ],
         ]);

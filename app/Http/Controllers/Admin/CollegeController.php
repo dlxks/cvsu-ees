@@ -23,14 +23,15 @@ class CollegeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         request()->validate([
             'direction' => ['in:asc,desc'],
             'field' => ['in:college_name,college_desc'],
         ]);
 
-        $query = College::query();
+        $query = College::orderBy('college_name', 'asc');
+        $perpage = $request->input('perpage') ?: 10;
 
         if (request('search')) {
             $query->where('college_name', 'like', '%' . request('search') . '%')->orWhere('college_desc', 'like', '%' . request('search') . '%');
@@ -42,8 +43,8 @@ class CollegeController extends Controller
 
         return Inertia::render('Admin/College/Index', [
 
-            'colleges' => $query->paginate(25)->withQueryString(),
-            'filters' => request()->all(['search', 'field', 'direction']),
+            'colleges' => $query->paginate($perpage)->withQueryString(),
+            'filters' => request()->all(['search', 'field', 'direction', 'perpage']),
         ]);
     }
 

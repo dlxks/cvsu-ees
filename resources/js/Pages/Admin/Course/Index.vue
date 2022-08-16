@@ -16,14 +16,75 @@
       <div class="mx-auto sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 px-5 py-3">
           <div>
-            <div class="inline-block">
+            <!-- Search -->
+            <div class="block">
+              <span class="text-sm text-gray-500">Search: </span>
               <jet-input
                 type="text"
-                class="block ml-2 mb-4 w-60"
                 placeholder="Search..."
                 v-model="params.search"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
               />
             </div>
+            <!-- Search -->
+
+            <!-- View filter -->
+            <div class="block">
+              <span class="text-sm text-gray-500">No. per page: </span>
+              <select
+                ref="perpage"
+                id="perpage"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
+                v-model="params.perpage"
+              >
+                <option
+                  v-for="perpage in perpages"
+                  :key="perpage"
+                  :value="perpage"
+                  class="capitalize"
+                >
+                  <span>{{ perpage }}</span>
+                </option>
+              </select>
+            </div>
+            <!-- View filter -->
+
+            <!-- College filter -->
+            <div class="block">
+              <span class="text-sm text-gray-500">College: </span>
+              <select
+                v-model="params.college"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
+              >
+                <option
+                  class="capitalize"
+                  v-for="college in colleges"
+                  v-bind:value="college.college_name"
+                >
+                  <span>{{ college.college_name }}</span>
+                </option>
+              </select>
+            </div>
+            <!-- College filter -->
+
+            <!-- clear -->
+            <div class="block">
+              <jet-button
+                value="Clear Filter"
+                @click="clearFilters()"
+                v-if="
+                  this.filters.search != null ||
+                  this.filters.field != null ||
+                  this.filters.direction != null ||
+                  this.filters.college != null ||
+                  this.filters.perpage != null
+                "
+                class="px-2 py-1 bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
+              >
+                Clear Filters
+              </jet-button>
+            </div>
+            <!-- clear -->
           </div>
           <div class="block" align="right">
             <jet-button
@@ -61,14 +122,19 @@
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <div class="inline-block">College</div>
+                        <span class="inline-flex">
+                          <div class="">College</div>
+                        </span>
                       </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('course_name')">
-                          <div class="inline-block">
+                        <span
+                          class="cursor-pointer inline-flex"
+                          @click="sort('course_name')"
+                        >
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -106,15 +172,18 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">Course</div></span
-                        >
+                          <div>Course</div>
+                        </span>
                       </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('course_desc')">
-                          <div class="inline-block">
+                        <span
+                          class="cursor-pointer inline-flex"
+                          @click="sort('course_desc')"
+                        >
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -169,19 +238,19 @@
                         <!-- NO data -->
                       </td>
                     </tr>
-                    <tr v-for="course in courses.data" :key="course.id">
-                      <td class="px-6 py-4 whitespace-nowrap">
+                    <tr v-for="course in courses.data" :key="course.id" class="text-sm">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ course.college.college_name }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ course.course_name }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ course.course_desc }}
                       </td>
 
                       <td
-                        class="px-6 py-4 space-x-1 whitespace-nowrap text-right text-sm font-medium"
+                        class="px-6 py-1 space-x-1 whitespace-nowrap text-right text-sm font-medium"
                       >
                         <button
                           @click="edit(course, true)"
@@ -396,6 +465,8 @@ export default {
         search: this.filters.search,
         field: this.filters.field,
         direction: this.filters.direction,
+        college: this.filters.college,
+        perpage: this.filters.perpage,
       },
 
       form: this.$inertia.form({
@@ -484,6 +555,10 @@ export default {
           this.disabledClick(false);
         },
       });
+    },
+
+    clearFilters: function () {
+      this.$inertia.get(this.route("admin.courses.index"), {});
     },
   },
 

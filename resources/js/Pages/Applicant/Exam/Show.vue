@@ -135,7 +135,7 @@
                                   name="options"
                                   :id="choice.id"
                                   selected
-                                  v-model="answers[id]"
+                                  v-model="applicantResponses[id]"
                                   :value="
                                     choice.option
                                   "
@@ -410,8 +410,8 @@ export default {
   data() {
     return {
       questionIndex: 0,
-      // applicantResponses: Array(this.questions.length).fill(false),
-      answers: Array(this.questions.length).fill(false),
+      applicantResponses: Array(this.questions.length).fill(false),
+      // answers: Array(this.questions.length).fill(false),
       question_id: this.answers.question_id,
       answer_id:  this.answers.answer_id,
 

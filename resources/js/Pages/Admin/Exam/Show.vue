@@ -27,6 +27,25 @@
                 {{ exam.exam_code }}
               </span>
             </Link>
+
+            <!-- Active/Inactive -->
+            <div>
+              <!-- Active -->
+              <span
+                v-if="exam.status == 'active'"
+                class="inline-flex items-center text-emerald-800 bg-emerald-200 px-2 text-sm font-medium rounded-md"
+              >
+                Active
+              </span>
+              <!-- Inactive -->
+              <span
+                v-if="exam.status == 'inactive'"
+                class="inline-flex items-center text-red-800 bg-red-200 px-2 text-sm font-medium rounded-md"
+              >
+                Inactive
+              </span>
+            </div>
+            <!-- Active/Inactive -->
           </h2>
         </div>
         <!-- Header -->
@@ -236,12 +255,12 @@
       <!-- Description -->
       <div class="mb-4">
         <jet-label for="description" value="Description" />
-        <jet-input
+        <textarea
           id="description"
           type="text"
-          class="mt-1 block w-full"
-          v-model="examform.description"
-          @keyup.enter="updateExam(exam)"
+          class="px-2 py-1 relative bg-white rounded mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow-sm block w-full"
+          v-model="form.description"
+          @keyup.enter="updateExam(form)"
         />
       </div>
 
@@ -255,6 +274,27 @@
           v-model="examform.duration"
           @keyup.enter="updateExam(exam)"
         />
+      </div>
+
+      <!-- Status -->
+      <div class="mb-4">
+        <jet-label for="status" value="Status" />
+        <select
+          ref="status"
+          id="status"
+          class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+          v-model="examform.status"
+          @keyup.enter="updateExam(form)"
+        >
+          <option
+            v-for="status in status"
+            :key="status"
+            :value="status"
+            class="capitalize"
+          >
+            <span>{{ status }}</span>
+          </option>
+        </select>
       </div>
     </template>
 
@@ -307,15 +347,14 @@
       <div class="mb-4">
         <jet-label for="question" value="Question" />
         <div class="text-left">
-          <jet-input
+          <textarea
             id="question"
             type="text"
             v-model="questionform.question"
             placeholder="Enter Question"
-            class="block w-full"
             required
-          >
-          </jet-input>
+            class="px-2 py-1 relative bg-white rounded mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow-sm block w-full"
+          />
 
           <span class="block text-gray-800 mx-4 my-2">
             You can add image/illustration to your question.
@@ -435,7 +474,11 @@ export default {
   props: {
     exam: Object,
   },
+
+  extends: shared,
+
   remember: "form",
+
   data() {
     return {
       isOpen: false,
@@ -448,6 +491,7 @@ export default {
         subject: this.exam.subject,
         description: this.exam.description,
         duration: this.exam.duration,
+        status: this.exam.status,
       }),
 
       valid: true,
@@ -520,7 +564,7 @@ export default {
     },
     // Exam assign data
     editExam: function (exam, status) {
-      // this.form = Object.assign({}, exam);
+      this.form = Object.assign({}, exam);
       this.editModal(status);
     },
     // Exam update function

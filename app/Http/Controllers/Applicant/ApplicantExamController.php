@@ -45,7 +45,7 @@ class ApplicantExamController extends Controller
                 $exams = Exam::where('status', 'active')->latest()->get();
                 $questions = null;
             }
-        }
+        }else{}
 
         return Inertia::render('Applicant/Exam/Index', [
             'exams' => $exams,

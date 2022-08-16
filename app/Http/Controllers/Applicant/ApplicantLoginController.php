@@ -13,7 +13,7 @@ use Inertia\Inertia;
 class ApplicantLoginController extends Controller
 {
     use Banner;
-
+    
     public function showLoginForm()
     {
         if (!auth()->check())

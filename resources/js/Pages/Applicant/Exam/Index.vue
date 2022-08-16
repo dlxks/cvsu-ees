@@ -17,7 +17,7 @@
           class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
         >
           <!-- No data -->
-          <div v-if="exams.length < 1 || schedule.status === 'ended'">
+          <div v-if="exams == null || !schedule">
             <div class="w-full py-8">
               <div class="p-4 text-center text-sm text-gray-800">
                 <span class="text-red-500 uppercase text-xl">No exam found!</span>
@@ -32,7 +32,6 @@
             class="flex-auto p-8"
             v-for="exam in exams"
             :key="exam.id"
-            v-if="schedule.status !== 'ended'"
           >
             <div class="w-full">
               <div class="my-2">

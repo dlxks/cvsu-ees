@@ -16,21 +16,25 @@
       <div class="mx-auto sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 px-5 py-3">
           <div>
-            <div class="inline-block">
+            <!-- Search -->
+            <div class="block">
+              <span class="text-sm text-gray-500">Search: </span>
               <jet-input
                 type="text"
-                class="block ml-2 mb-4 w-60"
                 placeholder="Search..."
                 v-model="params.search"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
               />
             </div>
+            <!-- Search -->
+
             <!-- View filter -->
-            <div class="inline-block">
-              <span class="px-1 text-gray-500">Show</span>
+            <div class="block">
+              <span class="text-sm text-gray-500">No. per page: </span>
               <select
                 ref="perpage"
                 id="perpage"
-                class="mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
                 v-model="params.perpage"
               >
                 <option
@@ -42,9 +46,46 @@
                   <span>{{ perpage }}</span>
                 </option>
               </select>
-              <span class="px-1 text-gray-500">per page</span>
             </div>
             <!-- View filter -->
+
+            <!-- College filter -->
+            <div class="block">
+              <span class="text-sm text-gray-500">Category: </span>
+              <select
+                v-model="params.category"
+                id="category"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
+              >
+                <option
+                  class="capitalize"
+                  v-for="category in categories"
+                  :value="category"
+                >
+                  <span>{{ category }}</span>
+                </option>
+              </select>
+            </div>
+            <!-- College filter -->
+
+            <!-- clear -->
+            <div class="block">
+              <jet-button
+                value="Clear Filter"
+                @click="clearFilters()"
+                v-if="
+                  this.filters.search != null ||
+                  this.filters.field != null ||
+                  this.filters.direction != null ||
+                  this.filters.category != null ||
+                  this.filters.perpage != null
+                "
+                class="px-2 py-1 bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
+              >
+                Clear Filters
+              </jet-button>
+            </div>
+            <!-- clear -->
           </div>
 
           <div class="block" align="right">
@@ -358,6 +399,8 @@ export default {
         search: this.filters.search,
         field: this.filters.field,
         direction: this.filters.direction,
+        category: this.filters.category,
+        perpage: this.filters.perpage,
       },
 
       form: this.$inertia.form({
@@ -460,6 +503,12 @@ export default {
       this.$inertia.visit("/admin/chatbot/" + id, {
         method: "delete",
       });
+    },
+
+    // Clear filters
+
+    clearFilters: function () {
+      this.$inertia.get(this.route("admin.chatbot.index"), {});
     },
   },
 

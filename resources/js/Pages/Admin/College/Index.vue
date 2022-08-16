@@ -16,14 +16,38 @@
       <div class="mx-auto sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 px-5 py-3">
           <div>
-            <div class="inline-block">
+            <!-- Search -->
+            <div class="block">
+              <span class="text-sm text-gray-500">Search: </span>
               <jet-input
                 type="text"
-                class="block ml-2 mb-4 w-60"
                 placeholder="Search..."
                 v-model="params.search"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
               />
             </div>
+            <!-- Search -->
+
+            <!-- View filter -->
+            <div class="block">
+              <span class="text-sm text-gray-500">No. per page: </span>
+              <select
+                ref="perpage"
+                id="perpage"
+                class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
+                v-model="params.perpage"
+              >
+                <option
+                  v-for="perpage in perpages"
+                  :key="perpage"
+                  :value="perpage"
+                  class="capitalize"
+                >
+                  <span>{{ perpage }}</span>
+                </option>
+              </select>
+            </div>
+            <!-- View filter -->
           </div>
           <div class="block" align="right">
             <jet-button
@@ -164,14 +188,14 @@
                       </td>
                     </tr>
                     <tr v-for="college in colleges.data" :key="college.id">
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ college.college_name }}
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
+                      <td class="px-6 py-1 whitespace-nowrap">
                         {{ college.college_desc }}
                       </td>
                       <td
-                        class="px-6 py-4 space-x-1 whitespace-nowrap text-right text-sm font-medium"
+                        class="px-6 py-1 space-x-1 whitespace-nowrap text-right text-sm font-medium"
                       >
                         <button
                           @click="edit(college, true)"
@@ -334,6 +358,7 @@ export default {
         search: this.filters.search,
         field: this.filters.field,
         direction: this.filters.direction,
+        perpage: this.filters.perpage,
       },
 
       form: this.$inertia.form({

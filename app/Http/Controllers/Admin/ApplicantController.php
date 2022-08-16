@@ -40,13 +40,13 @@ class ApplicantController extends Controller
 
         if (request('search')) {
             $data
-                ->where('applicants.id', 'like', '%' . request('search') . '%')
-                ->orwhere('applicants.fname', 'like', '%' . request('search') . '%')
-                ->orWhere('applicants.mname', 'like', '%' . request('search') . '%')
-                ->orWhere('applicants.lname', 'like', '%' . request('search') . '%')
-                ->orWhere('applicants.course_applied', 'like', '%' . request('search') . '%')
-                ->orWhere('applicants.email', 'like', '%' . request('search') . '%')
-                ->orWhere('applicants.phone_number', 'like', '%' . request('search') . '%');
+                ->where('id', 'like', '%' . request('search') . '%')
+                ->orwhere('fname', 'like', '%' . request('search') . '%')
+                ->orWhere('.mname', 'like', '%' . request('search') . '%')
+                ->orWhere('.lname', 'like', '%' . request('search') . '%')
+                ->orWhere('course_applied', 'like', '%' . request('search') . '%')
+                ->orWhere('.email', 'like', '%' . request('search') . '%')
+                ->orWhere('phone_number', 'like', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
@@ -92,24 +92,28 @@ class ApplicantController extends Controller
             $this->flash($val->errors()->first(), 'danger');
             return back();
         }
-        $user = User::create([
-            'name' =>  Str::of($request['lname'])->ucfirst() . ', ' . Str::of($request['fname'])->ucfirst() . ' ' . Str::of($request['mname'])->ucfirst(),
-            'email' => $request['email'],
-            'phone' => $request['phone_number'],
-            'role' => 'applicant',
-            'password' => bcrypt('changetorandomstring')
-        ]);
 
-        $applicant = Applicant::create([
-            'user_id' => $user->id,
-            'fname' => Str::of($request['fname'])->ucfirst(),
-            'mname' => Str::of($request['mname'])->ucfirst(),
-            'lname' => Str::of($request['lname'])->ucfirst(),
-            'course_applied' => Str::of($request['course_applied'])->upper(),
-            'email' => $request['email'],
-            'phone_number' => $request['phone_number'],
-            'birthday' => $request['birthday'],
-        ]);
+        if ($val) {
+            $user = User::create([
+                'name' =>  Str::of($request['lname'])->ucfirst() . ', ' . Str::of($request['fname'])->ucfirst() . ' ' . Str::of($request['mname'])->ucfirst(),
+                'email' => $request['email'],
+                'phone' => $request['phone_number'],
+                'role' => 'applicant',
+                'password' => bcrypt('changetorandomstring')
+            ]);
+
+            $applicant = Applicant::create([
+                'user_id' => $user->id,
+                'fname' => Str::of($request['fname'])->ucfirst(),
+                'mname' => Str::of($request['mname'])->ucfirst(),
+                'lname' => Str::of($request['lname'])->ucfirst(),
+                'course_applied' => Str::of($request['course_applied'])->upper(),
+                'email' => $request['email'],
+                'phone_number' => $request['phone_number'],
+                'birthday' => $request['birthday'],
+            ]);
+        }
+
 
         $this->flash('Applicant added', 'success');
 
