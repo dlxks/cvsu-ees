@@ -114,7 +114,7 @@
                           <div v-if="question.img_path">
                             <img
                               :src="question.img_url"
-                              class="object-contain h-80"
+                              class="object-contain h-60"
                               alt="Image"
                             />
                           </div>
@@ -123,19 +123,11 @@
                               <div
                                 class="form-check w-full p-4 shadow overflow-hidden border-b border-gray-500 rounded-lg m-2 md:m-2 lg:m-4"
                               >
-                              
-                                  <!-- :selected="
-                                    answers.exam_id === exam.id &&
-                                    answers.question_id === questions.id &&
-                                    answers.answers === choice.id
-                                  " -->
-                                  <!-- v-model="applicantResponses[id]" -->
                                 <input
                                   type="radio"
                                   name="options"
                                   :id="choice.id"
-                                  selected
-                                  v-model="applicantResponses[id]"
+                                  v-model="applicantResponses[choice.id]"
                                   :value="
                                     choice.option
                                   "
@@ -150,7 +142,7 @@
                                   <div v-if="choice.img_path">
                                     <img
                                       :src="choice.img_url"
-                                      class="object-contain h-80"
+                                      class="object-contain h-40"
                                     />
                                   </div>
                                 </label>

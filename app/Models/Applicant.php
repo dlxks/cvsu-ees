@@ -62,7 +62,7 @@ class Applicant extends Model
 
     public function schedule()
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->belongsTo(Schedule::class, 'id', 'applicant_id');
     }
 
     public function attempt()

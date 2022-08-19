@@ -35,21 +35,20 @@ class ApplicantExamController extends Controller
         $results = Result::where('applicant_id', $applicant->id)->get();
 
         $exams = null;
-        $questions = null;
+        // $questions = null;
+
 
         if ($schedule) {
             if ($schedule->status == 'active') {
-                $exams = Exam::where('status', 'active')->latest()->get();
-                $questions = Exam::with('questions')->get();
+                $exams = auth()->user()->applicantAccount->schedule->exams;
+                // $exams = Exam::with('schedules')->where(['status', 'active'])->latest()->get();
             } else {
                 $exams = Exam::where('status', 'active')->latest()->get();
-                $questions = null;
             }
-        }else{}
+        }
 
         return Inertia::render('Applicant/Exam/Index', [
             'exams' => $exams,
-            'questions' => $questions,
             'attempts' => $attempts,
             'results' => $results,
             'schedule' => $schedule,
