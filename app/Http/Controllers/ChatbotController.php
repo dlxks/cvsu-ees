@@ -24,7 +24,7 @@ class ChatbotController extends Controller
 
         $data = Chatbot::orderBy('created_at', 'desc');
 
-        $perpage = $request->input('perpage') ?: 5;
+        $perpage = $request->input('perpage') ?: 25;
         $search_keyword = request('search');
 
         if (request('search')) {
@@ -72,7 +72,9 @@ class ChatbotController extends Controller
             'answer' => Str::of($request['answer'])->ucfirst(),
         ]);
 
-        $this->flash('New question for chatbot added.', 'success');
+        if ($val) {
+            $this->flash('New question for chatbot added.', 'success');
+        }
 
         return redirect()->route('admin.chatbot.index');
     }

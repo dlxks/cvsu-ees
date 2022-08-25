@@ -26,7 +26,9 @@ class HomeController extends Controller
             ->orWhere('status', 'active')
             ->count();
 
-        $data = Schedule::where('status', 'pending')
+        $data = Schedule::groupBy('sched_code', 'date', 'sched_name', 'status')
+            ->select('sched_code', 'date', 'sched_name', 'status', DB::raw('count(*) as total'))
+            ->where('status', 'pending')
             ->orWhere('status', 'active')
             ->orderBy('date', 'desc');
 
@@ -34,7 +36,7 @@ class HomeController extends Controller
             ->orderBy('question', 'asc')
             ->get();
 
-            // dd($contacts);
+        // dd($contacts);
 
         return Inertia::render('Index', [
             'noOfExams' => $noOfExams,

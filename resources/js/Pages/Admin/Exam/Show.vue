@@ -547,6 +547,11 @@ export default {
       this.$inertia.visit("/admin/questions", {
         method: "post",
         data: questions,
+        // onSuccess: () => {
+        //   (this.questionform = {});
+        // },
+        preserveScroll: true,
+        preserveState: true,
       });
     },
     // Disable function

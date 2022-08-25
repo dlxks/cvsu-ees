@@ -1,0 +1,3 @@
+composer update --ignore-platform-req=ext-gd
+php artisan key:generate
+php artisan migrate:fresh

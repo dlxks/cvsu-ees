@@ -20,7 +20,9 @@ class AdminDashboardController extends Controller
         $noOfExams = DB::table('exams')->count();
         $noOfApplicants = DB::table('applicants')->count();
         $noOfSched = DB::table('schedules')->where('status', 'pending')->count();
-        $data = Schedule::where('status', 'pending')
+        $data = Schedule::groupBy('sched_code', 'date', 'sched_name', 'status')
+            ->select('sched_code', 'date', 'sched_name', 'status', DB::raw('count(*) as total'))
+            ->where('status', 'pending')
             ->orWhere('status', 'active')
             ->orderBy('date', 'desc');
 

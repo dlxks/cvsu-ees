@@ -364,6 +364,17 @@
           type="text"
           class="mt-1 block w-full"
           v-model="form.course_name"
+          v-show="!editMode"
+          @keyup.enter="save(form)"
+        />
+        <jet-input
+          id="course_name"
+          ref="course_name"
+          type="text"
+          class="mt-1 block w-full"
+          v-model="form.course_name"
+          v-show="editMode"
+          @keyup.enter="update(form)"
         />
       </div>
 
@@ -511,12 +522,11 @@ export default {
       this.$inertia.visit("/admin/courses", {
         method: "post",
         data: courses,
-        onBefore: () => {
-          this.disabledClick(true);
-        },
         onSuccess: () => {
-          this.disabledClick(false), this.openModal(false), (this.form = {});
+          this.form = {};
         },
+        preserveScroll: true,
+        preserveState: true,
       });
     },
 
@@ -536,10 +546,9 @@ export default {
           this.disabledClick(true);
         },
         onSuccess: () => {
-          this.disabledClick(false), this.openModal(false);
+          this.disabledClick(false), this.openModal(false), (this.form = {});
         },
         onFinish: () => (this.form = {}),
-        preserveScroll: true,
       });
     },
 

@@ -455,17 +455,15 @@ export default {
       this.$inertia.visit("/admin/chatbot", {
         method: "post",
         data: form,
-        onBefore: () => {
-          this.disabledClick(true);
-        },
         onSuccess: () => {
-          this.disabledClick(false), (this.form = {});
+          this.form = {};
         },
+        preserveScroll: true,
+        preserveState: true,
       });
     },
 
     // Import data function
-
     importData: function (importForm) {
       this.$inertia.post(
         this.route("admin.chatbot.import", this.importForm),

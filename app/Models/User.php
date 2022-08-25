@@ -78,8 +78,8 @@ class User extends Authenticatable
 
     public function getUpdatedAtAttribute($value)
     {
-        return now()->parse($value)->timezone(config('app.timezone'))->format('d F Y, H:i:s');
-        // return now()->parse($value)->timezone(config('app.timezone'))->diffForHumans();
+        // return now()->parse($value)->timezone(config('app.timezone'))->format('d F Y, H:i:s');
+        return now()->parse($value)->timezone(config('app.timezone'))->diffForHumans();
     }
 
     public function hasRole($role)

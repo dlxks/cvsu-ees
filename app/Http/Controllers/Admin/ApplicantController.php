@@ -84,7 +84,7 @@ class ApplicantController extends Controller
             'lname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:applicants'],
             'course_applied' => ['required'],
-            'phone_number' => ['required', 'integer', 'unique:applicants', 'regex:/^(63)[0-9]{10}$/'],
+            'phone_number' => ['required', 'unique:applicants', 'numeric', 'min:10'],
             'birthday' => ['required', 'date'],
         ]);
 
@@ -156,7 +156,7 @@ class ApplicantController extends Controller
             'lname' => ['required', 'string', 'max:255'],
             'course_applied' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'phone_number' => ['required', 'integer', 'regex:/^(63)[0-9]{10}$/'],
+            'phone_number' => ['required', 'numeric', 'min:10'],
             'birthday' => ['required', 'date'],
         ]);
 
@@ -184,7 +184,9 @@ class ApplicantController extends Controller
             'birthday' => $request['birthday'],
         ]);
 
-        $this->flash('Applicant updated!', 'success');
+        if ($val) {
+            $this->flash('Applicant updated!', 'success');
+        }
 
         return redirect()->back();
     }

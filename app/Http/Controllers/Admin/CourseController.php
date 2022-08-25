@@ -161,8 +161,10 @@ class CourseController extends Controller
             'course_name' => $request['course_name'],
             'course_desc' => $request['course_desc'],
         ]);
+        if ($val) {
+            $this->flash('Course updated successfully.', 'success');
+        }
 
-        $this->flash('Course updated successfully.', 'success');
 
         return redirect()->back();
     }

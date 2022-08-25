@@ -573,6 +573,18 @@
           class="mt-1 block w-full"
           autocomplete
           v-model="form.fname"
+          v-show="editMode"
+          @keyup.enter="update(form)"
+        />
+        <jet-input
+          id="fname"
+          ref="fname"
+          type="text"
+          class="mt-1 block w-full"
+          autocomplete
+          v-model="form.fname"
+          v-show="!editMode"
+          @keyup.enter="save(form)"
         />
       </div>
 
@@ -586,6 +598,18 @@
           class="mt-1 block w-full"
           autocomplete
           v-model="form.mname"
+          v-show="editMode"
+          @keyup.enter="update(form)"
+        />
+        <jet-input
+          id="mname"
+          ref="mname"
+          type="text"
+          class="mt-1 block w-full"
+          autocomplete
+          v-model="form.mname"
+          @keyup.enter="save(form)"
+          v-show="!editMode"
         />
       </div>
 
@@ -599,15 +623,40 @@
           class="mt-1 block w-full"
           autocomplete
           v-model="form.lname"
+          v-show="editMode"
+          @keyup.enter="update(form)"
+        />
+        <jet-input
+          id="lname"
+          ref="lname"
+          type="text"
+          class="mt-1 block w-full"
+          autocomplete
+          v-model="form.lname"
+          v-show="!editMode"
+          @keyup.enter="save(form)"
         />
       </div>
 
       <!-- Course -->
       <div class="mb-4">
-        <jet-label for="course" value="Course" />
-
+        <jet-label for="course" value="Course Applied" />
         <Multiselect
           v-model="form.course_applied"
+          v-show="editMode"
+          @keyup.enter="update(form)"
+          placeholder="Select course"
+          valueProp="course_name"
+          :searchable="true"
+          label="course_desc"
+          id="course"
+          :options="courses"
+          class="mt-1 block text-sm w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+        />
+        <Multiselect
+          v-model="form.course_applied"
+          v-show="!editMode"
+          @keyup.enter="save(form)"
           placeholder="Select course"
           valueProp="course_name"
           :searchable="true"
@@ -628,6 +677,18 @@
           class="mt-1 block w-full"
           autocomplete
           v-model="form.email"
+          v-show="editMode"
+          @keyup.enter="update(form)"
+        />
+        <jet-input
+          id="email"
+          ref="email"
+          type="text"
+          class="mt-1 block w-full"
+          autocomplete
+          v-model="form.email"
+          v-show="!editMode"
+          @keyup.enter="save(form)"
         />
       </div>
 
@@ -641,6 +702,18 @@
           class="mt-1 block w-full"
           autocomplete
           v-model="form.phone_number"
+          v-show="editMode"
+          @keyup.enter="update(form)"
+        />
+        <jet-input
+          id="phone_number"
+          ref="phone_number"
+          type="number"
+          class="mt-1 block w-full"
+          autocomplete
+          v-model="form.phone_number"
+          v-show="!editMode"
+          @keyup.enter="save(form)"
         />
       </div>
 
@@ -653,7 +726,17 @@
           class="mt-1 block w-full"
           autocomplete
           v-model="form.birthday"
+          v-show="!editMode"
           @keyup.enter="save(form)"
+        />
+        <jet-input
+          id="birthday"
+          type="date"
+          class="mt-1 block w-full"
+          autocomplete
+          v-model="form.birthday"
+          v-show="editMode"
+          @keyup.enter="update(form)"
         />
       </div>
     </template>
@@ -665,7 +748,6 @@
         class="ml-2"
         v-show="!editMode"
         @click="save(form)"
-        :class="{ 'opacity-25': disabled }"
         :disabled="disabled"
       >
         Save
@@ -784,11 +866,8 @@ export default {
       this.$inertia.visit("/admin/applicants", {
         method: "post",
         data: this.form,
-        onBefore: () => {
-          this.disabledClick(true);
-        },
         onSuccess: () => {
-          this.disabledClick(false), this.openModal(false), (this.form = {});
+          this.form = {};
         },
         preserveScroll: true,
         preserveState: true,
@@ -798,7 +877,6 @@ export default {
     // Edit mode function
     edit: function (applicant, status) {
       this.form = Object.assign({}, applicant);
-
       this.editMode = true;
       this.openModal(status);
     },
@@ -812,10 +890,9 @@ export default {
           this.disabledClick(true);
         },
         onSuccess: () => {
-          this.disabledClick(false), this.openModal(false);
+          this.disabledClick(false), this.openModal(false), (this.form = {});
         },
         onFinish: () => (this.form = {}),
-        preserveScroll: true,
       });
     },
 
