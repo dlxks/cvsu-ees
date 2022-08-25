@@ -101,7 +101,7 @@
                             </div>
                             <!-- no sched -->
                           </div>
-                          <div class="relative w-auto pl-4 flex-initial">
+                          <div class="relative w-auto pl-4 flex-initial hidden sm:block">
                             <div
                               class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-blue-500"
                             >
@@ -175,7 +175,7 @@
                               </span>
                             </div>
                           </div>
-                          <div class="relative w-auto pl-4 flex-initial">
+                          <div class="relative w-auto pl-4 flex-initial hidden sm:block"> 
                             <Link
                               class="cursor-pointer"
                               :href="route('applicant.results.index')"

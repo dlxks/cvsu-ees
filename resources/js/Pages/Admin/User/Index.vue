@@ -14,19 +14,17 @@
 
     <div class="py-12">
       <div class="mx-auto sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 px-5 py-3">
-          <div>
-            <div class="inline-block">
-              <jet-input
-                type="text"
-                class="block ml-2 mb-4 w-60"
-                placeholder="Search..."
-                v-model="params.search"
-              />
-            </div>
+        <div class="mx-auto md:flex md:justify-between md:items-center px-5 py-3">
+          <div class="">
+            <jet-input
+              type="text"
+              class="block ml-2 mb-4 w-60"
+              placeholder="Search..."
+              v-model="params.search"
+            />
           </div>
 
-          <div class="block" align="right">
+          <div class="text-right">
             <jet-button
               @click="openModal(true)"
               v-if="$page.props.permission.users.viewAny"

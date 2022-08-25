@@ -25,12 +25,14 @@
       </div>
     </template>
 
-    <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+    <div
+      class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 text-md sm:text-lg"
+    >
       <div
-        class="w-full sm:max-w-2xl mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
+        class="w-full sm:max-w-2xl mt-6 bg-white shadow-md overflow-hidden sm:rounded-lg"
       >
         <div class="w-full bg-emerald-500 py-2 px-4">
-          <span class="mr-2 text-xl text-white">
+          <span class="mr-2 sm:text-lg text-xs text-white">
             Application Result: {{ verified.applicant_id }}
           </span>
         </div>
@@ -81,7 +83,7 @@
                     :searchable="true"
                     label="course_desc"
                     :options="courses"
-                    class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    class="sm:text-lg text-md mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                   />
                 </td>
               </tr>
@@ -106,7 +108,7 @@
                   <select
                     ref="role"
                     id="role"
-                    class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    class="sm:text-lg text-md mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                     v-model="form.status"
                   >
                     <option

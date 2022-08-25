@@ -14,8 +14,8 @@
 
     <div class="py-12">
       <div class="mx-auto sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 px-5 py-3">
-          <div>
+        <div class="mx-auto md:flex md:justify-between md:items-center px-5 py-3">
+          <div class="pb-2 sm:pb-0">
             <!-- Search -->
             <div class="block">
               <span class="text-sm text-gray-500">Search: </span>
@@ -88,7 +88,7 @@
             <!-- clear -->
           </div>
 
-          <div class="block" align="right">
+          <div class="text-right">
             <jet-button
               class="inline-flex items-center px-4 py-2 mr-2 bg-emerald-200 hover:bg-emerald-300 text-emerald-800 text-sm font-medium rounded-md"
               @click="openModal(true)"
