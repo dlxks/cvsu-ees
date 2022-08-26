@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use PDF;
 
 class ApplicantController extends Controller
@@ -93,8 +92,6 @@ class ApplicantController extends Controller
             $this->flash($val->errors()->first(), 'danger');
             return back();
         }
-        
-        $id = IdGenerator::generate(['table' => 'applicants', 'field' => 'id', 'length' => 10, 'prefix' => date('ym'), 'reset_on_prefix_change' => true]);
 
         if ($val) {
             $user = User::create([
@@ -106,7 +103,6 @@ class ApplicantController extends Controller
             ]);
 
             $applicant = Applicant::create([
-                'id' => $id,
                 'user_id' => $user->id,
                 'fname' => Str::of($request['fname'])->ucfirst(),
                 'mname' => Str::of($request['mname'])->ucfirst(),

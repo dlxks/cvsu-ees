@@ -17,17 +17,15 @@ class Applicant extends Model
 
     protected $guarded = ['id'];
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //     self::creating(function ($model) {
-    //         // $model->id = IdGenerator::generate(['table' => 'applicants', 'length' => 10, 'prefix' => date('ym'), 'reset_on_prefix_change' => true]);
-    //         $model->id= IdGenerator::generate(['table' => 'applicants', 'prefix' => date(''), 'length' => 6, ]);
-    //     });
-    // }
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->id = IdGenerator::generate(['table' => 'applicants', 'length' => 6]);
+        });
+    }
 
     protected $fillable = [
-        'id',
         'user_id',
         'fname',
         'mname',
