@@ -21,7 +21,7 @@ class Applicant extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'applicants', 'length' => 6]);
+            $model->id = IdGenerator::generate(['table' => 'applicants', 'length' => 7, 'prefix' => date('y'), 'reset_on_prefix_change' => true]);
         });
     }
 
