@@ -14,7 +14,7 @@ class CreateApplicantsTable extends Migration
     public function up()
     {
         Schema::create('applicants', function (Blueprint $table) {
-            $table->id();
+            $table->bigInteger('id');
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->onUpdate('cascade')
