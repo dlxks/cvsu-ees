@@ -83,9 +83,9 @@ class ApplicantController extends Controller
         $val = Validator::make($request->all(), [
             'fname' => ['required', 'string', 'max:255'],
             'lname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:applicants'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:applicants', 'unique:users'],
             'course_applied' => ['required'],
-            'phone_number' => ['required', 'unique:applicants', 'numeric', 'min:10'],
+            'phone_number' => ['required', 'unique:applicants', 'unique:users', 'numeric', 'min:10'],
             'birthday' => ['required', 'date'],
         ]);
 
