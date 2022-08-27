@@ -87,9 +87,9 @@
           id="phone"
           type="number"
           class="mt-1 block w-full"
-          v-model="form.phone"
+          v-model="form.phone_number"
         />
-        <jet-input-error :message="form.errors.phone" class="mt-2" />
+        <jet-input-error :message="form.errors.phone_number" class="mt-2" />
       </div>
     </template>
 
@@ -134,7 +134,7 @@ export default defineComponent({
         _method: "PUT",
         name: this.user.name,
         email: this.user.email,
-        phone: this.user.phone,
+        phone_number: this.user.phone_number,
         photo: null,
       }),
 

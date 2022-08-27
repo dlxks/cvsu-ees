@@ -153,7 +153,7 @@
                           scope="col"
                           class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                          <span @click="sort('phone')" class="cursor-pointer">
+                          <span @click="sort('phone_number')" class="cursor-pointer">
                             <div class="inline-block">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -163,7 +163,7 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                                 v-if="
-                                  params.field === 'phone' && params.direction === 'asc'
+                                  params.field === 'phone_number' && params.direction === 'asc'
                                 "
                               >
                                 <path
@@ -180,7 +180,7 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                                 v-if="
-                                  params.field === 'phone' && params.direction === 'desc'
+                                  params.field === 'phone_number' && params.direction === 'desc'
                                 "
                               >
                                 <path
@@ -244,7 +244,7 @@
                           {{ user.email }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                          {{ user.phone }}
+                          {{ user.phone_number }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {{ user.role }}
@@ -362,12 +362,12 @@
 
       <!-- Phone -->
       <div class="mb-4">
-        <jet-label for="phone" value="Phone Number" />
+        <jet-label for="phone_number" value="Phone Number" />
         <jet-input
-          id="phone"
+          id="phone_number"
           type="number"
           class="mt-1 block w-full"
-          v-model="form.phone"
+          v-model="form.phone_number"
         />
       </div>
 
@@ -476,7 +476,7 @@ export default {
       form: this.$inertia.form({
         name: "",
         email: "",
-        phone: "",
+        phone_number: "",
         role: "",
         password: "",
       }),

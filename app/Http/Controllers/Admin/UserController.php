@@ -29,7 +29,7 @@ class UserController extends Controller
     {
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:name,email,phone'],
+            'field' => ['in:name,email,phone_number'],
         ]);
 
         // $query = User::where('role', '=', 'admin')->orWhere('role', '=', 'personnel');
@@ -71,7 +71,7 @@ class UserController extends Controller
         $val = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', 'integer', 'unique:users', 'regex:/^(63)[0-9]{10}$/'],
+            'phone_number' => ['required', 'integer', 'unique:users', 'regex:/^(63)[0-9]{10}$/'],
             'password' => $this->passwordRules(),
         ]);
 
@@ -83,7 +83,7 @@ class UserController extends Controller
         User::create([
             'name' => $request['name'],
             'email' => $request['email'],
-            'phone' => $request['phone'],
+            'phone_number' => $request['phone_number'],
             'role' => $request['role'],
             'password' => Hash::make($request['password']),
         ]);
@@ -128,7 +128,7 @@ class UserController extends Controller
         $val = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'phone' => ['required', 'integer', 'regex:/^(63)[0-9]{10}$/'],
+            'phone_number' => ['required', 'integer', 'regex:/^(63)[0-9]{10}$/'],
         ]);
 
         if ($val->fails()) {
@@ -139,7 +139,7 @@ class UserController extends Controller
         $user->update([
             'name' => $request['name'],
             'email' => $request['email'],
-            'phone' => $request['phone'],
+            'phone_number' => $request['phone_number'],
             'role' => $request['role'],
             'password' => Hash::make($request['password']),
         ]);
