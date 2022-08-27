@@ -553,7 +553,6 @@
           <DatePicker
             v-model="form.date"
             :min-date="new Date()"
-            :disabled-dates="{ weekdays: [1, 7] }"
             id="date"
             class="bg-white border rounded w-full"
           >
