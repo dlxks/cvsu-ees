@@ -36,7 +36,8 @@ class UserController extends Controller
         $query = User::query();
 
         if (request('search')) {
-            $query->where('name', 'like', '%' . request('search') . '%')->orWhere('email', 'like', '%' . request('search') . '%');
+            $query->where('name', 'like', '%' . request('search') . '%')
+                ->orWhere('email', 'like', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {

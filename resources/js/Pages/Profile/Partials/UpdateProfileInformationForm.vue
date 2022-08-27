@@ -82,9 +82,9 @@
 
       <!-- Phone Nunber -->
       <div class="col-span-6 sm:col-span-4">
-        <jet-label for="phone" value="Phone Number" />
+        <jet-label for="phone_number" value="Phone Number" />
         <jet-input
-          id="phone"
+          id="phone_number"
           type="number"
           class="mt-1 block w-full"
           v-model="form.phone_number"
