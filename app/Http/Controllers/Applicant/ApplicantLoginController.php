@@ -13,11 +13,20 @@ use Inertia\Inertia;
 class ApplicantLoginController extends Controller
 {
     use Banner;
-    
+
     public function showLoginForm()
     {
-        if (!auth()->check())
+        if (!auth()->check()) {
             return Inertia::render('Applicant/Auth/Login');
+        }
+        else{
+            if(auth()->user()->hasRole('applicant')){
+                return redirect(route('applicant.dashboard'));
+            }
+            if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('personnel')){
+                return redirect(route('admin.dashboard'));
+            }
+        }
         return back();
     }
 
