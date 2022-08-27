@@ -21,10 +21,11 @@ class ApplicantLoginController extends Controller
         }
         else{
             if(auth()->user()->hasRole('applicant')){
-                return redirect(route('applicant.dashboard'));
+                return redirect(route('applicant.dashboard.index'));
             }
+
             if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('personnel')){
-                return redirect(route('admin.dashboard'));
+                return redirect(route('admin.dashboard.index'));
             }
         }
         return back();
