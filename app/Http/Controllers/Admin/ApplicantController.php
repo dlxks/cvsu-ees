@@ -46,7 +46,7 @@ class ApplicantController extends Controller
                 ->orWhere('.mname', 'like', '%' . request('search') . '%')
                 ->orWhere('.lname', 'like', '%' . request('search') . '%')
                 ->orWhere('course_applied', 'like', '%' . request('search') . '%')
-                ->orWhere('.email', 'like', '%' . request('search') . '%')
+                ->orWhere('email', 'like', '%' . request('search') . '%')
                 ->orWhere('phone_number', 'like', '%' . request('search') . '%');
         }
 
@@ -98,7 +98,7 @@ class ApplicantController extends Controller
             $user = User::create([
                 'name' =>  Str::of($request['lname'])->ucfirst() . ', ' . Str::of($request['fname'])->ucfirst() . ' ' . Str::of($request['mname'])->ucfirst(),
                 'email' => $request['email'],
-                'phone' => $request['phone_number'],
+                'phone_number' => $request['phone_number'],
                 'role' => 'applicant',
                 'password' => bcrypt('changetorandomstring')
             ]);
@@ -175,7 +175,7 @@ class ApplicantController extends Controller
         $user->update([
             'name' =>  Str::of($request['lname'])->ucfirst() . ', ' . Str::of($request['fname'])->ucfirst() . ' ' . Str::of($request['mname'])->ucfirst(),
             'email' => $request['email'],
-            'phone' => $request['phone_number'],
+            'phone_number' => $request['phone_number'],
         ]);
 
         $applicant->update([
