@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\ApplicantsExport;
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Banner;
 use App\Models\Applicant;
@@ -102,7 +103,10 @@ class ApplicantController extends Controller
                 'password' => bcrypt('changetorandomstring')
             ]);
 
+            $applicant_id = Helper::IDGenerator(new Applicant(), 'id', 5, date('ym')); /** Generate id */
+
             $applicant = Applicant::create([
+                'id' => $applicant_id,
                 'user_id' => $user->id,
                 'fname' => Str::of($request['fname'])->ucfirst(),
                 'mname' => Str::of($request['mname'])->ucfirst(),
@@ -204,7 +208,6 @@ class ApplicantController extends Controller
         $userid = $applicant->user_id;
         $user = User::where('id', $userid)->first();
 
-        // $d->colleges()->detach();
         $user->delete();
         $applicant->delete();
 
