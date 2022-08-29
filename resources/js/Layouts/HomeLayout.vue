@@ -13,7 +13,7 @@
                   <div class="flex items-center">
                     <div class="flex-shrink-0 h-10 w-10">
                       <img
-                        src="https://drive.google.com/uc?id=1NQL8McpMmgaK0WgqpihPWsUzArvFHzRo"
+                        src="https://drive.google.com/uc?id=1eXYuH_JePPGJCUg5XLNTuU0DeNoy5QKS"
                         class="w-10"
                         alt="CvSU Logo"
                         title="CvSU"
