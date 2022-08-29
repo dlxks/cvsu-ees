@@ -34,9 +34,9 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        // if ($this->app->environment('production')) {
-        //     $this->app['request']->server->set('HTTPS', 'on');
-        //     // \URL::forceScheme('https');
-        // }
+        if ($this->app->environment('production')) {
+            $this->app['request']->server->set('HTTPS', 'on');
+            // \URL::forceScheme('https');
+        }
     }
 }
