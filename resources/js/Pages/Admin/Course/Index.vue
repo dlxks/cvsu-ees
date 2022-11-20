@@ -233,7 +233,7 @@
                     <tr v-if="!courses.data.length">
                       <td class="p-4 text-center text-sm text-gray-800" colspan="7">
                         <!-- NO data -->
-                        <span class="text-red-500 uppercase text-xl">No exam found!</span>
+                        <span class="text-red-500 uppercase text-xl">No course found!</span>
                         <NoData />
                         <!-- NO data -->
                       </td>
