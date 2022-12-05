@@ -101,6 +101,7 @@ class ApplicantResultController extends Controller
             $rtd_score += $res->score;
         }
         $total_rating = $rtd_score / $exm_cnt;
+
         Verified::updateOrCreate(
             [
                 'applicant_id' => $applicant->id,

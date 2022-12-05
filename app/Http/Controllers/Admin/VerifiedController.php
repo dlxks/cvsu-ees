@@ -43,15 +43,28 @@ class VerifiedController extends Controller
 
         $applicant = Applicant::with('verified', 'results')
             ->where('results.applicant_id', '=', 'applicants.id');
+        $courses = Course::latest()->get();
 
-
-        $data = Verified::orderBy('rating', 'desc');
+        $data = Verified::query();
         $perpage = $request->input('perpage') ?: 25;
 
         if (request('search')) {
             $data
-                ->orwhere('results.applicant_id', 'like', '%' . request('search') . '%')
-                ->orWhere('results.name', 'like', '%' . request('search') . '%');
+                ->orwhere('verifieds.applicant_id', 'like', '%' . request('search') . '%')
+                ->orWhere('verifieds.name', 'like', '%' . request('search') . '%')
+                ->orWhere('verifieds.rating', 'like', '%' . request('search') . '%')
+                ->orWhere('verifieds.course_applied', 'like', '%' . request('search') . '%')
+                ->orWhere('verifieds.status', 'like', '%' . request('search') . '%');
+        }
+
+        if (request()->has(['course'])) {
+            $data
+                ->orwhere('verifieds.course_applied', 'like', '%' . request('course') . '%');
+        }
+
+        if (request()->has(['status'])) {
+            $data
+                ->orwhere('verifieds.status', request('status'));
         }
 
         if (request()->has(['field', 'direction'])) {
@@ -60,7 +73,8 @@ class VerifiedController extends Controller
 
         return Inertia::render('Admin/Verified/Index', [
             'verifieds' => $data->paginate($perpage)->withQueryString(),
-            'filters' => request()->all(['search', 'field', 'direction', 'perpage']),
+            'filters' => request()->all(['search', 'field', 'direction', 'perpage', 'course', 'status']),
+            'courses' => $courses,
         ]);
     }
 
@@ -171,7 +185,6 @@ class VerifiedController extends Controller
     {
         //
     }
-
 
     // Export function
     public function export()

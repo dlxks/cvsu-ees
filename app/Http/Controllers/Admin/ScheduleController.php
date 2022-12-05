@@ -249,7 +249,6 @@ class ScheduleController extends Controller
             return redirect()->back();
         } elseif (count($schedules) > 0) {
             foreach ($schedules as $schedule) {
-
                 $sms_message = 'This is Cavite State University-Main Campus. You were scheduled to take the entrance examination on ' . $schedule->date . '.';
                 // // SMS
                 $basic  = new Basic("68ad8f1a", "4PMcuDQ5mVe0STkl");

@@ -3,7 +3,7 @@
 STEPS----------
 
 Run the following commands.
-1. composer install -ignore-platform-req=ext-gd
+1. composer install --ignore-platform-req=ext-gd
 2. cp .env.example .env
 3. php artisan key:generate
 4. php artisan migrate:fresh -seed

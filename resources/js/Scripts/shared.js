@@ -29,7 +29,7 @@ export default {
             ],
             status: ["active", "inactive"],
             categories: ["Requirements", "Admission", "Courses", "Contact Information", "Other"],
-            qualifications: ["pending", "qualified", "not qualified"]
+            qualifications: ["pending", "qualified", "not qualified"],
         };
     },
     methods: {

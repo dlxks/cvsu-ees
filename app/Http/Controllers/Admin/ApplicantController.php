@@ -31,7 +31,7 @@ class ApplicantController extends Controller
     {
         request()->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:fname,mname,lname,email,phone_number'],
+            'field' => ['in:id,fname,mname,lname,email,phone_number,birthday,course_applied'],
         ]);
 
 
@@ -43,9 +43,10 @@ class ApplicantController extends Controller
             $data
                 ->where('id', 'like', '%' . request('search') . '%')
                 ->orwhere('fname', 'like', '%' . request('search') . '%')
-                ->orWhere('.mname', 'like', '%' . request('search') . '%')
-                ->orWhere('.lname', 'like', '%' . request('search') . '%')
+                ->orWhere('mname', 'like', '%' . request('search') . '%')
+                ->orWhere('lname', 'like', '%' . request('search') . '%')
                 ->orWhere('course_applied', 'like', '%' . request('search') . '%')
+                ->orWhere('birthday', 'like', '%' . request('search') . '%')
                 ->orWhere('email', 'like', '%' . request('search') . '%')
                 ->orWhere('phone_number', 'like', '%' . request('search') . '%');
         }

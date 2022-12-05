@@ -172,7 +172,7 @@
                       >
                         <span
                           class="cursor-pointer inline-flex"
-                          @click="sort('exam_name')"
+                          @click="sort('sched_name')"
                         >
                           <div>
                             <svg
@@ -183,7 +183,8 @@
                               stroke="currentColor"
                               stroke-width="2"
                               v-if="
-                                params.field === 'exam_name' && params.direction === 'asc'
+                                params.field === 'sched_name' &&
+                                params.direction === 'asc'
                               "
                             >
                               <path
@@ -200,7 +201,7 @@
                               stroke="currentColor"
                               stroke-width="2"
                               v-if="
-                                params.field === 'exam_name' &&
+                                params.field === 'sched_name' &&
                                 params.direction === 'desc'
                               "
                             >
@@ -211,7 +212,7 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">Exam Name</div></span
+                          <div>Schedule Name</div></span
                         >
                       </th>
                       <th
@@ -263,7 +264,7 @@
                       >
                         <span
                           class="cursor-pointer inline-flex"
-                          @click="sort('ctrl_num')"
+                          @click="sort('applicant_id')"
                         >
                           <div>
                             <svg
@@ -274,7 +275,8 @@
                               stroke="currentColor"
                               stroke-width="2"
                               v-if="
-                                params.field === 'ctrl_num' && params.direction === 'asc'
+                                params.field === 'applicant_id' &&
+                                params.direction === 'asc'
                               "
                             >
                               <path
@@ -291,7 +293,8 @@
                               stroke="currentColor"
                               stroke-width="2"
                               v-if="
-                                params.field === 'ctrl_num' && params.direction === 'desc'
+                                params.field === 'applicant_id' &&
+                                params.direction === 'desc'
                               "
                             >
                               <path

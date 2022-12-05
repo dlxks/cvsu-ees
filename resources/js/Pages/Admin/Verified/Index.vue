@@ -113,6 +113,64 @@
               </select>
             </div>
             <!-- View filter -->
+
+            <!-- Status Filter -->
+            <span class="text-sm text-gray-500 w-2">Status: </span>
+            <select
+              ref="status"
+              id="status"
+              class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
+              v-model="params.status"
+            >
+              <option
+                v-for="qualification in qualifications"
+                :key="qualification"
+                :value="qualification"
+                class="capitalize"
+              >
+                <span>{{ qualification }}</span>
+              </option>
+            </select>
+            <!-- Status Filter -->
+
+            <!-- Course filter -->
+            <div class="block">
+              <div class="lg:w-60" >
+                <span class="text-sm text-gray-500">Select Course: </span>
+                <div class="text-xs">
+                  <Multiselect
+                    v-model="params.course"
+                    placeholder="Select course"
+                    valueProp="course_name"
+                    :searchable="true"
+                    label="course_desc"
+                    :options="courses"
+                    class="text-xs"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- Course filter -->
+
+            <!-- clear -->
+            <div class="block">
+              <jet-button
+                value="Clear Filter"
+                @click="clearFilters()"
+                v-if="
+                  this.filters.search != null ||
+                  this.filters.field != null ||
+                  this.filters.direction != null ||
+                  this.filters.course != null ||
+                  this.filters.status != null ||
+                  this.filters.perpage != null
+                "
+                class="px-2 py-1 bg-white rounded text-sm border-0 mt-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow"
+              >
+                Clear Filters
+              </jet-button>
+            </div>
+            <!-- clear -->
           </div>
         </div>
       </div>
@@ -126,6 +184,12 @@
                 <table class="min-w-full divide-y divide-gray-200">
                   <thead class="bg-gray-50">
                     <tr>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        <span class="cursor-pointer flex"> ID </span>
+                      </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -289,7 +353,7 @@
                               d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
                             />
                           </svg>
-                          Course Applied
+                          Course
                         </span>
                       </th>
                       <th
@@ -347,10 +411,13 @@
                       </td>
                     </tr>
                     <tr
-                      v-for="verified in verifieds.data"
-                      :key="verified.id"
+                      v-for="(verified, index) in verifieds.data"
+                      v-bind:key="verified.id"
                       class="text-sm"
                     >
+                      <td class="px-6 py-1 whitespace-nowrap">
+                        {{ index + 1 }}
+                      </td>
                       <td class="px-6 py-1 whitespace-nowrap">
                         {{ verified.applicant_id }}
                       </td>
@@ -466,6 +533,7 @@ import JetDropdownLink from "@/Jetstream/DropdownLink";
 import JetPagination from "@/Components/Pagination";
 import { Link } from "@inertiajs/inertia-vue3";
 import shared from "@/Scripts/shared";
+import Multiselect from "@vueform/multiselect";
 import NoData from "@/Components/Fillers/NoData.vue";
 
 export default {
@@ -479,6 +547,7 @@ export default {
     JetDropdown,
     JetDropdownLink,
     Link,
+    Multiselect,
     NoData,
   },
 
@@ -487,6 +556,7 @@ export default {
   props: {
     verifieds: Object,
     filters: Object,
+    courses: Object,
   },
 
   data() {
@@ -499,6 +569,8 @@ export default {
         search: this.filters.search,
         field: this.filters.field,
         direction: this.filters.direction,
+        course: this.filters.course,
+        status: this.filters.status,
       },
     };
   },
@@ -527,6 +599,11 @@ export default {
       const url = "/admin/pdf/verified";
       window.location.href = url;
     },
+
+    //Clear filters
+    clearFilters: function () {
+      this.$inertia.get(this.route("admin.verified.index"), {});
+    },
   },
 
   watch: {
@@ -545,3 +622,4 @@ export default {
 };
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>
+<style src="@vueform/multiselect/themes/tailwind.css"></style>

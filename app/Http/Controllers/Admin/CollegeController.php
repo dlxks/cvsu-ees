@@ -30,7 +30,7 @@ class CollegeController extends Controller
             'field' => ['in:college_name,college_desc'],
         ]);
 
-        $query = College::orderBy('college_name', 'asc');
+        $query = College::query();
         $perpage = $request->input('perpage') ?: 10;
 
         if (request('search')) {

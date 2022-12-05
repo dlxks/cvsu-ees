@@ -85,8 +85,11 @@
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('college_name')">
-                          <div class="inline-block">
+                        <span
+                          class="cursor-pointer inline-flex"
+                          @click="sort('college_name')"
+                        >
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -124,8 +127,8 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">College</div></span
-                        >
+                          <div>College Name</div>
+                        </span>
                       </th>
                       <th
                         scope="col"

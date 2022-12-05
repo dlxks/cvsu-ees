@@ -33,7 +33,7 @@ class CourseController extends Controller
 
         $colleges = College::latest()->orderBy('college_name', 'asc')->get();
         $perpage = $request->input('perpage') ?: 25;
-        $data = Course::with('college')->orderBy('course_name', 'asc');
+        $data = Course::with('college');
 
         $search_keyword = request('search');
 

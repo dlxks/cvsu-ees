@@ -150,8 +150,8 @@
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('id')">
-                          <div class="inline-block">
+                        <span class="cursor-pointer inline-flex" @click="sort('id')">
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -183,15 +183,15 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">Control Number</div></span
-                        >
+                          <div>Control Number</div>
+                        </span>
                       </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('fname')">
-                          <div class="inline-block">
+                        <span class="cursor-pointer inline-flex" @click="sort('fname')">
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -227,15 +227,15 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">First Name</div></span
-                        >
+                          <div>First Name</div>
+                        </span>
                       </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('mname')">
-                          <div class="inline-block">
+                        <span class="cursor-pointer inline-flex" @click="sort('mname')">
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -271,15 +271,15 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">Middle Name</div></span
-                        >
+                          <div>Middle Name</div>
+                        </span>
                       </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('lname')">
-                          <div class="inline-block">
+                        <span class="cursor-pointer inline-flex" @click="sort('lname')">
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -315,21 +315,64 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">Last Name</div></span
+                          <div>Last Name</div>
+                        </span>
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        <span
+                          class="cursor-pointer inline-flex"
+                          @click="sort('course_applied')"
                         >
+                          <div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              v-if="
+                                params.field === 'course_applied' &&
+                                params.direction === 'asc'
+                              "
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+                              />
+                            </svg>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              v-if="
+                                params.field === 'course_applied' &&
+                                params.direction === 'desc'
+                              "
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+                              />
+                            </svg>
+                          </div>
+                          <div>Course Applied</div>
+                        </span>
                       </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span><div class="inline-block">Course Applied</div></span>
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        <span class="cursor-pointer" @click="sort('birthday')">
-                          <div class="inline-block">
+                        <span class="cursor-pointer inline-flex" @click="sort('birthday')">
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -365,15 +408,15 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">Birthday</div></span
-                        >
+                          <div>Birthday</div>
+                        </span>
                       </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('email')">
-                          <div class="inline-block">
+                        <span class="cursor-pointer inline-flex" @click="sort('email')">
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -409,15 +452,18 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">Email</div></span
-                        >
+                          <div>Email</div>
+                        </span>
                       </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        <span class="cursor-pointer" @click="sort('phone_number')">
-                          <div class="inline-block">
+                        <span
+                          class="cursor-pointer inline-flex"
+                          @click="sort('phone_number')"
+                        >
+                          <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               class="h-4 w-4"
@@ -455,8 +501,8 @@
                               />
                             </svg>
                           </div>
-                          <div class="inline-block">Phone Number</div></span
-                        >
+                          <div>Phone Number</div>
+                        </span>
                       </th>
                       <th scope="col" class="relative px-6 py-3">
                         <span class="sr-only">Edit</span>

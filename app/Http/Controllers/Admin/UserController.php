@@ -33,7 +33,6 @@ class UserController extends Controller
         ]);
 
         $query = User::where('role', '=', 'admin')->orWhere('role', '=', 'personnel');
-        // $query = User::query();
 
         if (request('search')) {
             $query->where('name', 'like', '%' . request('search') . '%')
