@@ -3,15 +3,19 @@
 namespace App\Exports;
 
 use App\Models\Verified;
+use Inertia\Inertia;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithConditionalSheets;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
@@ -21,9 +25,12 @@ class VerifiedExport implements ShouldAutoSize, WithMapping, WithHeadings, WithE
 
     public function query()
     {
-        return Verified::query()
+        $data = Verified::query()
             ->with('applicant', 'course')
-            ->orderBy('verifieds.applicant_id', 'asc');
+            ->orderBy('verifieds.course_applied', 'asc')
+            ->orderBy('verifieds.rating', 'desc');
+
+        return $data;
     }
 
     public function map($result): array
@@ -32,10 +39,10 @@ class VerifiedExport implements ShouldAutoSize, WithMapping, WithHeadings, WithE
         if ($result->status == "not qualified") {
             $qual_course = "N/A";
         } else {
-            $qual_course = $result->course_applied ." - ".$result->course->course_desc;
+            $qual_course = $result->course_applied . " - " . $result->course->course_desc;
         }
 
-        $crs_applied = $result->course_applied ." - ".$result->course->course_desc;
+        $crs_applied = $result->course_applied . " - " . $result->course->course_desc;
 
         return [
             $result->applicant_id,

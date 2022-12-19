@@ -71,7 +71,8 @@ class UserController extends Controller
         $val = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone_number' => ['required', 'integer', 'unique:users', 'regex:/^(63)[0-9]{10}$/'],
+            // 'phone_number' => ['required', 'integer', 'unique:users', 'regex:/^(63)[0-9]{10}$/'],
+            'phone_number' => ['required', 'unique:users', 'numeric', 'min:10'],
             'password' => $this->passwordRules(),
         ]);
 
@@ -128,7 +129,7 @@ class UserController extends Controller
         $val = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'phone_number' => ['required', 'integer', 'regex:/^(63)[0-9]{10}$/'],
+            'phone' => ['required', 'numeric', 'min:10'],
         ]);
 
         if ($val->fails()) {

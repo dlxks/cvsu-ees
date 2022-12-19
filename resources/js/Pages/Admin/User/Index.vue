@@ -163,7 +163,8 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                                 v-if="
-                                  params.field === 'phone_number' && params.direction === 'asc'
+                                  params.field === 'phone_number' &&
+                                  params.direction === 'asc'
                                 "
                               >
                                 <path
@@ -180,7 +181,8 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                                 v-if="
-                                  params.field === 'phone_number' && params.direction === 'desc'
+                                  params.field === 'phone_number' &&
+                                  params.direction === 'desc'
                                 "
                               >
                                 <path

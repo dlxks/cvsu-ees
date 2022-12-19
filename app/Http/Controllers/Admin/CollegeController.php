@@ -13,7 +13,6 @@ class CollegeController extends Controller
 {
     use Banner;
 
-
     public function __construct()
     {
         $this->authorizeResource(College::class);

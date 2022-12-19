@@ -41,11 +41,12 @@ class VerifiedController extends Controller
             'field' => ['in:applicant_id,name,rating,course_applied,status'],
         ]);
 
-        $applicant = Applicant::with('verified', 'results')
-            ->where('results.applicant_id', '=', 'applicants.id');
+        // $applicant = Applicant::with('verified', 'results')
+        //     ->where('results.applicant_id', '=', 'applicants.id');
         $courses = Course::latest()->get();
 
-        $data = Verified::query();
+        $data = Verified::query()
+            ->orderBy('verifieds.course_applied', 'asc');;
         $perpage = $request->input('perpage') ?: 25;
 
         if (request('search')) {
@@ -59,16 +60,17 @@ class VerifiedController extends Controller
 
         if (request()->has(['course'])) {
             $data
-                ->orwhere('verifieds.course_applied', 'like', '%' . request('course') . '%');
+                ->where('verifieds.course_applied', 'like', '%' . request('course') . '%');
         }
 
         if (request()->has(['status'])) {
             $data
-                ->orwhere('verifieds.status', request('status'));
+                ->where('verifieds.status', request('status'));
         }
 
         if (request()->has(['field', 'direction'])) {
-            $data->orderBy(request('field'), request('direction'))->get();
+            $data->orderBy(request('field'), request('direction'))
+                ->get();
         }
 
         return Inertia::render('Admin/Verified/Index', [

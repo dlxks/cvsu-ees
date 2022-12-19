@@ -49,6 +49,7 @@
             </div>
             <!-- View filter -->
           </div>
+          
           <div class="text-right">
             <jet-button
               class="inline-flex items-center px-4 py-2 mr-2 bg-emerald-200 hover:bg-emerald-300 text-emerald-800 text-sm font-medium rounded-md"
