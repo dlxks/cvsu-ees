@@ -24,7 +24,6 @@ class ApplicantDashboardController extends Controller
      */
     public function index()
     {
-
         $authApplicant = auth()->user()->id;
         $applicant = Applicant::where('user_id', $authApplicant)->first();
         $schedule = Schedule::where('applicant_id', $applicant->id)->first();
