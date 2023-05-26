@@ -11,7 +11,7 @@
         class="text-white text-sm uppercase hidden lg:inline-block font-semibold"
         href="javascript:void(0)"
       >
-        Dashboardaa
+        Dashboard
       </a>
       <!-- Form -->
       <form
