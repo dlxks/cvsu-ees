@@ -22,12 +22,17 @@
   "devDependencies": {
     "@inertiajs/inertia": "^0.11.0",
     "@inertiajs/inertia-vue3": "^0.6.0",
-    "@inertiajs/progress": "^0.2.7",
+    "@inertiajs/progress": "^0.1.2",
     "@tailwindcss/forms": "^0.5.0",
     "@tailwindcss/typography": "^0.5.2",
     "@vue/compiler-sfc": "^3.2.31",
+<<<<<<< Updated upstream
     "axios": "^1.8",
     "browser-sync": "^2.28.3",
+=======
+    "axios": "^0.21",
+    "browser-sync": "^3.0.4",
+>>>>>>> Stashed changes
     "browser-sync-webpack-plugin": "^2.3.0",
     "deepmerge": "^4.2.2",
     "laravel-mix": "^6.0.6",
