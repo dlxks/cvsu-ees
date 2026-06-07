@@ -39,7 +39,7 @@
           type="date"
           class="mt-1 block w-full"
           v-model="form.birthday"
-          @keyup.enter="login(form)"
+          @keyup.enter="submit"
           required
         />
       </div>
@@ -69,8 +69,8 @@
 </template>
 
 <script setup>
-import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import { Inertia } from "@inertiajs/inertia";
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 import JetAuthenticationCard from "@/Jetstream/AuthenticationCard.vue";
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo.vue";
 import JetButton from "@/Jetstream/Button.vue";

@@ -156,7 +156,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import HomeLayout from "@/Layouts/HomeLayout";
 import { Calendar, DatePicker } from "v-calendar";
 import JetPagination from "@/Components/Pagination";

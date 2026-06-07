@@ -30,20 +30,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'personnel',
             ],
-            // [
-            //     'name' =>  'Tristan Sangangbayan',
-            //     'email' => 'sangangbayant@gmail.com',
-            //     'phone' => '639072203266',
-            //     'password' => bcrypt('changetorandomstring'),
-            //     'role' => 'applicant',
-            // ],
-            // [
-            //     'name' =>  'Dan Lloyd Rosarda',
-            //     'email' => 'danlloyd.rosarda@cvsu.edu.ph',
-            //     'phone' => '639761830787',
-            //     'password' => bcrypt('changetorandomstring'),
-            //     'role' => 'applicant',
-            // ],
         ]);
     }
 }

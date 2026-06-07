@@ -165,7 +165,7 @@
 </template>
 
 <script>
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout";
 import JetButton from "@/Jetstream/Button";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";

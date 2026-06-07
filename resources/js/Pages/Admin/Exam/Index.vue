@@ -44,7 +44,7 @@
                   :value="perpage"
                   class="capitalize"
                 >
-                  <span>{{ perpage }}</span>
+                  {{ perpage }}
                 </option>
               </select>
             </div>
@@ -312,7 +312,7 @@
             :value="status"
             class="capitalize"
           >
-            <span>{{ status }}</span>
+            {{ status }}
           </option>
         </select>
       </div>
@@ -349,7 +349,7 @@
 <script>
 import { reactive, watchEffect } from "vue";
 import { pickBy, throttle } from "lodash";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout";
 import JetButton from "@/Jetstream/Button";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
@@ -361,7 +361,7 @@ import JetFormSection from "@/Jetstream/FormSection";
 import JetActionMessage from "@/Jetstream/ActionMessage";
 import DialogModal from "@/Jetstream/DialogModal";
 import JetPagination from "@/Components/Pagination";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import shared from "@/Scripts/shared";
 import NoData from "@/Components/Fillers/NoData.vue";
 

@@ -46,8 +46,8 @@
             >
               <img
                 class="h-10 w-10 rounded-full object-cover"
-                :src="$page.props.user.profile_photo_url"
-                :alt="$page.props.user.name"
+                :src="$page.props.auth.user.profile_photo_url"
+                :alt="$page.props.auth.user.name"
               />
             </button>
 
@@ -56,7 +56,7 @@
                 type="button"
                 class="inline-flex items-center border border-transparent text-md leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
               >
-                {{ $page.props.user.name }}
+                {{ $page.props.auth.user.name }}
 
                 <svg
                   class="ml-2 -mr-0.5 h-4 w-4"
@@ -155,16 +155,16 @@
                       <div class="flex-shrink-0 h-10 w-10">
                         <img
                           class="h-10 w-10 rounded-full object-cover"
-                          :src="$page.props.user.profile_photo_url"
-                          :alt="$page.props.user.name"
+                          :src="$page.props.auth.user.profile_photo_url"
+                          :alt="$page.props.auth.user.name"
                         />
                       </div>
                       <div class="ml-4">
                         <div class="text-sm font-medium text-gray-900">
-                          {{ $page.props.user.name }}
+                          {{ $page.props.auth.user.name }}
                         </div>
                         <div class="text-sm text-gray-500">
-                          {{ $page.props.user.email }}
+                          {{ $page.props.auth.user.email }}
                         </div>
                       </div>
                     </div>
@@ -175,7 +175,7 @@
                       type="button"
                       class="inline-flex items-center border border-transparent text-md leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
                     >
-                      {{ $page.props.user.name }}
+                      {{ $page.props.auth.user.name }}
 
                       <svg
                         class="ml-2 -mr-0.5 h-4 w-4"

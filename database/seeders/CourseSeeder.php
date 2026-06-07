@@ -51,11 +51,6 @@ class CourseSeeder extends Seeder
                 'course_name' => 'BSFT',
                 'course_desc' => 'BS Food Technology',
             ],
-            [
-                'college_id' =>  9,
-                'course_name' => 'BSFT',
-                'course_desc' => 'BS Food Technology',
-            ],
         ]);
     }
 }

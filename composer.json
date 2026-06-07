@@ -5,31 +5,30 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.2|^8.3|^8.4",
         "ext-gd": "*",
-        "botman/botman": "^2.6",
+        "botman/botman": "^2.8",
         "botman/driver-web": "^1.5",
-        "carlos-meneses/laravel-mpdf": "^2.1.10",
-        "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "carlos-meneses/laravel-mpdf": "^2.1",
+        "guzzlehttp/guzzle": "^7.8",
         "haruncpi/laravel-id-generator": "^1.1",
-        "inertiajs/inertia-laravel": "^0.6.0",
-        "laravel/framework": "^8.75",
-        "laravel/jetstream": "^2.7",
-        "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5",
-        "laravel/vonage-notification-channel": "^2.5",
+        "inertiajs/inertia-laravel": "^3.1",
+        "laravel/framework": "^13.0",
+        "laravel/jetstream": "^5.5",
+        "laravel/sanctum": "^4.3",
+        "laravel/tinker": "^3.0",
+        "laravel/vonage-notification-channel": "^3.3",
         "maatwebsite/excel": "^3.1",
-        "tightenco/ziggy": "^1.0",
-        "vonage/client": "^2.1"
+        "tightenco/ziggy": "^2.6",
+        "vonage/client": "^4.3"
     },
     "require-dev": {
-        "facade/ignition": "^2.5",
-        "fakerphp/faker": "^1.9.1",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.10"
+        "fakerphp/faker": "^1.24",
+        "laravel/sail": "^1.62",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.9",
+        "phpunit/phpunit": "^13.2",
+        "spatie/laravel-ignition": "^2.12"
     },
     "autoload": {
         "psr-4": {
@@ -44,6 +43,16 @@
         }
     },
     "scripts": {
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npm run dev"
+        ],
+        "setup": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate --ansi",
+            "npm install",
+            "npm run build"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -66,8 +75,11 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

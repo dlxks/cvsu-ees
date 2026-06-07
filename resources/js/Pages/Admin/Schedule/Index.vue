@@ -52,7 +52,7 @@
                   :value="perpage"
                   class="capitalize"
                 >
-                  <span>{{ perpage }}</span>
+                  {{ perpage }}
                 </option>
               </select>
             </div>
@@ -602,7 +602,7 @@
 <script>
 import { reactive, watchEffect } from "vue";
 import { pickBy, throttle } from "lodash";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout";
 import JetButton from "@/Jetstream/Button";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
@@ -612,7 +612,7 @@ import JetDropdown from "@/Jetstream/Dropdown";
 import JetDropdownLink from "@/Jetstream/DropdownLink";
 import DialogModal from "@/Jetstream/DialogModal";
 import JetPagination from "@/Components/Pagination";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import shared from "@/Scripts/shared";
 import Multiselect from "@vueform/multiselect";
 import { DatePicker } from "v-calendar";

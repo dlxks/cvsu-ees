@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             ChatbotSeeder::class,
-            // CourseSeeder::class,
             CollegeSeeder::class,
+            CourseSeeder::class,
             ExamSeeder::class,
-            // ApplicantSeeder::class,
+            ApplicantSeeder::class,
         ]);
     }
 }

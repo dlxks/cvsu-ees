@@ -106,7 +106,7 @@
 
 <script>
 import ApplicantLayout from "@/Layouts/ApplicantLayout";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import JetButton from "@/Jetstream/Button.vue";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";

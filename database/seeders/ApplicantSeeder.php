@@ -31,7 +31,7 @@ class ApplicantSeeder extends Seeder
             'email' => 'sangangbayant@gmail.com',
             'phone_number' => '639072203266',
             'role' => 'applicant',
-            'password' => bcrypt('changetorandomstring')
+            'password' => bcrypt('password')
         ]);
         $applicant1 = Applicant::create([
             'id' => $applicant_id,
@@ -42,6 +42,7 @@ class ApplicantSeeder extends Seeder
             'birthday' => '2000-08-31',
             'email' => 'sangangbayant@gmail.com',
             'phone_number' => '639072203266',
+            'course_applied' => 'BSIT',
         ]);
 
         $user2 = User::create([
@@ -49,10 +50,10 @@ class ApplicantSeeder extends Seeder
             'email' => 'ljohnmark9@gmail.com',
             'phone_number' => '639558076388',
             'role' => 'applicant',
-            'password' => bcrypt('changetorandomstring')
+            'password' => bcrypt('password')
         ]);
         $applicant2 = Applicant::create([
-            'id' => $applicant_id,
+            'id' => $applicant_id + 1,
             'user_id' => $user2->id,
             'fname' => 'Dan Lloyd',
             'mname' => 'Martinez',
@@ -60,6 +61,7 @@ class ApplicantSeeder extends Seeder
             'birthday' => '2000-07-31',
             'email' => 'ljohnmark9@gmail.com',
             'phone_number' => '639558076388',
+            'course_applied' => 'BSCS',
         ]);
     }
 }

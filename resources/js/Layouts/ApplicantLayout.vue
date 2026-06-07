@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import ApplicantSideBar from "@/Components/SideBar/ApplicantSideBar.vue";
 import JetDropdown from "@/Jetstream/Dropdown.vue";
 import JetBanner from "@/Jetstream/Banner.vue";

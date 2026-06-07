@@ -367,16 +367,14 @@
 <script>
 import ExamLayout from "@/Layouts/ExamLayout";
 import moment from "moment";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import JetPagination from "@/Components/Pagination";
 import JetInput from "@/Jetstream/Input";
 import DialogModal from "@/Jetstream/DialogModal";
 import JetButton from "@/Jetstream/Button";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
-import route from "../../../../../vendor/tightenco/ziggy/src/js";
+import { route } from "../../../../../vendor/tightenco/ziggy/src/js";
 import { floor } from "lodash";
-import M from "minimatch";
-
 export default {
   components: {
     ExamLayout,

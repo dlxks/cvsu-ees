@@ -267,8 +267,8 @@
 import ApplicantLayout from "@/Layouts/ApplicantLayout";
 import { reactive, watchEffect } from "vue";
 import { pickBy, throttle } from "lodash";
-import { Inertia } from "@inertiajs/inertia";
-import { Link } from "@inertiajs/inertia-vue3";
+import { router } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import JetSectionBorder from "@/Jetstream/SectionBorder.vue";
 import { Calendar, DatePicker } from "v-calendar";
 
