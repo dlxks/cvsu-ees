@@ -10,6 +10,7 @@
         "botman/botman": "^2.8",
         "botman/driver-web": "^1.5",
         "carlos-meneses/laravel-mpdf": "^2.1",
+        "google/cloud-dialogflow": "^2.4",
         "guzzlehttp/guzzle": "^7.8",
         "haruncpi/laravel-id-generator": "^1.1",
         "inertiajs/inertia-laravel": "^3.1",

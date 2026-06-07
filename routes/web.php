@@ -19,6 +19,8 @@ use App\Http\Controllers\Applicant\ApplicantResultController;
 use App\Http\Controllers\Applicant\ApplicantUpdateController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\ChatLogController;
+use App\Http\Controllers\SyncLogController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +56,12 @@ Route::prefix('admin')
 
         // Users routes
         Route::resource('users', UserController::class);
+
+        // Chat logs routes
+        Route::resource('chat_logs', ChatLogController::class)->only(['index']);
+
+        // Sync logs routes
+        Route::resource('sync_logs', SyncLogController::class)->only(['index']);
 
         // College routes
         Route::resource('colleges', CollegeController::class);
@@ -92,6 +100,7 @@ Route::prefix('admin')
         Route::get('send-verified', [VerifiedController::class, 'sendNotification'])->name('send.verified');
 
         // Chatbot routes
+        Route::post('chatbot/sync', [ChatbotController::class, 'syncToDialogflow'])->name('chatbot.sync');
         Route::resource('chatbot', ChatbotController::class);
         // Route::post('chatbot-import', [ChatbotController::class, 'import'])->name('chatbot.import');
 

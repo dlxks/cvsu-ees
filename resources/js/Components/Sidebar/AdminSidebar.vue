@@ -543,6 +543,64 @@
             </jet-nav-link>
           </li>
           <!-- Link End -->
+          <!-- Link Start-->
+          <li class="items-center">
+            <jet-nav-link
+              :href="route('admin.chat_logs.index')"
+              class="text-xs uppercase py-2 font-bold block"
+              :class="
+                route().current('admin.chat_logs.index')
+                  ? 'text-emerald-500 hover:text-emerald-600'
+                  : 'text-gray-700 hover:text-gray-500'
+              "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                />
+              </svg>
+              <span>Chat Logs</span>
+            </jet-nav-link>
+          </li>
+          <!-- Link End -->
+          <!-- Link Start-->
+          <li class="items-center">
+            <jet-nav-link
+              :href="route('admin.sync_logs.index')"
+              class="text-xs uppercase py-2 font-bold block"
+              :class="
+                route().current('admin.sync_logs.index')
+                  ? 'text-emerald-500 hover:text-emerald-600'
+                  : 'text-gray-700 hover:text-gray-500'
+              "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+              <span>Sync Logs</span>
+            </jet-nav-link>
+          </li>
+          <!-- Link End -->
         </ul>
         <!-- Navigation End -->
         <!-- Divider End-->

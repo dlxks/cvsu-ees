@@ -10,10 +10,99 @@ use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Google\Cloud\Dialogflow\V2\Client\IntentsClient;
+use Google\Cloud\Dialogflow\V2\Intent;
+use Google\Cloud\Dialogflow\V2\Intent\TrainingPhrase;
+use Google\Cloud\Dialogflow\V2\Intent\TrainingPhrase\Part;
+use Google\Cloud\Dialogflow\V2\Intent\Message;
+use Google\Cloud\Dialogflow\V2\Intent\Message\Text;
+use Google\Cloud\Dialogflow\V2\CreateIntentRequest;
+use Google\Cloud\Dialogflow\V2\ListIntentsRequest;
+use Google\Cloud\Dialogflow\V2\DeleteIntentRequest;
+use Illuminate\Support\Facades\Log;
 
 class ChatbotController extends Controller
 {
     use Banner;
+
+    public function syncToDialogflow()
+    {
+        $projectId = env('DIALOGFLOW_PROJECT_ID');
+        if (!$projectId) {
+            $this->flash('Dialogflow Project ID not configured.', 'danger');
+            return back();
+        }
+
+        try {
+            $intentsClient = new IntentsClient();
+            $parent = $intentsClient->agentName($projectId);
+            
+            // Delete existing FAQ intents first to avoid duplicates
+            $listRequest = (new ListIntentsRequest())->setParent($parent);
+            $pagedResponse = $intentsClient->listIntents($listRequest);
+            
+            foreach ($pagedResponse->iterateAllElements() as $existingIntent) {
+                if (str_starts_with($existingIntent->getDisplayName(), 'FAQ_')) {
+                    $deleteRequest = (new DeleteIntentRequest())->setName($existingIntent->getName());
+                    $intentsClient->deleteIntent($deleteRequest);
+                }
+            }
+
+            // Sync current FAQs
+            $faqs = Chatbot::all();
+            
+            foreach ($faqs as $faq) {
+                $intent = new Intent();
+                $displayName = 'FAQ_' . $faq->id . '_' . Str::slug(substr($faq->category, 0, 15));
+                $intent->setDisplayName($displayName);
+
+                $part = new Part();
+                $part->setText($faq->question);
+                
+                $trainingPhrase = new TrainingPhrase();
+                $trainingPhrase->setParts([$part]);
+                $intent->setTrainingPhrases([$trainingPhrase]);
+
+                $text = new Text();
+                $text->setText([$faq->answer]);
+                
+                $message = new Message();
+                $message->setText($text);
+                $intent->setMessages([$message]);
+
+                $createRequest = (new CreateIntentRequest())
+                    ->setParent($parent)
+                    ->setIntent($intent);
+                    
+                $intentsClient->createIntent($createRequest);
+            }
+            
+            $intentsClient->close();
+            
+            \App\Models\SyncLog::create([
+                'admin_id' => auth()->id(),
+                'status' => 'success',
+                'message' => 'Successfully synced ' . count($faqs) . ' FAQs to Dialogflow!',
+                'synced_intents_count' => count($faqs),
+            ]);
+
+            $this->flash('Successfully synced ' . count($faqs) . ' FAQs to Dialogflow!', 'success');
+            
+        } catch (\Exception $e) {
+            Log::error("Dialogflow Sync Error: " . $e->getMessage());
+            
+            \App\Models\SyncLog::create([
+                'admin_id' => auth()->id(),
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+                'synced_intents_count' => 0,
+            ]);
+
+            $this->flash('Failed to sync to Dialogflow. Check logs.', 'danger');
+        }
+        
+        return back();
+    }
 
     public function index(Request $request)
     {

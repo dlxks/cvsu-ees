@@ -17,13 +17,5 @@ class BotManController extends Controller
         $botman->listen();
     }
 
-    /**
-     * Loaded through routes/botman.php
-     * @param  BotMan $bot
-     */
-
-    public function startConversation(BotMan $bot)
-    {
-        $bot->startConversation(new OptionConversation());
-    }
+    // NLP handling is done natively via fallback logic in routes/botman.php
 }
