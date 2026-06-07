@@ -233,24 +233,28 @@ class VerifiedController extends Controller
         if ($request['status'] == 'qualified') {
 
             // // SMS
-            $basic  = new Basic("68ad8f1a", "4PMcuDQ5mVe0STkl");
-            $client = new Client($basic);
+            if (env('ENABLE_SMS_NOTIFICATIONS', true)) {
+                $basic  = new Basic("68ad8f1a", "4PMcuDQ5mVe0STkl");
+                $client = new Client($basic);
 
-            $response = $client->sms()->send(
-                new SMS($phone, 'Cavite State University-Main Campus', $sms_message)
-            );
+                $response = $client->sms()->send(
+                    new SMS($phone, 'Cavite State University-Main Campus', $sms_message)
+                );
 
-            $message = $response->current();
+                $message = $response->current();
 
-            if ($message->getStatus() == 0) {
-                $this->flash('Results was sent!', 'success');
-            } else {
+                if ($message->getStatus() == 0) {
+                    $this->flash('Results was sent via SMS!', 'success');
+                } else {
 
-                $this->flash('Results was not sent!', 'danger');
+                    $this->flash('Results was not sent via SMS!', 'danger');
+                }
             }
 
             // EMAIL
-            Mail::to($email)->send(new ResultMail($result));
+            if (env('ENABLE_EMAIL_NOTIFICATIONS', true)) {
+                Mail::to($email)->send(new ResultMail($result));
+            }
 
             $this->flash('Result was sent!', 'success');
 

@@ -81,7 +81,9 @@ class ExamController extends Controller
             return back();
         }
 
-        $exam_code = IdGenerator::generate(['table' => 'exams', 'field' => 'exam_code', 'length' => 8, 'prefix' => 'EXM-']);
+        $latest = Exam::orderBy('id', 'desc')->first();
+        $nextId = $latest && $latest->exam_code ? intval(substr($latest->exam_code, 4)) + 1 : 1;
+        $exam_code = 'EXM-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
         $duration = $request['duration'];
 
         Exam::create([

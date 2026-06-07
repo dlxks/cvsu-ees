@@ -120,7 +120,9 @@ class ScheduleController extends Controller
             return back();
         }
 
-        $sched_code = IdGenerator::generate(['table' => 'schedules', 'field' => 'sched_code', 'length' => 8, 'prefix' => 'SCH-', 'reset_on_prefix_change' => true]);
+        $latest = Schedule::orderBy('id', 'desc')->first();
+        $nextId = $latest && $latest->sched_code ? intval(substr($latest->sched_code, 4)) + 1 : 1;
+        $sched_code = 'SCH-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
 
         $start = substr($request->start_ctrl_num, 4);
         $end = substr($request->end_ctrl_num, 4);
@@ -251,33 +253,38 @@ class ScheduleController extends Controller
             foreach ($schedules as $schedule) {
                 $sms_message = 'This is Cavite State University-Main Campus. You were scheduled to take the entrance examination on ' . $schedule->date . '.';
                 // // SMS
-                $basic  = new Basic("68ad8f1a", "4PMcuDQ5mVe0STkl");
-                $client = new Client($basic);
+                if (env('ENABLE_SMS_NOTIFICATIONS', true)) {
+                    $basic  = new Basic("68ad8f1a", "4PMcuDQ5mVe0STkl");
+                    $client = new Client($basic);
 
-                $response = $client->sms()->send(
-                    new SMS($schedule->applicants->phone_number, 'Cavite State University-Main Campus', $sms_message)
-                );
+                    $response = $client->sms()->send(
+                        new SMS($schedule->applicants->phone_number, 'Cavite State University-Main Campus', $sms_message)
+                    );
 
-                $message = $response->current();
+                    $message = $response->current();
 
-                if ($message->getStatus() == 0) {
-                    $this->flash('Schedule was sent!', 'success');
-                } else {
+                    if ($message->getStatus() == 0) {
+                        $this->flash('Schedule was sent via SMS!', 'success');
+                    } else {
 
-                    $this->flash('Schedule was not sent!', 'danger');
+                        $this->flash('Schedule was not sent via SMS!', 'danger');
+                    }
                 }
-                // Email
-                $data = [
-                    'ctrl_num' => $schedule->applicants->id,
-                    'name' => $schedule->applicants->lname . ', ' . $schedule->applicants->fname . ' ' . $schedule->applicants->mname,
-                    'email' => $schedule->applicants->email,
-                    'phone_number' => $schedule->applicants->phone_number,
-                    'sched_name' => $schedule->sched_name,
-                    'date' => $schedule->date,
-                    'regards' => 'Cavite State University-Main Campus',
-                ];
 
-                Mail::to($schedule->applicants->email)->send(new ScheduleMail($data));
+                // Email
+                if (env('ENABLE_EMAIL_NOTIFICATIONS', true)) {
+                    $data = [
+                        'ctrl_num' => $schedule->applicants->id,
+                        'name' => $schedule->applicants->lname . ', ' . $schedule->applicants->fname . ' ' . $schedule->applicants->mname,
+                        'email' => $schedule->applicants->email,
+                        'phone_number' => $schedule->applicants->phone_number,
+                        'sched_name' => $schedule->sched_name,
+                        'date' => $schedule->date,
+                        'regards' => 'Cavite State University-Main Campus',
+                    ];
+
+                    Mail::to($schedule->applicants->email)->send(new ScheduleMail($data));
+                }
             }
 
             $this->flash('Schedule sent!', 'success');
